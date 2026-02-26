@@ -5,7 +5,7 @@
 // =============================================================================
 
 define( 'CHILD_VERSION', '1.0.3' );
-define( 'CHILD_NAME', 'Fictioneer Child Theme' );
+define( 'CHILD_NAME', 'Illusia Theme' );
 
 // =============================================================================
 // CHILD THEME SETUP
@@ -15,50 +15,50 @@ define( 'CHILD_NAME', 'Fictioneer Child Theme' );
  * Enqueue child theme styles and scripts
  */
 
-function fictioneer_child_enqueue_styles_and_scripts() {
+function illusia_enqueue_styles_and_scripts() {
   /*
 
   // Example: Enqueue styles
 
   wp_enqueue_style(
-    'fictioneer-child-style',
-    get_stylesheet_directory_uri() . '/css/fictioneer-child-style.css',
+    'illusia-style',
+    get_stylesheet_directory_uri() . '/css/illusia-style.css',
     ['fictioneer-application']
   );
 
   // Example: Register and enqueue script in the footer
 
   wp_register_script(
-    'fictioneer-child-script',
-    get_stylesheet_directory_uri() . '/js/fictioneer-child-script.js',
+    'illusia-script',
+    get_stylesheet_directory_uri() . '/js/illusia-script.js',
     [],
     false,
     true // Or use array( 'strategy' => 'defer' )
   );
 
-  wp_enqueue_script( 'fictioneer-child-script' );
+  wp_enqueue_script( 'illusia-script' );
 
   // Example: Register and enqueue deferred script with dependency
 
   wp_register_script(
-    'fictioneer-another-child-script',
-    get_stylesheet_directory_uri() . '/js/fictioneer-child-script.js',
+    'illusia-another-script',
+    get_stylesheet_directory_uri() . '/js/illusia-script.js',
     ['fictioneer-application-scripts'], // Parent theme dependency
     false,
     array( 'strategy' => 'defer' ) // Must be deferred or everything breaks
   );
 
-  wp_enqueue_script( 'fictioneer-another-child-script' );
+  wp_enqueue_script( 'illusia-another-script' );
 
   */
 }
-add_action( 'wp_enqueue_scripts', 'fictioneer_child_enqueue_styles_and_scripts', 99 );
+add_action( 'wp_enqueue_scripts', 'illusia_enqueue_styles_and_scripts', 99 );
 
 /**
  * Add or remove parent filters and actions on the frontend
  */
 
-function fictioneer_child_customize_parent() {
+function illusia_customize_parent() {
   /*
 
   // Example: Prevent custom story/chapter CSS from being applied
@@ -67,7 +67,7 @@ function fictioneer_child_customize_parent() {
 
   */
 }
-add_action( 'init', 'fictioneer_child_customize_parent' );
+add_action( 'init', 'illusia_customize_parent' );
 
 /**
  * Use the following hook if 'init' does not work
@@ -79,7 +79,7 @@ add_action( 'init', 'fictioneer_child_customize_parent' );
  * Add or remove filters and actions in the admin panel
  */
 
-function fictioneer_child_customize_admin() {
+function illusia_customize_admin() {
   /*
 
   // Example: Remove SEO meta box for non-administrators
@@ -90,6 +90,6 @@ function fictioneer_child_customize_admin() {
 
   */
 }
-add_action( 'admin_init', 'fictioneer_child_customize_admin' );
+add_action( 'admin_init', 'illusia_customize_admin' );
 
 ?>
