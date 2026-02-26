@@ -767,7 +767,9 @@ perf: cache featured stories query with transient
 a11y: add aria-labels to modal close buttons
 ```
 
-### Versionamento
+### Versionamento (SemVer)
+
+Formato: `MAJOR.MINOR.PATCH` — baseado em [Semantic Versioning](https://semver.org/).
 
 - `style.css` → campo `Version:`
 - `functions.php` → constante `CHILD_VERSION`
@@ -781,6 +783,37 @@ define( 'CHILD_VERSION', '1.1.0' );
 ```css
 /* style.css */
 Version: 1.1.0
+```
+
+#### Quando incrementar cada casa
+
+| Casa | Formato | Quando incrementar | Exemplos |
+|------|---------|-------------------|----------|
+| **PATCH** `x.x.X` | `1.0.3 → 1.0.4` | Correções de bug, ajustes visuais pontuais, typos, hotfixes que **não adicionam** funcionalidade nem mudam comportamento existente | Fix z-index, corrigir cor errada, ajustar padding |
+| **MINOR** `x.X.0` | `1.0.4 → 1.1.0` | Nova funcionalidade, redesenho de componente/página, novo partial, novo CSS/JS, qualquer adição que **não quebra** o que já existe | Redesenhar story card, adicionar hero section, novo modal |
+| **MAJOR** `X.0.0` | `1.1.0 → 2.0.0` | Mudança que **quebra compatibilidade**: reestruturação de templates, renomear hooks/filtros públicos, alterar estrutura de dados, trocar sistema de design | Migrar de BEM para outra metodologia, reescrever functions.php |
+
+#### Regras adicionais
+
+- **PATCH reseta ao incrementar MINOR**: `1.0.4` → `1.1.0` (não `1.1.4`)
+- **MINOR e PATCH resetam ao incrementar MAJOR**: `1.3.2` → `2.0.0`
+- **Documentação sozinha (`docs:`) não incrementa versão** — apenas atualiza CHANGELOG em `[Unreleased]`
+- **Refatoração interna (`refactor:`) que não muda comportamento** → PATCH
+- **Redesenho visual completo de componente** → MINOR (é funcionalidade nova do frontend)
+- **Múltiplos commits acumulados em `[Unreleased]`** → incrementar versão uma vez no momento da release, não a cada commit
+- **Pre-release / dev**: enquanto acumulando mudanças, o CHANGELOG agrupa em `[Unreleased]`. Ao publicar, fecha a seção com versão e data
+
+#### Fluxo prático
+
+```
+1. Trabalho acumula em [Unreleased] no CHANGELOG
+2. Ao publicar/fazer deploy:
+   a. Avaliar: só fixes? → PATCH. Componentes novos? → MINOR. Quebra algo? → MAJOR.
+   b. Renomear [Unreleased] para [X.Y.Z] - YYYY-MM-DD
+   c. Atualizar CHILD_VERSION e style.css Version
+   d. Commit: "chore: release vX.Y.Z"
+   e. Tag git: git tag vX.Y.Z
+   f. Criar novo [Unreleased] vazio no CHANGELOG
 ```
 
 ### CHANGELOG.md
