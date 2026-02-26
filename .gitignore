@@ -1,0 +1,13 @@
+# Cache e temporários
+*.cache
+*.log
+.DS_Store
+Thumbs.db
+
+# Node (se usar ferramentas de build)
+node_modules/
+npm-debug.log
+
+# Uploads acidentais
+*.zip
+*.tar.gz
