@@ -16,41 +16,13 @@ define( 'CHILD_NAME', 'Illusia Theme' );
  */
 
 function illusia_enqueue_styles_and_scripts() {
-  /*
-
-  // Example: Enqueue styles
-
+  // Override das custom properties do Fictioneer
   wp_enqueue_style(
-    'illusia-style',
-    get_stylesheet_directory_uri() . '/css/illusia-style.css',
-    ['fictioneer-application']
+    'illusia-properties',
+    get_stylesheet_directory_uri() . '/css/illusia-properties.css',
+    ['fictioneer-application'],
+    CHILD_VERSION
   );
-
-  // Example: Register and enqueue script in the footer
-
-  wp_register_script(
-    'illusia-script',
-    get_stylesheet_directory_uri() . '/js/illusia-script.js',
-    [],
-    false,
-    true // Or use array( 'strategy' => 'defer' )
-  );
-
-  wp_enqueue_script( 'illusia-script' );
-
-  // Example: Register and enqueue deferred script with dependency
-
-  wp_register_script(
-    'illusia-another-script',
-    get_stylesheet_directory_uri() . '/js/illusia-script.js',
-    ['fictioneer-application-scripts'], // Parent theme dependency
-    false,
-    array( 'strategy' => 'defer' ) // Must be deferred or everything breaks
-  );
-
-  wp_enqueue_script( 'illusia-another-script' );
-
-  */
 }
 add_action( 'wp_enqueue_scripts', 'illusia_enqueue_styles_and_scripts', 99 );
 
@@ -91,5 +63,3 @@ function illusia_customize_admin() {
   */
 }
 add_action( 'admin_init', 'illusia_customize_admin' );
-
-?>

@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+- `docs/STANDARDS.md` — Padrão Ouro: regras PHP, segurança, CSS, JS, a11y, versionamento
+- `docs/DESIGN-DIRECTION.md` — Direção artística completa com sistema dinâmico de cores HSL
+- `css/illusia-properties.css` — Override integral das custom properties do Fictioneer (v5.34.4)
+
+### Changed
+- `functions.php` — Enqueue de `illusia-properties.css` com prioridade 99
+- Sistema de cores do design direction migrado de hex estático para HSL dinâmico com variáveis de controle (`--illusia-hue-offset`, `--illusia-saturation`, `--illusia-darken`, `--illusia-font-saturation`, `--illusia-font-lightness`)
+
 ## [1.0.3] - 2026-02-25
 ### Changed
 - Renamed theme from "Fictioneer Child Theme" to "Illusia Theme"
