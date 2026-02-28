@@ -18,7 +18,7 @@
  * ════════════════════════════════════════════════════════════════
  */
 
-/* ══════════════════════════════════════════════════════════════
+/** ══════════════════════════════════════════════════════════════
  * 1. ILLUSIA DESIGN TOKENS
  * ══════════════════════════════════════════════════════════════ */
 
@@ -85,62 +85,62 @@
    */
   --ink-0: hsl(
     calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-    max(calc(40% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    max(calc(8% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
     clamp(0%, calc(93% * var(--illusia-font-lightness, 1)), 100%)
   );
   --ink-1: hsl(
     calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-    max(calc(26% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    max(calc(7% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
     clamp(0%, calc(89% * var(--illusia-font-lightness, 1)), 100%)
   );
   --ink-2: hsl(
     calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-    max(calc(20% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    max(calc(6% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
     clamp(0%, calc(85% * var(--illusia-font-lightness, 1)), 100%)
   );
   --ink-3: hsl(
     calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-    max(calc(18% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    max(calc(5% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
     clamp(0%, calc(80.5% * var(--illusia-font-lightness, 1)), 100%)
   );
   --ink-4: hsl(
     calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-    max(calc(18% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    max(calc(5% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
     clamp(0%, calc(77% * var(--illusia-font-lightness, 1)), 100%)
   );
   --ink-5: hsl(
     calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-    max(calc(18% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    max(calc(5% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
     clamp(0%, calc(71% * var(--illusia-font-lightness, 1)), 100%)
   );
   --ink-6: hsl(
     calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-    max(calc(16% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    max(calc(4% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
     clamp(0%, calc(65% * var(--illusia-font-lightness, 1)), 100%)
   );
   --ink-7: hsl(
     calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-    max(calc(12% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    max(calc(3% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
     clamp(0%, calc(61% * var(--illusia-font-lightness, 1)), 100%)
   );
   --ink-8: hsl(
     calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-    max(calc(11% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    max(calc(3% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
     clamp(0%, calc(54% * var(--illusia-font-lightness, 1)), 100%)
   );
   --ink-9: hsl(
     calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-    max(calc(9% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    max(calc(2% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
     clamp(0%, calc(49% * var(--illusia-font-lightness, 1)), 100%)
   );
   --ink-tinted: hsl(
     calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-    max(calc(22% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    max(calc(6% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
     clamp(0%, calc(76% * var(--illusia-font-lightness, 1)), 100%)
   );
   --ink-inverted: hsl(
     calc(var(--illusia-void-hue) + var(--illusia-hue-offset))
-    max(calc(20% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    max(calc(6% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
     clamp(0%, calc(5% * var(--illusia-font-lightness, 1)), 100%)
   );
 

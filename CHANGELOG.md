@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-02-28
+
+### Added
+- `functions.php` — Enqueue de Google Fonts (Playfair Display + Syne) como dependência do illusia-properties.css
+
+### Changed
+- `css/illusia-properties.css` — Saturação dos tokens ink reduzida de 9–40% para 2–8%; texto quase neutro com warmth sutil, eliminando fadiga visual em leitura prolongada
+
 ## [1.1.1] - 2026-02-28
 
 ### Fixed
