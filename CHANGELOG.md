@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-02-28
+
 ### Added
 - `docs/STANDARDS.md` — Padrão Ouro: regras PHP, segurança, CSS, JS, a11y, versionamento
 - `docs/DESIGN-DIRECTION.md` — Direção artística completa com sistema dinâmico de cores HSL
@@ -14,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 - `css/illusia-properties.css` — Variáveis de controle reconectadas ao sistema de offsets do Fictioneer; modal de hue-rotate/darken/saturation volta a funcionar
+- `css/illusia-properties.css` — Legibilidade de texto restaurada: overrides manuais de cor (ink-9 a 49% L) removidos; Fictioneer fg-* resolve via mapeamento fg→ink com contraste testado (+9–22% lightness em tabs, pagination, buttons, code, navigation)
 
 ### Changed
 - `functions.php` — Enqueue de `illusia-properties.css` com prioridade 99
@@ -33,8 +36,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - Fictioneer `--bg-*` remapeado para void hue (270°), `--fg-*` para ink hue (35°)
   - Fictioneer `--primary-*` → amber, `--green-*` → sage, `--red-*` → crimson
   - Font families: `--ff-base` → Syne, `--ff-heading` → Playfair Display, `--ff-mono` → Fira Code
-  - ~200 variáveis Fictioneer com comentário indicando token Illusia correspondente
   - Zero hex/rgba estático nas variáveis sobrescritas — tudo via HSL dinâmico ou referência a token
+- `css/illusia-properties.css` — Slimizado de 1.653 → ~590 linhas (−64%)
+  - Removida Seção 7 (Rule Blocks) — 523 linhas de regras CSS estruturais que o tema pai já provê
+  - Removidos ~200 overrides redundantes idênticos ao Fictioneer (shadows, font weights/sizes, popup/tooltip/comment/button props)
+  - Removidos overrides manuais de cor de texto — fg→ink mapping (Seção 4) já faz o trabalho
+  - Seção 6 (Light Mode) reescrita: 260→65 linhas, hue 210° (azul Fictioneer) → 270° void / 35° ink com sat/lightness original
+  - Seção 2 (Control Variables) limpa: removidos computed vars e props idênticos ao Fictioneer
+  - Seção 5 (Scoped Blocks) limpa: removidos WP preset font sizes e font weight selectors idênticos
+  - Propriedades de componentes padronizadas: `--void-*` → `--bg-*`, `--ink-*` → `--fg-*` (respondem ao modal Fictioneer)
 
 ## [1.0.3] - 2026-02-25
 ### Changed

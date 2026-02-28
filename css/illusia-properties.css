@@ -9,11 +9,10 @@
  * ESTRUTURA:
  * 1. Illusia Design Tokens (fonte de verdade)
  * 2. Fictioneer Control Variables (mapeadas para Illusia)
- * 3. Fictioneer Dark Mode Colors & Components (overrides)
+ * 3. Fictioneer Dark Mode — bg→void mapping + overrides genuínos
  * 4. Fictioneer fg colors → Illusia ink
- * 5. Scoped blocks (reference — mostly unchanged)
- * 6. Light mode (reference — unchanged)
- * 7. Rule blocks (reference — unchanged)
+ * 5. Scoped blocks (minimal, tags, toggles, etc.)
+ * 6. Light Mode — Illusia hue overrides (bg→void, fg→ink)
  *
  * Carregado com prioridade 99 via wp_enqueue_scripts
  * ════════════════════════════════════════════════════════════════
@@ -184,7 +183,7 @@
   --border-active: hsl(var(--amber-free) / .45);
 
   /* ── Glass ── */
-  --glass-bg:     hsl(var(--void-1-free) / .7); /* → void-1 (8% L, was void-2) */
+  --glass-bg:     hsl(var(--bg-900-free) / .7);
   --glass-blur:   blur(clamp(8px, 1.5vw, 16px));
   --glass-border: hsl(var(--illusia-border-base) / .08);
 
@@ -237,26 +236,6 @@
    * ══════════════════════════════════════════════════════════════ */
 
   --site-width: 1100px; /* → max-w */
-  --lightness-offset: 0;
-  /* ── Fictioneer computed vars — fórmulas originais restauradas ──
-   * O modal do Fictioneer altera os *-offset via inline style.
-   * Estas fórmulas produzem os multiplicadores que Illusia consome
-   * via --illusia-darken, --illusia-saturation, etc.
-   */
-  --darken: (1 + var(--lightness-offset));
-  --saturation-offset: 0;
-  --saturation: (1 + var(--saturation-offset));
-  --font-saturation-offset: 0;
-  --font-saturation: (1 + var(--font-saturation-offset));
-  --font-lightness-offset: 0;
-  --font-lightness: (1 + var(--font-lightness-offset));
-  --hue-offset: 0deg;
-  --hue-rotate: 0deg + var(--hue-offset);
-  --sidebar-width: 256px;
-  --sidebar-gap: 3rem;
-  --sidebar-mobile-divider: 2px solid var(--layout-lineart-color);
-  --sidebar-mobile-divider-margin: 1rem var(--layout-spacing-horizontal-small);
-  --ff-system: "-apple-system", "Segoe UI", Roboto, "Oxygen-Sans", Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, sans-serif;
   --ff-base: var(--ff-ui); /* → Syne */
   --ff-heading: var(--ff-display); /* → Playfair Display */
   --ff-note: var(--ff-ui); /* → Syne */
@@ -268,15 +247,14 @@
   --ff-chapter-title: var(--ff-display); /* → Playfair Display */
   --ff-chapter-list-title: var(--ff-ui); /* → Syne */
   --ff-card-body: var(--ff-ui); /* → Syne */
-  --ff-card-list-link: inherit;
   --ff-nav-item: var(--ff-ui); /* → Syne */
   --header-image-height: clamp(210px, 42.1875vw + 75px, 480px);
   --header-height: calc(clamp(190px, 29.6875vw + 95px, 380px) - var(--page-inset-top, 0px));
   --header-logo-height: 210px;
   --site-title-font-size: clamp(32px, 4.375vw + 18px, 60px);
   --site-title-tagline-font-size: clamp(13px, .78125vw + 10.5px, 18px);
-  --site-title-heading-color: var(--ink-0); /* → ink-0 */
-  --site-title-tagline-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
+  --site-title-heading-color: var(--fg-100);
+  --site-title-tagline-color: var(--fg-950);
   --site-title-text-shadow: none;
   --data-image-2x2-black: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAAAAACMmsGiAAAAC0lEQVQI12NgwAQAABQAAeWGsEoAAAAASUVORK5CYII=);
   --navigation-height: 48px
@@ -287,97 +265,59 @@
  * ══════════════════════════════════════════════════════════════ */
 
 :root {
-  --theme-color-base: 270 60 4; /* → void-0 HSL (updated to match new void-0) */
-  --body-bg-color: var(--void-0); /* → void-0 */
-  --site-bg-color: var(--void-0); /* → void-0 (was void-1) */
-  --fullscreen-background: var(--page-bg-color);
-  --dark-shade-rgb: 0 0 0;
-  --read-ribbon-background: var(--bg-50);
-  --read-ribbon-color: var(--fg-inverted);
-  --read-ribbon-box-shadow: 0 0 2px hsl(0 0% 0% / .3);
-  --code-background: hsl(var(--void-0-free) / .6); /* → void-0 */
-  --code-background-inline: hsl(var(--void-0-free) / .6); /* → void-0 */
-  --code-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
-  --spoiler-background: var(--bg-100);
-  --spoiler-color-visible: var(--fg-inverted);
-  --ins-background: var(--sage); /* → sage */
-  --ins-color: var(--fg-inverted);
-  --del-background: var(--crimson); /* → crimson */
-  --del-color: var(--fg-inverted);
-  --caption-overlay-background: linear-gradient(to top, hsl(0 0% 0% / .5) 0%, hsl(0 0% 0% / .37) 19%, hsl(0 0% 0% / .27) 34%, hsl(0 0% 0% / .19) 47%, hsl(0 0% 0% / .14) 56.5%, hsl(0 0% 0% / .1) 65%, hsl(0 0% 0% / .06) 73%, hsl(0 0% 0% / .04) 80.2%, hsl(0 0% 0% / .02) 86.1%, hsl(0 0% 0% / .01) 91%, transparent 95.2%, transparent 100%);
-  --caption-overlay-color: var(--ink-0); /* → ink-0 */
-  --caption-padding: 1.75rem .5rem .5rem;
-  --progress-bar-background: var(--navigation-background);
-  --progress-bar-color: var(--bg-200);
-  --skeleton-shape-color: var(--bg-300);
-  --skeleton-cutout-color: var(--page-bg-color);
-  --embed-background: var(--disabled-pattern);
-  --embed-box-shadow: 0 0 1px hsl(0 0% 0% / .7);
-  --table-border-color: var(--fg-950);
-  --table-border-color-striped: var(--fg-950);
-  --table-background-striped: hsl(0 0% 0% / .15);
-  --calendar-th-background: var(--void-1); /* → void-1 (8% L) */
-  --calendar-border-color: var(--void-1); /* → void-1 (8% L) */
-  --calendar-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
-  --paragraph-spacing: 1.5em;
-  --blockquote-background: hsl(0 0% 0% / .15);
-  --placeholder-background: var(--void-0); /* → void-0 */
-  --kbd-background: hsl(0 0% 100% / .1);
-  --infobox-background: hsl(0 0% 0% / .17);
-  --text-shadow: none;
-  --checkmark-checked: var(--fg-600);
-  --checkmark-not-checked: var(--void-0); /* → void-0 */
-  --tax-cloud-current: var(--amber); /* → amber */
-  --disabled-pattern: hsl(0 0% 0% / .08) repeating-linear-gradient(-45deg, hsl(0 0% 0% / .08), hsl(0 0% 0% / .08) 2px, transparent 2px, transparent 5px);
-  --strong-filter: brightness(1.05);
-  --invert-filter: invert(0);
-  --splide-arrow: var(--bg-400);
-  --splide-arrow-hover: var(--bg-100);
-  --splide-arrow-active: var(--bg-100);
-  --splide-pagination: var(--bg-400);
-  --splide-pagination-hover: var(--bg-300);
-  --splide-pagination-active: var(--bg-100);
-  --litrpg-background: var(--bg-50);
-  --litrpg-color: var(--fg-inverted);
-  --litrpg-ins: var(--sage); /* → sage */
-  --litrpg-del: var(--crimson); /* → crimson */
-  --litrpg-polygon: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
-  --litrpg-drop-shadow: var(--drop-shadow-m);
-  --content-li-background: var(--content-li-background-gradient);
-  --content-li-background-full: hsl(var(--bg-950-free) / 10%);
-  --content-li-background-gradient: linear-gradient(to left, hsl(var(--bg-950-free) / 10%) 0%, hsl(var(--bg-950-free) / 10%) 55%, transparent 90%);
-  --content-li-hr-border: 1.5px solid var(--hr-border-color, var(--layout-lineart-color));
-  --current-content-li-background: hsl(0 0% 0% / .25);
+  --theme-color-base: 270 60 4;
 
-  /* ── primary → amber ── */
-  --primary-400: hsl(var(--amber-free)); /* → amber */
-  --primary-500: hsl(var(--amber-free)); /* → amber */
-  --primary-600: hsl(var(--amber-dim-free)); /* → amber-dim */
+  /* ── Core backgrounds (darker than Fictioneer) ── */
+  --body-bg-color: var(--bg-950);
+  --site-bg-color: var(--bg-950);
+  --page-bg-color: var(--bg-900);
+  --card-bg-color: var(--bg-800);
+  --card-footer-bg-color: var(--bg-950);
+  --card-overlay-bg-color: var(--bg-950);
+  --modal-bg-color: var(--bg-800);
+  --navigation-background: var(--bg-950);
+  --navigation-submenu-background: var(--bg-700);
+  --navigation-item-background-hover: var(--bg-700);
+  --navigation-subitem-background-hover: var(--bg-800);
+  --mobile-menu-background: var(--bg-900);
+  --mobile-menu-advanced-background: var(--bg-950);
+  --micro-menu-background: var(--bg-950);
+  --bg-isolated-footer: var(--bg-950);
+  --scrollbar-background: var(--bg-950);
 
-  /* ── green → sage ── */
-  --green-400: hsl(var(--sage-free)); /* → sage */
-  --green-500: hsl(var(--sage-free)); /* → sage */
-  --green-600: hsl(var(--sage-dim-free)); /* → sage-dim */
+  /* ── Glass backgrounds ── */
+  --code-background: hsl(var(--bg-950-free) / .6);
+  --code-background-inline: hsl(var(--bg-950-free) / .6);
+  --input-background: hsl(var(--bg-950-free) / .6);
 
-  /* ── red → crimson ── */
-  --red-400: hsl(var(--crimson-free)); /* → crimson */
-  --red-500: hsl(var(--crimson-free)); /* → crimson */
-  --red-600: hsl(var(--crimson-dim-free)); /* → crimson-dim */
+  /* ── Color identity swaps ── */
+  --primary-400: hsl(var(--amber-free));
+  --primary-500: hsl(var(--amber-free));
+  --primary-600: hsl(var(--amber-dim-free));
+  --green-400: hsl(var(--sage-free));
+  --green-500: hsl(var(--sage-free));
+  --green-600: hsl(var(--sage-dim-free));
+  --red-400: hsl(var(--crimson-free));
+  --red-500: hsl(var(--crimson-free));
+  --red-600: hsl(var(--crimson-dim-free));
+  --ins-background: var(--sage);
+  --del-background: var(--crimson);
+  --tax-cloud-current: var(--amber);
+  --litrpg-ins: var(--sage);
+  --litrpg-del: var(--crimson);
 
-  /* ── bg-* → remapped to Illusia void hue ── */
-  /* Mapping 1:1 — cada bg-X-free = void correspondente */
-  --bg-50-free:  var(--void-10-free); /* → void-10 (80% L) */
-  --bg-100-free: var(--void-9-free);  /* → void-9  (68% L) */
-  --bg-200-free: var(--void-8-free);  /* → void-8  (54% L) */
-  --bg-300-free: var(--void-7-free);  /* → void-7  (38% L) */
-  --bg-400-free: var(--void-6-free);  /* → void-6  (31% L) */
-  --bg-500-free: var(--void-5-free);  /* → void-5  (26.5% L) */
-  --bg-600-free: var(--void-4-free);  /* → void-4  (23.5% L) */
-  --bg-700-free: var(--void-3-free);  /* → void-3  (20% L) */
-  --bg-800-free: var(--void-2-free);  /* → void-2  (17% L) */
-  --bg-900-free: var(--void-1-free);  /* → void-1  (8% L) */
-  --bg-950-free: var(--void-0-free);  /* → void-0  (4% L) */
-
+  /* ── bg-* → void mapping (core bridge) ── */
+  --bg-50-free:  var(--void-10-free);
+  --bg-100-free: var(--void-9-free);
+  --bg-200-free: var(--void-8-free);
+  --bg-300-free: var(--void-7-free);
+  --bg-400-free: var(--void-6-free);
+  --bg-500-free: var(--void-5-free);
+  --bg-600-free: var(--void-4-free);
+  --bg-700-free: var(--void-3-free);
+  --bg-800-free: var(--void-2-free);
+  --bg-900-free: var(--void-1-free);
+  --bg-950-free: var(--void-0-free);
   --bg-50:  hsl(var(--bg-50-free));
   --bg-100: hsl(var(--bg-100-free));
   --bg-200: hsl(var(--bg-200-free));
@@ -390,308 +330,105 @@
   --bg-900: hsl(var(--bg-900-free));
   --bg-950: hsl(var(--bg-950-free));
 
-  /* ── Layout spacing → Illusia space tokens ── */
-  --layout-spacing-vertical: var(--space-xl); /* → space-xl */
-  --layout-spacing-horizontal: var(--space-xl); /* → space-xl */
-  --layout-spacing-horizontal-small: var(--space-md); /* → space-md */
-  --layout-border-radius-large: var(--r-sm); /* → r-sm */
-  --layout-border-radius-small: var(--r-xs); /* → r-xs */
+  /* ── Layout spacing → Illusia tokens ── */
+  --layout-spacing-vertical: var(--space-xl);
+  --layout-spacing-horizontal: var(--space-xl);
+  --layout-spacing-horizontal-small: var(--space-md);
+  --layout-border-radius-large: var(--r-sm);
+  --layout-border-radius-small: var(--r-xs);
   --layout-link-color: inherit;
   --layout-link-color-hover: inherit;
-  --layout-lineart-color: var(--border-1); /* → border-1 */
+  --layout-lineart-color: var(--border-1);
   --layout-hr-border: 2px solid var(--hr-color);
   --layout-hr-border-dashed: 2px dashed var(--hr-color);
-  --layout-widget-spacing: var(--space-lg); /* → space-lg */
+  --layout-widget-spacing: var(--space-lg);
   --layout-widget-spacing-heading-multiplier: .5;
-  --block-spacing-20: var(--space-xs); /* → space-xs */
-  --block-spacing-30: var(--space-md); /* → space-md */
-  --block-spacing-40: var(--space-lg); /* → space-lg */
-  --block-spacing-50: var(--space-xl); /* → space-xl */
-  --block-spacing-60: var(--space-2xl); /* → space-2xl */
-  --block-spacing-70: var(--space-3xl); /* → space-3xl */
+  --block-spacing-20: var(--space-xs);
+  --block-spacing-30: var(--space-md);
+  --block-spacing-40: var(--space-lg);
+  --block-spacing-50: var(--space-xl);
+  --block-spacing-60: var(--space-2xl);
+  --block-spacing-70: var(--space-3xl);
   --block-spacing-80: 8rem;
   --hr-color: var(--layout-lineart-color);
   --hr-size: 2px;
   --hr-spacing: max(2.5rem, calc(var(--paragraph-spacing) + 1rem));
   --hr-dots-color: var(--bg-200);
-  --minimal-page-box-shadow: 0 0 1px hsl(0 0% 0% / .4);
-  --minimal-page-drop-shadow: drop-shadow(0 0 1px hsl(0 0% 0% / .4));
-  --minimal-box-shadow: 0 0 1px hsl(0 0% 0% / .4);
-  --minimal-drop-shadow: drop-shadow(0 0 1px hsl(0 0% 0% / .4));
-  --header-image-drop-shadow: drop-shadow(0 0 2px hsl(0 0% 0% / .4));
-  --page-inset-top: 3rem;
-  --page-bg-color: var(--void-1); /* → void-1 (8% L, was void-2) */
-  --page-box-shadow: 0 0 3px hsl(0 0% 0% / .2);
-  --page-drop-shadow: drop-shadow(0 1px 1.5px hsl(0 0% 0% / .25));
-  --card-bg-color: var(--void-2); /* → void-2 (17% L, was void-3) */
-  --card-footer-bg-color: var(--void-0); /* → void-0 (was void-1) */
-  --card-overlay-bg-color: var(--void-0); /* → void-0 (was void-1) */
-  --card-content-li-background: var(--card-content-li-background-gradient);
-  --card-content-li-background-full: hsl(var(--bg-950-free) / 16%);
-  --card-content-li-background-gradient: linear-gradient(to left, hsl(var(--bg-950-free) / 16%) 0%, hsl(var(--bg-950-free) / 16%) 55%, transparent 90%);
-  --card-label-color: var(--fg-inverted);
-  --card-label-background: var(--amber-dim); /* → amber-dim */
-  --card-unavailable-filter: grayscale(.5) blur(1.5px);
-  --card-frame-border-color: var(--border-1); /* → border-1 */
 
-  /* ── Navigation ── */
-  --navigation-background: var(--void-0); /* → void-0 */
-  --navigation-background-start-opacity: 0;
-  --navigation-background-end-opacity: 1;
-  --navigation-submenu-background: var(--void-3); /* → void-3 (20% L, was void-4) */
-  --navigation-item-background-hover: var(--void-3); /* → void-3 (20% L, was void-4) */
-  --navigation-subitem-background-hover: var(--void-2); /* → void-2 (17% L, was void-3) */
-  --navigation-color: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
-  --navigation-color-hover: var(--ink-0); /* → ink-0 */
-  --navigation-font-size: clamp(14px, .508906vw + 12.0916px, 16px);
-  --navigation-subitem-divider: 1px solid var(--border-0); /* → border-0 */
-  --navigation-submenu-box-shadow: 0 4px 3px -2px hsl(0 0% 0% / .3);
-  --navigation-drop-shadow: drop-shadow(0 3px 2px hsl(0 0% 0% / .2));
-  --alert-highlight-color: var(--amber); /* → amber */
-  --new-alert-icon-text-color: var(--fg-inverted);
-
-  /* ── Tabs ── */
-  --tab-background: var(--void-3); /* → void-3 (20% L, was void-4) */
-  --tab-background-hover: var(--void-4); /* → void-4 (23.5% L, was void-5) */
-  --tab-background-active: var(--bg-100);
-  --tab-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
-  --tab-color-hover: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
-  --tab-color-active: var(--fg-inverted);
-  --tab-text-shadow: none;
-
-  /* ── Filter reel ── */
-  --filter-reel-background: hsl(var(--bg-950-free) / 16%);
-  --filter-reel-background-active: var(--bg-100);
-  --filter-reel-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
-  --filter-reel-color-hover: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
-  --filter-reel-color-active: var(--fg-inverted);
-  --filter-reel-text-shadow: none;
-  --filter-reel-lightbox-hover-shadow: linear-gradient(to bottom, hsl(0 0% 0% / .25) 0%, transparent 100%);
-  --filter-reel-filter-hover-shadow: linear-gradient(to top, hsl(0 0% 0% / .15) 0%, transparent 100%);
-
-  /* ── Pagination ── */
-  --pagination-background: var(--void-3); /* → void-3 (20% L, was void-4) */
-  --pagination-background-hover: var(--void-4); /* → void-4 (23.5% L, was void-5) */
-  --pagination-background-current: var(--bg-200);
-  --pagination-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
-  --pagination-color-hover: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
-  --pagination-color-current: var(--fg-inverted);
-  --fg-isolated-footer: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
-  --fg-isolated-footer-hover: var(--ink-0); /* → ink-0 */
-  --bg-isolated-footer: var(--void-0); /* → void-0 */
-
-  /* ── Modal ── */
-  --modal-overlay: hsl(0 0% 0% / .35);
-  --modal-bg-color: var(--void-2); /* → void-2 (17% L, was void-3) */
-
-  /* ── Shadows ── */
-  --box-shadow-border: 0 0 0 1.5px var(--card-frame-border-color, hsl(0 0% 0% / .6));
-  --box-shadow-xs: 0 1px 2px 0 hsl(0 0% 0% / .09), 0 -1px 1px 0 hsl(0 0% 0% / .03);
-  --box-shadow-s: 0 1px 3px 0 hsl(0 0% 0% / .11), 0 1px 2px -1px hsl(0 0% 0% / .1);
-  --box-shadow: 0 3px 6px -1px hsl(0 0% 0% / .12), 0 -1px 4px -2px hsl(0 0% 0% / .15);
-  --box-shadow-m: hsl(0 0% 0% / .14) 0 2px 5px 0, hsl(0 0% 0% / .05) 0 1px 1px 0;
-  --box-shadow-l: hsl(0 0% 0% / .1) 0 5px 12px -2px, hsl(0 0% 0% / .15) 0 1px 7px -3px;
-  --box-shadow-xl: 0 3px 8px -1px hsl(0 0% 0% / .09), 0 3px 12px -1px hsl(0 0% 0% / .17);
-  --drop-shadow-border: drop-shadow(0 -1.5px 0 var(--card-frame-border-color, hsl(0 0% 0% / .7))) drop-shadow(0 1.5px 0 var(--card-frame-border-color, hsl(0 0% 0% / .7))) drop-shadow(1.5px 0 0 var(--card-frame-border-color, hsl(0 0% 0% / .7))) drop-shadow(-1.5px 0 0 var(--card-frame-border-color, hsl(0 0% 0% / .7)));
-  --drop-shadow-xs: drop-shadow(0 1px 1px hsl(0 0% 0% / .06)) drop-shadow(0 0 1px hsl(0 0% 0% / .06));
-  --drop-shadow-s: drop-shadow(0 1px 2px hsl(0 0% 0% / .07)) drop-shadow(0 1px 1px hsl(0 0% 0% / .07));
-  --drop-shadow: drop-shadow(0 2px 2px hsl(0 0% 0% / .1)) drop-shadow(0 -1px 5px hsl(0 0% 0% / .04));
-  --drop-shadow-m: drop-shadow(0 2px 3px hsl(0 0% 0% / .1)) drop-shadow(0 1px 1px hsl(0 0% 0% / .1));
-  --drop-shadow-l: drop-shadow(0 4px 5px hsl(0 0% 0% / .05)) drop-shadow(0 3px 5px hsl(0 0% 0% / .07));
-  --drop-shadow-xl: drop-shadow(0 3px 5px hsl(0 0% 0% / .11)) drop-shadow(0 3px 6px hsl(0 0% 0% / .11));
-
-  /* ── Mobile menu ── */
-  --mobile-menu-background: var(--void-1); /* → void-1 (8% L, was void-2) */
-  --mobile-menu-advanced-background: var(--void-0); /* → void-0 */
-  --mobile-menu-box-shadow: 2px 0 3px hsl(0 0% 0% / .3);
-  --mobile-advanced-menu-site-box-shadow: inset -5px 0 3px -4px hsl(0 0% 0% / .3);
-  --mobile-menu-overlay: hsl(0 0% 0% / .5);
-  --mobile-menu-bookmark-progress-background: hsl(0 0% 0% / .4);
-
-  /* ── Font weights ── */
-  --font-smoothing-webkit: subpixel-antialiased;
-  --font-smoothing-moz: auto;
-  --font-weight-normal: 300;
-  --font-weight-strong: 600;
-  --font-weight-semi-strong: 400;
-  --font-weight-medium: 400;
-  --font-weight-heading: 600;
-  --font-weight-badge: 600;
-  --font-weight-post-meta: 300;
-  --font-weight-read-ribbon: 600;
-  --font-weight-card-label: 600;
-  --font-weight-navigation: 400;
-  --font-line-height-base: 1.7;
-  --font-letter-spacing-base: .017em;
-
-  /* ── Fictioneer font sizes (reference) ── */
-  --fs-xxxs: .625rem;
-  --fs-xxs: .75rem;
-  --fs-xs: .875rem;
-  --fs-s: 1rem;
-  --fs-m: 1.125rem;
-  --fs-ml: 1.25rem;
-  --fs-l: 1.5rem;
-  --fs-xl: 1.75rem;
-  --fs-xxl: 2.125rem;
-  --fs-xxxl: 2.5rem;
-  --fs-xxxxl: 3rem;
-  --fs-em-xxxs: .625em;
-  --fs-em-xxs: .75em;
-  --fs-em-xs: .875em;
-  --fs-em-s: 1em;
-  --fs-em-m: 1.125em;
-  --fs-em-ml: 1.25em;
-  --fs-em-l: 1.5em;
-  --fs-em-xl: 1.75em;
-  --fs-em-xxl: 2.125em;
-  --fs-em-xxxl: 2.5em;
-  --fs-em-xxxxl: 3em;
-  --fs-dxxs: clamp(11px, .543478vw + 8.82609px, 13px);
-  --fs-dxs: clamp(12px, .271739vw + 10.913px, 13px);
-  --fs-ds: clamp(13px, .271739vw + 11.913px, 14px);
-  --fs-widget: clamp(13.5px, 3.125cqw, 15px);
-
-  /* ── Block heading sizes → Illusia text tokens ── */
-  --block-fs-h1: var(--text-2xl); /* → text-2xl */
-  --block-fs-h2: var(--text-xl); /* → text-xl */
-  --block-fs-h3: var(--text-lg); /* → text-lg */
-  --block-fs-h4: var(--text-md); /* → text-md */
-  --block-fs-h5: var(--text-base); /* → text-base */
+  /* ── Block heading sizes → Illusia tokens ── */
+  --block-fs-h1: var(--text-2xl);
+  --block-fs-h2: var(--text-xl);
+  --block-fs-h3: var(--text-lg);
+  --block-fs-h4: var(--text-md);
+  --block-fs-h5: var(--text-base);
   --block-fs-h6: var(--fs-s);
 
-  /* ── Link colors ── */
-  --heading-link-color: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
-  --heading-link-color-hover: var(--ink-0); /* → ink-0 */
-  --inline-link-color: var(--amber); /* → amber */
-  --inline-link-color-hover: var(--amber); /* → amber */
-  --inline-link-color-visited: var(--amber-dim); /* → amber-dim */
+  /* ── Links → amber ── */
+  --alert-highlight-color: var(--amber);
+  --inline-link-color: var(--amber);
+  --inline-link-color-hover: var(--amber);
+  --inline-link-color-visited: var(--amber-dim);
   --inline-link-text-decoration: underline transparent solid .05em;
   --inline-link-text-decoration-hover: underline currentColor solid .05em;
   --widget-link-color: inherit;
-  --widget-link-color-hover: var(--ink-0); /* → ink-0 */
-  --footnote-link-color: var(--amber); /* → amber */
-  --footnote-link-color-hover: var(--amber-dim); /* → amber-dim */
+  --widget-link-color-hover: var(--fg-100);
+  --footnote-link-color: var(--amber);
+  --footnote-link-color-hover: var(--amber-dim);
 
-  /* ── Bookmarks (Fictioneer-specific) ── */
-  --bookmark-color-alpha: hsl(222 10% 55%);
-  --bookmark-color-beta: hsl(var(--crimson-free)); /* → crimson */
-  --bookmark-color-gamma: hsl(var(--teal-free)); /* → teal */
-  --bookmark-color-delta: hsl(210 70% 57%);
-  --bookmark-line: var(--amber); /* → amber */
-  --bookmark-button-color-active-alpha: var(--fg-inverted);
-  --bookmark-button-color-active-beta: var(--fg-inverted);
-  --bookmark-button-color-active-gamma: var(--fg-inverted);
-  --bookmark-button-color-active-delta: var(--fg-inverted);
-  --bookmark-progress-opacity: .15;
-  --bookmark-progress-mobile-opacity: .75;
+  /* ── Tabs / pagination (darker than Fictioneer) ── */
+  --tab-background: var(--bg-700);
+  --tab-background-hover: var(--bg-600);
+  --pagination-background: var(--bg-700);
+  --pagination-background-hover: var(--bg-600);
 
-  /* ── Buttons ── */
-  --button-font-weight: 500;
-  --button-box-shadow: none;
-  --button-color-active: var(--fg-inverted);
-  --button-background-active: var(--bg-100);
-  --button-border-active: 1px solid transparent;
-  --button-barberpole: var(--void-3); /* → void-3 (20% L, was void-4) */
-  --button-oauth-connected: var(--button-background-active);
-  --button-primary-background: var(--void-4); /* → void-4 (23.5% L, was void-5) */
-  --button-primary-background-hover: var(--bg-300);
-  --button-primary-background-disabled: var(--void-3); /* → void-3 (20% L, was void-4) */
-  --button-primary-color: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
-  --button-primary-color-hover: var(--ink-0); /* → ink-0 */
-  --button-primary-color-disabled: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
-  --button-primary-filter-disabled: saturate(.7) opacity(.3) brightness(1.4);
-  --button-secondary-background: transparent;
-  --button-secondary-background-hover: var(--void-3); /* → void-3 (20% L, was void-4) */
-  --button-secondary-background-disabled: repeating-linear-gradient(-45deg, hsl(0 0% 100% / .06), hsl(0 0% 100% / .06) 2px, transparent 2px, transparent 4px);
-  --button-secondary-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
-  --button-secondary-color-hover: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
-  --button-secondary-color-disabled: var(--ink-9); /* → ink-9 (49% L, was ink-3) */
-  --button-secondary-border: 1px solid var(--border-1); /* → border-1 */
-  --button-secondary-border-hover: 1px solid var(--border-2); /* → border-2 */
-  --button-secondary-border-disabled: 1px solid var(--border-1); /* → border-1 */
-  --button-warning-background: var(--crimson); /* → crimson */
-  --button-warning-background-hover: hsl(var(--crimson-dim-free)); /* → crimson-dim */
-  --button-warning-color: var(--ink-0); /* → ink-0 */
-  --button-warning-color-hover: var(--ink-0); /* → ink-0 */
-  --button-suggestion-color: var(--fg-inverted);
-  --button-suggestion-color-hover: var(--fg-inverted);
-  --button-suggestion-background: var(--bg-100);
-  --button-suggestion-background-hover: var(--bg-50);
-  --button-quick-background: var(--void-3); /* → void-3 (20% L, was void-4) */
-  --button-quick-background-hover: var(--bg-300);
-  --button-quick-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
-  --button-quick-color-hover: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
+  /* ── Navigation ── */
+  --navigation-subitem-divider: 1px solid var(--border-0);
 
-  /* ── Input ── */
-  --post-password-background: var(--input-background);
-  --post-password-cutout: var(--void-1); /* → void-1 (8% L, was void-2) */
-  --post-password-submit-color: var(--void-3); /* → void-3 (20% L, was void-4) */
-  --input-placeholder-color: var(--ink-9); /* → ink-9 (49% L, was ink-3) */
-  --input-background: hsl(var(--void-0-free) / .6); /* → void-0 glass */
-  --input-background-disabled: hsl(0 0% 0% / .15) repeating-linear-gradient(-45deg, hsl(0 0% 0% / .15), hsl(0 0% 0% / .15) 2px, transparent 2px, transparent 5px);
-  --input-color: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
-  --input-color-disabled: var(--ink-9); /* → ink-9 (49% L, was ink-3) */
-  --input-fill: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
-  --input-range-thumb: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
-  --input-range-thumb-hover: var(--ink-0); /* → ink-0 */
-  --input-token-background: var(--void-3); /* → void-3 (20% L, was void-4) */
-  --input-token-color: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
+  /* ── Cards ── */
+  --card-label-background: var(--amber-dim);
+  --card-frame-border-color: var(--border-1);
 
-  /* ── Popups & menus ── */
-  --popup-menu-background: var(--bg-50);
-  --popup-menu-background-hover: var(--bg-100);
-  --popup-menu-color: var(--fg-inverted);
-  --popup-menu-color-hover: var(--fg-inverted);
-  --micro-menu-background: var(--void-0); /* → void-0 */
-  --micro-menu-color: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
-  --micro-menu-color-hover: var(--ink-0); /* → ink-0 */
-  --micro-menu-box-shadow: var(--box-shadow-l);
-  --tooltip-background: var(--bg-50);
-  --tooltip-text: var(--fg-inverted);
+  /* ── Buttons (darker than Fictioneer) ── */
+  --button-barberpole: var(--bg-700);
+  --button-primary-background: var(--bg-600);
+  --button-primary-background-disabled: var(--bg-700);
+  --button-secondary-background-hover: var(--bg-700);
+  --button-secondary-border: 1px solid var(--border-1);
+  --button-secondary-border-hover: 1px solid var(--border-2);
+  --button-secondary-border-disabled: 1px solid var(--border-1);
+  --button-quick-background: var(--bg-700);
+
+  /* ── Inputs ── */
+  --post-password-cutout: var(--bg-900);
+  --post-password-submit-color: var(--bg-700);
+  --input-token-background: var(--bg-700);
+
+  /* ── Bookmarks → Illusia accents ── */
+  --bookmark-color-beta: hsl(var(--crimson-free));
+  --bookmark-color-gamma: hsl(var(--teal-free));
 
   /* ── Notices ── */
-  --notice-default-background: var(--bg-50);
-  --notice-default-color: var(--fg-inverted);
-  --notice-warning-background: var(--crimson); /* → crimson */
-  --notice-warning-color: var(--ink-0); /* → ink-0 */
-  --notice-success-background: var(--sage); /* → sage */
-  --notice-success-color: var(--ink-0); /* → ink-0 */
-  --notice-box-shadow: var(--box-shadow-l);
-
-  /* ── Comments ── */
-  --comment-background: hsl(0 0% 0% / .15);
-  --comment-background-private: hsl(0 0% 0% / .15) repeating-linear-gradient(-45deg, hsl(0 0% 0% / .1), hsl(0 0% 0% / .1) 3px, transparent 3px, transparent 6px);
-  --comment-background-deleted: hsl(0 0% 0% / .15) repeating-linear-gradient(-45deg, hsl(0 0% 100% / .03), hsl(0 0% 100% / .03) 3px, transparent 3px, transparent 6px);
-  --comment-background-offensive: hsl(0 0% 0% / .15) repeating-linear-gradient(45deg, hsl(0 0% 100% / .03), hsl(0 0% 100% / .03) 3px, transparent 3px, transparent 6px);
-  --comment-background-sticky: hsl(0 0% 0% / .2);
-  --comment-border-sticky: 1px dashed hsl(0 0% 100% / .2);
-  --load-comments-background: hsl(0 0% 0% / .15);
-  --load-comments-background-hover: hsl(0 0% 0% / .25);
-  --load-comments-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
-  --load-comments-color-hover: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
-
-  /* ── Misc ── */
-  --transition-duration: var(--t-fast); /* → t-fast (110ms) */
-  --text-selection-background: hsl(var(--amber-free) / .2); /* → amber glass */
-  --text-selection-color: var(--ink-0); /* → ink-0 */
-  --scrollbar-background: var(--void-0); /* → void-0 (was void-1) */
-  --scrollbar-thumb: var(--amber-dim); /* → amber-dim */
-  --scrollbar-box-shadow: none;
+  --notice-warning-color: var(--fg-100);
+  --notice-success-color: var(--fg-100);
 
   /* ── Badges ── */
-  --badge-generic-color: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
-  --badge-generic-background: var(--void-3); /* → void-3 (20% L, was void-4) */
-  --badge-supporter-color: var(--ink-0); /* → ink-0 */
-  --badge-supporter-background: hsl(var(--crimson-free)); /* → crimson */
-  --badge-moderator-color: var(--ink-0); /* → ink-0 */
+  --badge-generic-background: var(--bg-700);
+  --badge-supporter-color: var(--fg-100);
+  --badge-supporter-background: hsl(var(--crimson-free));
+  --badge-moderator-color: var(--fg-100);
   --badge-moderator-background: hsl(210 30% 45%);
-  --badge-admin-color: var(--ink-0); /* → ink-0 */
-  --badge-admin-background: hsl(var(--violet-free)); /* → violet */
-  --badge-author-color: var(--ink-0); /* → ink-0 */
-  --badge-author-background: var(--amber-dim); /* → amber-dim */
-  --badge-override-color: var(--ink-0); /* → ink-0 */
-  --badge-override-background: var(--void-4) /* → void-4 (23.5% L, was void-5) */
+  --badge-admin-color: var(--fg-100);
+  --badge-admin-background: hsl(var(--violet-free));
+  --badge-author-color: var(--fg-100);
+  --badge-author-background: var(--amber-dim);
+  --badge-override-color: var(--fg-100);
+  --badge-override-background: var(--bg-600);
+
+  /* ── Misc ── */
+  --transition-duration: var(--t-fast);
+  --text-selection-background: hsl(var(--amber-free) / .2);
+  --scrollbar-thumb: var(--amber-dim);
+  --scrollbar-box-shadow: none
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -718,68 +455,36 @@
  * 5. SCOPED BLOCKS
  * ══════════════════════════════════════════════════════════════ */
 
-:root .chapter-formatting {
-  --wp--preset--font-size--extra-small: .75em;
-  --wp--preset--font-size--small: .875em;
-  --wp--preset--font-size--normal: 1em;
-  --wp--preset--font-size--medium: 1.125em;
-  --wp--preset--font-size--large: 1.5em;
-  --wp--preset--font-size--extra-large: 1.75em;
-  --wp--preset--font-size--huge: 2.125em;
-  --wp--preset--font-size--gigantic: 2.5em
-}
 :root .consent-banner {
-  --consent-banner-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
-  --consent-banner-background: var(--void-0) /* → void-0 */
+  --consent-banner-background: var(--bg-950)
 }
 :root .selected-paragraph {
-  --paragraph-selection-background: hsl(var(--amber-free) / .1); /* → amber halo */
+  --paragraph-selection-background: hsl(var(--amber-free) / .1);
   --paragraph-tools-filter: drop-shadow(0 1px 4px hsl(0 0% 0% / .33));
-  --button-bookmark-background-active: var(--amber) /* → amber */
+  --button-bookmark-background-active: var(--amber)
 }
 :root .tts-interface {
-  --tts-background: var(--void-0); /* → void-0 */
-  --tts-button-active-background: var(--amber); /* → amber */
+  --tts-background: var(--bg-950);
+  --tts-button-active-background: var(--amber);
   --tts-button-active-text: var(--fg-inverted)
 }
 :root .current-reading {
   --tts-current-reading-background: hsl(0 0% 100% / .05)
 }
-:root .toggle {
-  --toggle-background: transparent;
-  --toggle-background-checked: var(--bg-100);
-  --toggle-background-hover: var(--bg-50);
-  --toggle-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
-  --toggle-color-hover: var(--ink-0); /* → ink-0 */
-  --toggle-color-checked: var(--fg-inverted);
-  --toggle-color-checked-hover: var(--fg-inverted);
-  --toggle-border: var(--bg-100);
-  --toggle-border-checked: var(--bg-100);
-  --toggle-border-hover: var(--bg-50)
-}
 :root .tag-pill {
-  --tag-background: var(--void-4); /* → void-4 (23.5% L, was void-5) */
+  --tag-background: var(--bg-600);
   --tag-background-hover: var(--bg-300);
-  --tag-color: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
-  --tag-color-hover: var(--ink-0); /* → ink-0 */
-  --tag-secondary-background: transparent;
-  --tag-secondary-background-hover: var(--void-4); /* → void-4 (23.5% L, was void-5) */
-  --tag-secondary-color: var(--ink-9); /* → ink-9 (49% L, was ink-3) */
-  --tag-secondary-color-hover: var(--ink-0); /* → ink-0 */
-  --tag-secondary-border: .5px solid var(--border-1); /* → border-1 */
+  --tag-secondary-background-hover: var(--bg-600);
+  --tag-secondary-border: .5px solid var(--border-1);
   --tag-secondary-border-hover: .5px solid transparent;
-  --tag-inline-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
-  --tag-inline-color-hover: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
-  --tag-warning-background: hsl(var(--crimson-free) / .1); /* → crimson glass */
-  --tag-warning-background-hover: hsl(var(--crimson-free) / .65); /* → crimson glass */
-  --tag-warning-color: var(--ink-9); /* → ink-9 (49% L, was ink-3) */
-  --tag-warning-color-hover: var(--ink-0); /* → ink-0 */
-  --tag-warning-border: .5px solid var(--border-1); /* → border-1 */
+  --tag-warning-background: hsl(var(--crimson-free) / .1);
+  --tag-warning-background-hover: hsl(var(--crimson-free) / .65);
+  --tag-warning-border: .5px solid var(--border-1);
   --tag-warning-border-hover: .5px solid transparent
 }
 :root.minimal {
-  --site-title-heading-color: var(--ink-0); /* → ink-0 */
-  --site-title-tagline-color: var(--ink-0); /* → ink-0 */
+  --site-title-heading-color: var(--fg-100);
+  --site-title-tagline-color: var(--fg-100);
   --site-title-text-shadow: none;
   --text-shadow: none;
   --mobile-menu-text-shadow: none;
@@ -808,846 +513,80 @@
   --card-style-border-width: 1px
 }
 :root[data-mode=dark] body {
-  --wp--preset--color--vivid-red: var(--crimson); /* → crimson */
-  --wp--preset--color--vivid-cyan-blue: hsl(var(--teal-free)); /* → teal */
-  --wp--preset--color--vivid-purple: hsl(var(--violet-free)) /* → violet */
+  --wp--preset--color--vivid-red: var(--crimson);
+  --wp--preset--color--vivid-cyan-blue: hsl(var(--teal-free));
+  --wp--preset--color--vivid-purple: hsl(var(--violet-free))
 }
 :root[data-mode=dark] body ::selection {
   background-color: var(--text-selection-background);
   color: var(--text-selection-color);
   text-shadow: none
 }
-:root[data-font-weight=normal]:-webkit-any(html) {
-  --font-smoothing-webkit: subpixel-antialiased;
-  --font-smoothing-moz: auto;
-  --font-weight-normal: 400;
-  --font-weight-semi-strong: 600;
-  --font-weight-strong: 700;
-  --font-weight-medium: 500;
-  --font-weight-heading: 700;
-  --font-weight-badge: 600;
-  --font-weight-post-meta: 400;
-  --font-weight-read-ribbon: 700;
-  --font-weight-card-label: 600;
-  --font-weight-navigation: 400;
-  --font-letter-spacing-base: 0em
-}
-:root[data-font-weight=normal]:is(html) {
-  --font-smoothing-webkit: subpixel-antialiased;
-  --font-smoothing-moz: auto;
-  --font-weight-normal: 400;
-  --font-weight-semi-strong: 600;
-  --font-weight-strong: 700;
-  --font-weight-medium: 500;
-  --font-weight-heading: 700;
-  --font-weight-badge: 600;
-  --font-weight-post-meta: 400;
-  --font-weight-read-ribbon: 700;
-  --font-weight-card-label: 600;
-  --font-weight-navigation: 400;
-  --font-letter-spacing-base: 0em
-}
-:root[data-font-weight=thinner]:-webkit-any(html) {
-  --font-weight-normal: 300;
-  --font-weight-strong: 500;
-  --font-weight-medium: 400;
-  --font-weight-heading: 600;
-  --font-weight-badge: 600;
-  --font-weight-post-meta: 300;
-  --font-weight-read-ribbon: 500;
-  --font-weight-navigation: 400
-}
-:root[data-font-weight=thinner]:is(html) {
-  --font-weight-normal: 300;
-  --font-weight-strong: 500;
-  --font-weight-medium: 400;
-  --font-weight-heading: 600;
-  --font-weight-badge: 600;
-  --font-weight-post-meta: 300;
-  --font-weight-read-ribbon: 500;
-  --font-weight-navigation: 400
-}
 
 /* ══════════════════════════════════════════════════════════════
- * 6. LIGHT MODE (reference — unchanged from Fictioneer)
+ * 6. LIGHT MODE — Illusia hue overrides
+ *
+ * O Fictioneer define o light mode completo com hue 210° (azul).
+ * Aqui sobrescrevemos apenas o necessário:
+ * - bg-*-free: hue 210° → illusia void hue (270°)
+ * - fg-*: hue ~222° → illusia ink hue (35°)
+ * - Color swaps: primary→amber, green→sage, red→crimson
+ * Todo o resto herda do Fictioneer e resolve via nosso hue.
  * ══════════════════════════════════════════════════════════════ */
 
 :root[data-mode=light] {
-  --theme-color-base:210 13 91;
-  --body-bg-color:var(--bg-400);
-  --site-bg-color:var(--bg-200);
-  --read-ribbon-background:var(--bg-100);
-  --read-ribbon-color:var(--fg-400);
-  --code-background:hsl(var(--bg-950-free) / 7%);
-  --code-background-inline:hsl(var(--bg-950-free) / 7%);
-  --code-color:var(--fg-600);
-  --spoiler-background:var(--bg-800);
-  --ins-background:var(--green-400);
-  --ins-color:inherit;
-  --del-background:var(--red-400);
-  --del-color:inherit;
-  --progress-bar-background:var(--bg-800);
-  --skeleton-shape-color:var(--bg-400);
-  --embed-box-shadow:0 0 1px #00000059;
-  --table-border-color:var(--fg-950);
-  --table-border-color-striped:var(--fg-950);
-  --table-background-striped:hsl(var(--bg-950-free) / 6%);
-  --calendar-th-background:var(--bg-300);
-  --calendar-border-color:var(--bg-300);
-  --calendar-color:var(--fg-800);
-  --blockquote-background:hsl(var(--bg-950-free) / 8%);
-  --kbd-background:var(--bg-300);
-  --infobox-background:hsl(var(--bg-950-free) / 5%);
-  --text-shadow:-1px -1px 1px #00000005;
-  --checkmark-not-checked:var(--bg-400);
-  --disabled-pattern:hsl(var(--bg-950-free) / 3%) repeating-linear-gradient(-45deg, hsl(var(--bg-950-free) / 6%), hsl(var(--bg-950-free) / 6%) 2px, transparent 2px, transparent 5px);
-  --chapter-list-warning-color:var(--red-600);
-  --chapter-infobox-warning-color:var(--red-600);
-  --strong-filter:none;
-  --invert-filter:invert(1);
-  --splide-arrow:var(--bg-400);
-  --splide-arrow-hover:var(--bg-700);
-  --splide-arrow-active:var(--bg-700);
-  --splide-pagination:var(--bg-400);
-  --splide-pagination-hover:var(--bg-500);
-  --splide-pagination-active:var(--bg-700);
-  --litrpg-background:var(--bg-50);
-  --litrpg-color:var(--fg-400);
-  --litrpg-drop-shadow:var(--drop-shadow-s);
-  --content-li-background-full:hsl(var(--bg-950-free) / 3%);
-  --content-li-background-gradient:linear-gradient(to left, hsl(var(--bg-950-free) / 3%) 0%, hsl(var(--bg-950-free) / 3%) 55%, transparent 90%);
-  --current-content-li-background:hsl(var(--bg-950-free) / 10%);
-  --primary-400:#6ea2f7;
-  --primary-500:#3c83f6;
-  --primary-600:#1e3fae;
-  --green-400:#a4db8a;
-  --green-500:#72bd51;
-  --green-600:#5cac39;
-  --red-400:#f98686;
-  --red-500:#f15b5b;
-  --red-600:#dd3c3c;
-  --bg-50-free:calc(210deg + var(--hue-rotate)) calc(20% * var(--saturation)) clamp(49.5%, 99% * var(--darken), 99.5%);
-  --bg-100-free:calc(210deg + var(--hue-rotate)) calc(20% * var(--saturation)) clamp(49%, 98% * var(--darken), 99%);
-  --bg-200-free:calc(210deg + var(--hue-rotate)) calc(10% * var(--saturation)) clamp(48%, 96% * var(--darken), 98%);
-  --bg-300-free:calc(210deg + var(--hue-rotate)) calc(13% * var(--saturation)) clamp(45.5%, 91% * var(--darken), 95.5%);
-  --bg-400-free:calc(210deg + var(--hue-rotate)) calc(11% * var(--saturation)) clamp(42%, 84% * var(--darken), 92%);
-  --bg-500-free:calc(210deg + var(--hue-rotate)) calc(11% * var(--saturation)) clamp(37.5%, 75% * var(--darken), 87.5%);
-  --bg-600-free:calc(210deg + var(--hue-rotate)) calc(9% * var(--saturation)) clamp(23%, 46% * var(--darken), 73%);
-  --bg-700-free:calc(210deg + var(--hue-rotate)) calc(14% * var(--saturation)) clamp(17%, 34% * var(--darken), 67%);
-  --bg-800-free:calc(210deg + var(--hue-rotate)) calc(28% * var(--saturation)) clamp(8.5%, 17% * var(--darken), 58.5%);
-  --bg-900-free:calc(210deg + var(--hue-rotate)) calc(39% * var(--saturation)) clamp(5.5%, 11% * var(--darken), 55.5%);
-  --bg-950-free:calc(210deg + var(--hue-rotate)) calc(71% * var(--saturation)) clamp(2%, 4% * var(--darken), 52%);
-  --layout-lineart-color:hsl(var(--bg-950-free) / 15%);
-  --hr-dots-color:var(--bg-600);
-  --page-bg-color:var(--bg-100);
-  --card-bg-color:var(--bg-50);
-  --card-footer-bg-color:hsl(var(--bg-950-free) / 5%);
-  --card-overlay-bg-color:var(--bg-300);
-  --card-content-li-background-full:hsl(var(--bg-950-free) / 3%);
-  --card-content-li-background-gradient:linear-gradient(to left, hsl(var(--bg-950-free) / 3%) 50%, transparent 90%);
-  --card-frame-border-color:var(--bg-300);
-  --card-footer-color:var(--fg-600);
-  --card-footer-icon-color:var(--fg-800);
-  --card-text-icon-color:var(--fg-600);
-  --navigation-background:var(--bg-50);
-  --navigation-submenu-background:var(--bg-300);
-  --navigation-item-background-hover:var(--bg-300);
-  --navigation-subitem-background-hover:var(--bg-400);
-  --navigation-color:var(--fg-500);
-  --navigation-color-hover:var(--fg-100);
-  --navigation-subitem-divider:1px solid var(--bg-500);
-  --navigation-drop-shadow:drop-shadow(0 2px 1px #0000002b);
-  --tab-background:var(--bg-300);
-  --tab-background-active:var(--bg-700);
-  --tab-color:var(--fg-700);
-  --tab-color-hover:var(--fg-500);
-  --tab-text-shadow:none;
-  --filter-reel-background:var(--bg-300);
-  --filter-reel-background-active:var(--bg-700);
-  --filter-reel-color:var(--fg-700);
-  --filter-reel-text-shadow:none;
-  --pagination-background:var(--bg-300);
-  --pagination-background-current:var(--bg-700);
-  --pagination-color:var(--fg-500);
-  --pagination-color-hover:var(--fg-300);
-  --fg-isolated-footer:var(--fg-950);
-  --fg-isolated-footer-hover:var(--fg-inverted);
-  --modal-bg-color:var(--bg-50);
-  --mobile-menu-background:var(--bg-100);
-  --mobile-menu-advanced-background:var(--bg-400);
-  --mobile-menu-box-shadow:1px 0 3px #0000004d;
-  --mobile-menu-overlay:#00000059;
-  --mobile-menu-bookmark-progress-background:hsl(var(--bg-950-free) / 10%);
-  --font-weight-normal:400;
-  --font-weight-strong:700;
-  --font-weight-semi-strong:600;
-  --font-weight-medium:500;
-  --font-weight-heading:700;
-  --font-weight-post-meta:400;
-  --font-weight-read-ribbon:700;
-  --font-weight-card-label:600;
-  --font-letter-spacing-base:0em;
-  --heading-link-color-hover:var(--fg-500);
-  --inline-link-color-hover:var(--primary-600);
-  --inline-link-text-decoration:underline transparent solid 1px;
-  --inline-link-text-decoration-hover:underline currentColor solid 1px;
-  --widget-link-color-hover:var(--primary-500);
-  --bookmark-color-alpha:#9ca3b0;
-  --bookmark-color-beta:#f59e0b;
-  --bookmark-color-gamma:#77bfa3;
-  --bookmark-color-delta:#dd5960;
-  --bookmark-button-color-active-beta:var(--fg-300);
-  --bookmark-button-color-active-gamma:var(--fg-300);
-  --bookmark-button-color-active-delta:var(--fg-300);
-  --bookmark-progress-opacity:.25;
-  --bookmark-progress-mobile-opacity:1;
-  --button-background-active:var(--bg-700);
-  --button-barberpole:var(--bg-300);
-  --button-primary-background:var(--bg-600);
-  --button-primary-background-hover:var(--bg-700);
-  --button-primary-background-disabled:var(--bg-400);
-  --button-primary-color:var(--fg-inverted);
-  --button-primary-color-hover:var(--fg-inverted);
-  --button-primary-filter-disabled:opacity(.6);
-  --button-secondary-background-hover:var(--bg-300);
-  --button-secondary-background-disabled:repeating-linear-gradient(-45deg, hsl(var(--bg-950-free) / 6%), hsl(var(--bg-950-free) / 6%) 2px, transparent 2px, transparent 4px);
-  --button-secondary-border:1px solid var(--bg-400);
-  --button-secondary-border-hover:1px solid var(--bg-500);
-  --button-secondary-border-disabled:1px solid var(--bg-400);
-  --button-suggestion-background:var(--bg-600);
-  --button-suggestion-background-hover:var(--bg-700);
-  --button-quick-background:var(--bg-600);
-  --button-quick-background-hover:var(--bg-700);
-  --button-quick-color:var(--fg-inverted);
-  --button-quick-color-hover:var(--fg-inverted);
-  --post-password-cutout:var(--bg-100);
-  --post-password-submit-color:var(--bg-100);
-  --input-background:hsl(var(--bg-950-free) / 7%);
-  --input-background-disabled:var(--disabled-pattern);
-  --input-fill:var(--fg-800);
-  --input-range-thumb:var(--fg-800);
-  --input-range-thumb-hover:var(--fg-600);
-  --input-token-background:var(--bg-600);
-  --input-token-color:var(--fg-inverted);
-  --popup-menu-background:var(--bg-800);
-  --popup-menu-background-hover:var(--bg-700);
-  --micro-menu-background:var(--bg-800);
-  --micro-menu-color:var(--fg-inverted);
-  --micro-menu-color-hover:var(--fg-inverted);
-  --tooltip-background:var(--bg-800);
-  --notice-default-background:var(--bg-800);
-  --notice-default-color:#fff;
-  --comment-background:hsl(var(--bg-950-free) / 6%);
-  --comment-background-private:hsl(var(--bg-950-free) / 3%) repeating-linear-gradient(-45deg, #0000000a, #0000000a 3px, transparent 3px, transparent 6px);
-  --comment-background-deleted:hsl(var(--bg-950-free) / 2%) repeating-linear-gradient(-45deg, #00000005, #00000005 3px, transparent 3px, transparent 6px);
-  --comment-background-offensive:hsl(var(--bg-950-free) / 3%) repeating-linear-gradient(45deg, #0000000a, #0000000a 3px, transparent 3px, transparent 6px);
-  --comment-background-sticky:hsl(var(--bg-950-free) / 9%);
-  --comment-border-sticky:1px dashed hsl(var(--bg-950-free) / 30%);
-  --comment-color-hidden:var(--fg-950);
-  --load-comments-background:hsl(var(--bg-950-free) / 6%);
-  --load-comments-background-hover:hsl(var(--bg-950-free) / 12%);
-  --scrollbar-background:#0003;
-  --scrollbar-thumb:var(--fg-950);
-  --scrollbar-box-shadow:inset 0 0 6px #0000001a;
-  --badge-generic-color:var(--fg-inverted);
-  --badge-generic-background:#71717a;
-  --badge-admin-color:var(--fg-inverted);
-  --badge-admin-background:#7c3aed;
-  --badge-moderator-color:var(--fg-inverted);
-  --badge-moderator-background:#576eb2;
-  --badge-author-color:var(--fg-inverted);
-  --badge-author-background:#f59e0b;
-  --badge-supporter-color:var(--fg-inverted);
-  --badge-supporter-background:#ed5e76;
-  --badge-override-color:var(--fg-inverted);
-  --badge-override-background:#64748b
-}
-:root[data-mode=light],:root[data-mode=light] .chapter-formatting{
-  --fg-100:hsl(calc(225deg + var(--hue-rotate)) max(calc(80% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(2% * var(--font-lightness,1)), 100%));
-  --fg-200:hsl(calc(224deg + var(--hue-rotate)) max(calc(71% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(4% * var(--font-lightness,1)), 100%));
-  --fg-300:hsl(calc(220deg + var(--hue-rotate)) max(calc(55% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(7% * var(--font-lightness,1)), 100%));
-  --fg-400:hsl(calc(221deg + var(--hue-rotate)) max(calc(39% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(11% * var(--font-lightness,1)), 100%));
-  --fg-500:hsl(calc(225deg + var(--hue-rotate)) max(calc(26% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(16% * var(--font-lightness,1)), 100%));
-  --fg-600:hsl(calc(217deg + var(--hue-rotate)) max(calc(19% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(27% * var(--font-lightness,1)), 100%));
-  --fg-700:hsl(calc(223deg + var(--hue-rotate)) max(calc(11% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(39% * var(--font-lightness,1)), 100%));
-  --fg-800:hsl(calc(220deg + var(--hue-rotate)) max(calc(9% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(46% * var(--font-lightness,1)), 100%));
-  --fg-900:hsl(calc(218deg + var(--hue-rotate)) max(calc(11% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(58% * var(--font-lightness,1)), 100%));
-  --fg-950:hsl(calc(218deg + var(--hue-rotate)) max(calc(11% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(65% * var(--font-lightness,1)), 100%));
-  --fg-tinted:hsl(calc(217deg + var(--hue-rotate)) max(calc(33% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(17% * var(--font-lightness,1)), 100%));
-  --fg-inverted:hsl(calc(210deg + var(--hue-rotate)) max(calc(20% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(99% * var(--font-lightness,1)), 100%))
-}
-:root[data-mode=light] .consent-banner{
-  --inline-link-color:var(--primary-400);
-  --inline-link-color-visited:var(--primary-400);
-  --consent-banner-color:var(--fg-inverted);
-  --button-primary-color:var(--fg-500);
-  --button-primary-color-hover:var(--fg-500);
-  --button-primary-background:var(--fg-inverted);
-  --button-primary-background-hover:var(--fg-inverted)
-}
-:root[data-mode=light] .selected-paragraph{
-  --paragraph-selection-background:hsl(var(--bg-950-free) / 10%);
-  --paragraph-tools-filter:drop-shadow(0 -3px 6px #00000014)
-}
-:root[data-mode=light] .current-reading{
-  --tts-current-reading-background:hsl(var(--bg-950-free) / 5%)
-}
-:root[data-mode=light] .toggle{
-  --toggle-background:transparent;
-  --toggle-background-checked:var(--bg-600);
-  --toggle-background-hover:var(--bg-700);
-  --toggle-color:var(--fg-700);
-  --toggle-color-hover:var(--fg-400);
-  --toggle-border:var(--bg-600);
-  --toggle-border-checked:var(--bg-600);
-  --toggle-border-hover:var(--bg-700)
-}
-:root[data-mode=light] .tag-pill{
-  --tag-background-hover:var(--bg-600);
-  --tag-color:var(--fg-600);
-  --tag-color-hover:var(--fg-inverted);
-  --tag-secondary-background-hover:var(--bg-600);
-  --tag-secondary-color:var(--fg-900);
-  --tag-secondary-color-hover:var(--fg-inverted);
-  --tag-secondary-border:1px solid var(--bg-400);
-  --tag-secondary-border-hover:1px solid transparent;
-  --tag-warning-background-hover:var(--red-500);
-  --tag-warning-color:var(--fg-800);
-  --tag-warning-color-hover:var(--fg-inverted);
-  --tag-warning-border:1px solid var(--bg-400);
-  --tag-warning-border-hover:1px solid transparent
-}
-:root[data-mode=light].minimal{
-  --site-title-heading-color:var(--fg-400);
-  --site-title-tagline-color:var(--fg-400)
-}
-:root[data-font-weight=normal][data-mode=light]:-webkit-any(html){
-  --font-weight-heading:700
-}
-:root[data-font-weight=normal][data-mode=light]:is(html){
-  --font-weight-heading:700
+  --theme-color-base: 270 20 96; /* → void hue, light sat/L */
+
+  /* ── Color identity swaps ── */
+  --primary-400: var(--amber);
+  --primary-500: var(--amber);
+  --primary-600: var(--amber-dim);
+  --green-400: var(--sage);
+  --green-500: var(--sage);
+  --green-600: var(--sage-dim);
+  --red-400: var(--crimson);
+  --red-500: var(--crimson);
+  --red-600: var(--crimson-dim);
+
+  /* ── bg-*-free: Fictioneer light saturation/lightness, Illusia void hue ── */
+  --bg-50-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(20% * var(--saturation)) clamp(49.5%, 99% * var(--darken), 99.5%);
+  --bg-100-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(20% * var(--saturation)) clamp(49%, 98% * var(--darken), 99%);
+  --bg-200-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(10% * var(--saturation)) clamp(48%, 96% * var(--darken), 98%);
+  --bg-300-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(13% * var(--saturation)) clamp(45.5%, 91% * var(--darken), 95.5%);
+  --bg-400-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(11% * var(--saturation)) clamp(42%, 84% * var(--darken), 92%);
+  --bg-500-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(11% * var(--saturation)) clamp(37.5%, 75% * var(--darken), 87.5%);
+  --bg-600-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(9% * var(--saturation)) clamp(23%, 46% * var(--darken), 73%);
+  --bg-700-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(14% * var(--saturation)) clamp(17%, 34% * var(--darken), 67%);
+  --bg-800-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(28% * var(--saturation)) clamp(8.5%, 17% * var(--darken), 58.5%);
+  --bg-900-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(39% * var(--saturation)) clamp(5.5%, 11% * var(--darken), 55.5%);
+  --bg-950-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(71% * var(--saturation)) clamp(2%, 4% * var(--darken), 52%);
+
+  /* ── Accent overrides ── */
+  --ins-background: var(--sage);
+  --del-background: var(--crimson);
+  --inline-link-color-hover: var(--amber-dim);
+  --widget-link-color-hover: var(--amber)
 }
 
-/* ══════════════════════════════════════════════════════════════
- * 7. RULE BLOCKS (reference — unchanged from Fictioneer)
- * ══════════════════════════════════════════════════════════════ */
+/* fg-* light mode: Fictioneer sat/lightness, Illusia ink hue */
+:root[data-mode=light], :root[data-mode=light] .chapter-formatting {
+  --fg-100:  hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(80% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(2% * var(--font-lightness, 1)), 100%));
+  --fg-200:  hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(71% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(4% * var(--font-lightness, 1)), 100%));
+  --fg-300:  hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(55% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(7% * var(--font-lightness, 1)), 100%));
+  --fg-400:  hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(39% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(11% * var(--font-lightness, 1)), 100%));
+  --fg-500:  hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(26% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(16% * var(--font-lightness, 1)), 100%));
+  --fg-600:  hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(19% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(27% * var(--font-lightness, 1)), 100%));
+  --fg-700:  hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(11% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(39% * var(--font-lightness, 1)), 100%));
+  --fg-800:  hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(9% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(46% * var(--font-lightness, 1)), 100%));
+  --fg-900:  hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(11% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(58% * var(--font-lightness, 1)), 100%));
+  --fg-950:  hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(11% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(65% * var(--font-lightness, 1)), 100%));
+  --fg-tinted: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(33% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(17% * var(--font-lightness, 1)), 100%));
+  --fg-inverted: hsl(calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) max(calc(20% * (var(--font-saturation) + var(--saturation) - 1)), 0%) clamp(0%, calc(99% * var(--font-lightness, 1)), 100%))
+}
 
-:root.age-modal-open,:root.age-modal-open body{
-  overflow:hidden
-}
-:root.age-modal-open :-webkit-any(.site,.mobile-menu,.consent-banner){
-  pointer-events:none;
-  filter:blur(5px)brightness(.5)
-}
-:root.age-modal-open :is(.site,.mobile-menu,.consent-banner){
-  pointer-events:none;
-  filter:blur(5px)brightness(.5)
-}
-:root:not(.minimal) .custom-background .site{
-  background-color:#0000
-}
-:root.has-polygon-or-mask:not(.minimal) .main__background{
-  filter:var(--page-drop-shadow);
-  background:0 0;
-  border-radius:0;
-  box-shadow:none!important
-}
-:root.has-polygon-or-mask:not(.minimal) .main__background:before{
-  content:"";
-  background-color:var(--page-bg-color);
-  display:block;
-  position:absolute;
-  top:0;
-  bottom:0;
-  left:0;
-  right:0
-}
-:root.has-polygon-or-mask:not(.minimal) .main__background.will-change:before{
-  will-change:transform
-}
-:root :is(.wp-block-button .wp-block-button__link){
-  cursor:pointer;
-  -webkit-user-select:none;
-  user-select:none;
-  font:var(--button-font-weight) 12px/1 var(--ff-base);
-  letter-spacing:max(.02em,min(.304762vw - .822857px,.04em));
-  white-space:nowrap;
-  text-shadow:none;
-  border:var(--button-primary-border,1px solid transparent);
-  border-radius:var(--layout-border-radius-small);
-  min-width:max(26px,min(10.9091vw - 8.90909px,32px));
-  box-shadow:var(--button-box-shadow);
-  outline-offset:3px;
-  transition:color,background-color,border-color,opacity,filter;
-  transition-duration:var(--transition-duration);
-  flex-shrink:0;
-  justify-content:center;
-  align-items:center;
-  gap:0 6px;
-  padding:calc(.667em + 1px) max(6px,min(1.90476vw - 1.14286px,8px));
-  display:flex
-}
-:root :not([disabled]):hover:is(.wp-block-button .wp-block-button__link){
-  background:var(--button-primary-background-hover);
-  color:var(--button-primary-color-hover);
-  border:var(--button-primary-border-hover,1px solid transparent)
-}
-:root [disabled]:is(.wp-block-button .wp-block-button__link){
-  cursor:not-allowed;
-  pointer-events:none;
-  background:var(--button-primary-background-disabled);
-  color:var(--button-primary-color-disabled);
-  filter:var(--button-primary-filter-disabled)
-}
-:root :not([disabled]).has-background:hover:is(.wp-block-button .wp-block-button__link){
-  filter:brightness(.95)
-}
-:root ._inline:is(.wp-block-button .wp-block-button__link){
-  display:inline-flex
-}
-:root .padding-left{
-  padding-left:var(--layout-spacing-horizontal-small)
-}
-:root .padding-right{
-  padding-right:var(--layout-spacing-horizontal-small)
-}
-:root .padding-top{
-  padding-top:var(--layout-spacing-vertical)
-}
-:root .padding-bottom{
-  padding-bottom:var(--layout-spacing-vertical)
-}
-:root:not([data-mode=light]) .only-lightmode,:root[data-mode=light] .only-darkmode{
-  content-visibility:hidden;
-  display:none
-}
-:root[data-mode=dark] :-webkit-any(.sidebar,.elementor) :where(select){
-  background:var(--input-background) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%237b7d81' d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z'/%3E%3C/svg%3E") no-repeat right 4px center/1em
-}
-:root[data-mode=dark] :is(.sidebar,.elementor) :where(select){
-  background:var(--input-background) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%237b7d81' d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z'/%3E%3C/svg%3E") no-repeat right 4px center/1em
-}
-:root[data-mode=light] :where(.select-wrapper,.wp-block-archives-dropdown):after{
-  filter:invert(0)
-}
-:root :where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box){
-  margin-left:auto;
-  margin-right:auto
-}
-:root :-webkit-any(.alignright,.alignleft):where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box){
-  clear:both;
-  float:none
-}
-:root :is(.alignright,.alignleft):where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box){
-  clear:both;
-  float:none
-}
-:root :is(.alignright,.alignleft):where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box){
-  clear:none;
-  max-width:var(--this-align-max-width,min(45cqw - 2 * var(--layout-spacing-horizontal-small), 45%))
-}
-:root :-webkit-any(.alignright,.alignleft):where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box):not(:lang(ae),:lang(ar),:lang(arc),:lang(bcc),:lang(bqi),:lang(ckb),:lang(dv),:lang(fa),:lang(glk),:lang(he),:lang(ku),:lang(mzn),:lang(nqo),:lang(pnb),:lang(ps),:lang(sd),:lang(ug),:lang(ur),:lang(yi)){
-  margin-left:unset;
-  margin-right:unset
-}
-:root :is(.alignright,.alignleft):where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box):not(:lang(ae),:lang(ar),:lang(arc),:lang(bcc),:lang(bqi),:lang(ckb),:lang(dv),:lang(fa),:lang(glk),:lang(he),:lang(ku),:lang(mzn),:lang(nqo),:lang(pnb),:lang(ps),:lang(sd),:lang(ug),:lang(ur),:lang(yi)){
-  margin-left:unset;
-  margin-right:unset
-}
-:root :-webkit-any(.alignright,.alignleft):where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box):-webkit-any(:lang(ae),:lang(ar),:lang(arc),:lang(bcc),:lang(bqi),:lang(ckb),:lang(dv),:lang(fa),:lang(glk),:lang(he),:lang(ku),:lang(mzn),:lang(nqo),:lang(pnb),:lang(ps),:lang(sd),:lang(ug),:lang(ur),:lang(yi)){
-  margin-right:unset;
-  margin-left:unset
-}
-:root :is(.alignright,.alignleft):where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box):is(:lang(ae),:lang(ar),:lang(arc),:lang(bcc),:lang(bqi),:lang(ckb),:lang(dv),:lang(fa),:lang(glk),:lang(he),:lang(ku),:lang(mzn),:lang(nqo),:lang(pnb),:lang(ps),:lang(sd),:lang(ug),:lang(ur),:lang(yi)){
-  margin-right:unset;
-  margin-left:unset
-}
-:root .alignright:where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box){
-  float:right
-}
-:root .alignright:where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box):not(:lang(ae),:lang(ar),:lang(arc),:lang(bcc),:lang(bqi),:lang(ckb),:lang(dv),:lang(fa),:lang(glk),:lang(he),:lang(ku),:lang(mzn),:lang(nqo),:lang(pnb),:lang(ps),:lang(sd),:lang(ug),:lang(ur),:lang(yi)){
-  margin-left:var(--this-align-right-inline-start,2.5rem);
-  margin-right:var(--this-align-right-inline-end,0)
-}
-:root .alignright:where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box):-webkit-any(:lang(ae),:lang(ar),:lang(arc),:lang(bcc),:lang(bqi),:lang(ckb),:lang(dv),:lang(fa),:lang(glk),:lang(he),:lang(ku),:lang(mzn),:lang(nqo),:lang(pnb),:lang(ps),:lang(sd),:lang(ug),:lang(ur),:lang(yi)){
-  margin-right:var(--this-align-right-inline-start,2.5rem);
-  margin-left:var(--this-align-right-inline-end,0)
-}
-:root .alignright:where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box):is(:lang(ae),:lang(ar),:lang(arc),:lang(bcc),:lang(bqi),:lang(ckb),:lang(dv),:lang(fa),:lang(glk),:lang(he),:lang(ku),:lang(mzn),:lang(nqo),:lang(pnb),:lang(ps),:lang(sd),:lang(ug),:lang(ur),:lang(yi)){
-  margin-right:var(--this-align-right-inline-start,2.5rem);
-  margin-left:var(--this-align-right-inline-end,0)
-}
-:root .alignleft:where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box){
-  float:left
-}
-:root .alignleft:where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box):not(:lang(ae),:lang(ar),:lang(arc),:lang(bcc),:lang(bqi),:lang(ckb),:lang(dv),:lang(fa),:lang(glk),:lang(he),:lang(ku),:lang(mzn),:lang(nqo),:lang(pnb),:lang(ps),:lang(sd),:lang(ug),:lang(ur),:lang(yi)){
-  margin-left:var(--this-align-left-inline-start,0);
-  margin-right:var(--this-align-left-inline-end,2.5rem)
-}
-:root .alignleft:where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box):-webkit-any(:lang(ae),:lang(ar),:lang(arc),:lang(bcc),:lang(bqi),:lang(ckb),:lang(dv),:lang(fa),:lang(glk),:lang(he),:lang(ku),:lang(mzn),:lang(nqo),:lang(pnb),:lang(ps),:lang(sd),:lang(ug),:lang(ur),:lang(yi)){
-  margin-right:var(--this-align-left-inline-start,0);
-  margin-left:var(--this-align-left-inline-end,2.5rem)
-}
-:root .alignleft:where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box):is(:lang(ae),:lang(ar),:lang(arc),:lang(bcc),:lang(bqi),:lang(ckb),:lang(dv),:lang(fa),:lang(glk),:lang(he),:lang(ku),:lang(mzn),:lang(nqo),:lang(pnb),:lang(ps),:lang(sd),:lang(ug),:lang(ur),:lang(yi)){
-  margin-right:var(--this-align-left-inline-start,0);
-  margin-left:var(--this-align-left-inline-end,2.5rem)
-}
-:root :where(:not(:first-child)):where(.wp-block-code){
-  margin-top:var(--this-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:first-child)):where(.wp-block-preformatted){
-  margin-top:var(--this-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:first-child)):where(.wp-block-verse){
-  margin-top:var(--this-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:first-child)):where(.wp-block-buttons){
-  margin-top:var(--this-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:first-child)):where(.wp-block-list,.list,.wp-block-footnotes,.wp-block-archives-list,.wp-block-categories-list){
-  margin-top:var(--this-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:first-child)):where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box){
-  margin-top:var(--this-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:first-child)):where(.alignleft,.alignright):where(.wp-block-preformatted){
-  margin-top:var(--this-float-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:first-child)):where(.alignleft,.alignright):where(.wp-block-verse){
-  margin-top:var(--this-float-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:first-child)):where(.alignleft,.alignright):where(.wp-block-buttons){
-  margin-top:var(--this-float-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:first-child)):where(.alignleft,.alignright):where(.wp-block-list,.list,.wp-block-footnotes,.wp-block-archives-list,.wp-block-categories-list){
-  margin-top:var(--this-float-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:first-child)):where(.alignleft,.alignright):where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box){
-  margin-top:var(--this-float-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:last-child)):where(.wp-block-code){
-  margin-bottom:var(--this-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:last-child)):where(.wp-block-preformatted){
-  margin-bottom:var(--this-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:last-child)):where(.wp-block-verse){
-  margin-bottom:var(--this-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:last-child)):where(.wp-block-buttons){
-  margin-bottom:var(--this-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:last-child)):where(.wp-block-list,.list,.wp-block-footnotes,.wp-block-archives-list,.wp-block-categories-list){
-  margin-bottom:var(--this-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:last-child)):where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box){
-  margin-bottom:var(--this-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:last-child)):where(.alignleft,.alignright):where(.wp-block-preformatted){
-  margin-bottom:var(--this-float-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:last-child)):where(.alignleft,.alignright):where(.wp-block-verse){
-  margin-bottom:var(--this-float-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:last-child)):where(.alignleft,.alignright):where(.wp-block-buttons){
-  margin-bottom:var(--this-float-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:last-child)):where(.alignleft,.alignright):where(.wp-block-list,.list,.wp-block-footnotes,.wp-block-archives-list,.wp-block-categories-list){
-  margin-bottom:var(--this-float-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root :where(:not(:last-child)):where(.alignleft,.alignright):where(.wp-block-calendar,.wp-block-social-links,.wp-block-image,.wp-block-gallery,.wp-block-quote,.wp-block-pullquote,.wp-block-table,.wp-block-file,.wp-block-search,.wp-block-audio,.wp-block-video,.wp-block-embed,.wp-block-latest-posts,.wp-block-latest-comments,.wp-block-loginout,.litrpg-box){
-  margin-bottom:var(--this-float-spacing,max(.5rem, var(--paragraph-spacing)))
-}
-:root .is-layout-flex>:-webkit-any(*,figure,div,p){
-  margin-top:0;
-  margin-bottom:0
-}
-:root .is-layout-flex>:is(*,figure,div,p){
-  margin-top:0;
-  margin-bottom:0
-}
-:root a:where(:not(.wp-element-button,.modal-tooltip)){
-  text-decoration:none
-}
-:root .wp-block-image{
-  --this-spacing:var(--image-spacing,var(--paragraph-spacing));
-  --this-float-spacing:.5rem;
-  --this-align-max-width:min(calc(45cqw - 2 * var(--layout-spacing-horizontal-small)), 50%)
-}
-:root .wp-block-image:where(:not(.alignwide,.alignfull,.alignleft,.aligncenter,.alignright)) .wp-element-caption{
-  text-align:left
-}
-:root .wp-block-gallery{
-  --this-spacing:var(--gallery-spacing,var(--paragraph-spacing))
-}
-:root :where(.wp-block-list,.list,.wp-block-footnotes,.wp-block-archives-list,.wp-block-categories-list){
-  --this-spacing:var(--list-spacing,var(--paragraph-spacing))
-}
-:root :where(.wp-block-buttons){
-  --this-spacing:var(--buttons-spacing,var(--paragraph-spacing))
-}
-:root .wp-block-quote{
-  --this-spacing:var(--blockquote-spacing,calc(var(--paragraph-spacing) + .75rem));
-  --this-align-max-width:min(calc(40cqw - 2 * var(--layout-spacing-horizontal-small)), 40%)
-}
-:root .wp-block-pullquote{
-  --this-spacing:var(--pullquote-spacing,calc(var(--paragraph-spacing) + 1.5rem));
-  --this-float-spacing:.375em;
-  --this-align-max-width:min(calc(40cqw - 2 * var(--layout-spacing-horizontal-small)), 40%)
-}
-:root :where(.wp-block-verse){
-  --this-spacing:var(--preformatted-spacing,calc(var(--paragraph-spacing)));
-  white-space:pre-wrap
-}
-:root :where(.wp-block-preformatted){
-  --this-spacing:var(--preformatted-spacing,calc(var(--paragraph-spacing)))
-}
-:root :where(.wp-block-code){
-  --this-spacing:var(--code-spacing,calc(var(--paragraph-spacing) + .5rem))
-}
-:root .wp-block-table{
-  --this-spacing:var(--table-spacing,calc(var(--paragraph-spacing) + .5rem))
-}
-:root .wp-block-file{
-  --this-spacing:var(--file-spacing,var(--paragraph-spacing))
-}
-:root .wp-block-search{
-  --this-spacing:var(--search-spacing,calc(var(--paragraph-spacing) + .5rem))
-}
-:root :-webkit-any(.wp-block-audio,.wp-block-video){
-  --this-spacing:var(--audio-video-spacing,calc(var(--paragraph-spacing) + .5rem));
-  --this-float-spacing:1rem
-}
-:root :is(.wp-block-audio,.wp-block-video){
-  --this-spacing:var(--audio-video-spacing,calc(var(--paragraph-spacing) + .5rem));
-  --this-float-spacing:1rem
-}
-:root .wp-block-embed{
-  --this-spacing:var(--embed-spacing,calc(var(--paragraph-spacing) + .5rem));
-  --this-float-spacing:1rem
-}
-:root .wp-block-latest-posts{
-  --this-spacing:var(--latest-posts-spacing,calc(var(--paragraph-spacing) + .5rem));
-  --this-float-spacing:1rem
-}
-:root .wp-block-latest-comments{
-  --this-spacing:var(--latest-comments-spacing,calc(var(--paragraph-spacing) + .5rem));
-  --this-float-spacing:1rem
-}
-:root .wp-block-loginout{
-  --this-spacing:var(--latest-comments-spacing,calc(var(--paragraph-spacing) + .5rem));
-  --this-float-spacing:1rem
-}
-:root .wp-block-social-links{
-  --this-spacing:var(--social-links-spacing,calc(var(--paragraph-spacing) + .5rem));
-  --this-float-spacing:1rem
-}
-:root .wp-block-calendar{
-  --this-spacing:var(--social-links-spacing,calc(var(--paragraph-spacing) + .5rem));
-  --this-float-spacing:1rem
-}
-:root.no-background-textures body .background-texture{
-  background-blend-mode:normal!important;
-  background-image:none!important
-}
-:root.no-polygons .site .polygon,:root.no-polygons .site .polygon:before,:root.no-polygons .site .polygon:after{
-  clip-path:none!important;
-  -webkit-mask-image:none!important;
-  mask-image:none!important
-}
-:root.no-text-shadows{
-  --text-shadow:none
-}
-:root.no-covers .site :-webkit-any(.card__image,.card__text-icon,.post-list-item__image,.story__thumbnail,.cover-hidable){
-  content-visibility:hidden!important;
-  display:none!important
-}
-:root.no-covers .site :is(.card__image,.card__text-icon,.post-list-item__image,.story__thumbnail,.cover-hidable){
-  content-visibility:hidden!important;
-  display:none!important
-}
-:root:not(.no-nav-sticky) .scrolling-up.is-inside-main .main-navigation{
-  transform:translate(0,0)
-}
-:root:not(.no-nav-sticky) .scrolling-down.is-inside-main .main-navigation:not(:hover,:focus-within){
-  transform:translateY(-115%)
-}
-:root:not(.no-nav-sticky) body:not(.scrolled-to-top) .main-navigation.is-sticky .main-navigation__background{
-  opacity:var(--navigation-background-end-opacity)
-}
-:root:not(.no-nav-sticky) body:not(.scrolled-to-top) .main-navigation.is-sticky:not(._oversized-navigation) :where(.main-navigation__list,.icon-menu)>:-webkit-any(.menu-item,.page_item){
-  border-radius:0
-}
-:root:not(.no-nav-sticky) body:not(.scrolled-to-top) .main-navigation.is-sticky:not(._oversized-navigation) :where(.main-navigation__list,.icon-menu)>:is(.menu-item,.page_item){
-  border-radius:0
-}
-:root:-webkit-any(:fullscreen,:-webkit-full-screen).header-style-overlay .main-navigation{
-  margin:0
-}
-:root:is(:fullscreen,:fullscreen).header-style-overlay .main-navigation{
-  margin:0
-}
-:root:not(.no-nav-sticky) .site .main-navigation.is-sticky{
-  position:-webkit-sticky;
-  position:sticky
-}
-:root.no-taxonomies :-webkit-any(.cell-tax,.story__taxonomies-space){
-  content-visibility:hidden;
-  display:none
-}
-:root.no-taxonomies :is(.cell-tax,.story__taxonomies-space){
-  content-visibility:hidden;
-  display:none
-}
-:root.no-taxonomies .card__tag-list>:-webkit-any(.tag-pill,.separator-dot){
-  content-visibility:hidden;
-  display:none
-}
-:root.no-taxonomies .card__tag-list>:is(.tag-pill,.separator-dot){
-  content-visibility:hidden;
-  display:none
-}
-:root.no-taxonomies .card._recommendation:not(._seamless) .cell-tax{
-  content-visibility:visible;
-  margin-top:0;
-  margin-bottom:var(--this-spacing);
-  height:0;
-  display:block;
-  overflow:hidden
-}
-:root.no-taxonomies .card._recommendation:not(._seamless) .cell-tax>:-webkit-any(span,a,div){
-  content-visibility:hidden;
-  display:none
-}
-:root.no-taxonomies .card._recommendation:not(._seamless) .cell-tax>:is(span,a,div){
-  content-visibility:hidden;
-  display:none
-}
-:root:not(.no-covers) .card._vertical:not(._seamless) .card__info-toggle:not(.last-clicked){
-  padding-top:calc(2*var(--this-spacing));
-  padding-right:calc(2*var(--this-spacing))
-}
-:root.no-covers .card ._grid._large .cell-desc{
-  min-height:0
-}
-:root.no-covers .story__taxonomies{
-  margin-bottom:1.5rem
-}
-:root.no-covers .story__taxonomies-space{
-  display:none
-}
-:root.no-covers .story__header{
-  display:block
-}
-:root.no-covers .story__header:not(._no-thumbnail,._float-top-left,._float-top-right){
-  padding-top:calc(var(--page-inset-top,0px) + var(--layout-spacing-vertical))
-}
-:root.no-covers .story__title{
-  padding-top:0
-}
-:root.no-taxonomies .story__tags-and-warnings,:root.no-filters .story__filter-reel{
-  display:none
-}
-:root .content-list-style-lines .chapter-index li{
-  border-bottom:var(--content-li-hr-border);
-  border-radius:0
-}
-:root .content-list-style-lines .chapter-index li a{
-  border-bottom:var(--content-li-hr-border);
-  border-color:#0000
-}
-:root .content-list-style-lines .chapter-index li.current{
-  --this-offset:var(--chapter-index-list-gap,var(--content-list-gap,4px));
-  background:linear-gradient(to bottom, var(--current-content-li-background) 0%, var(--current-content-li-background) calc(100% - var(--this-offset)), transparent calc(100% - var(--this-offset)))
-}
-:root.minimal{
-  --layout-spacing-horizontal-minimal:10px;
-  --layout-spacing-vertical-minimal:10px
-}
-:root.minimal .custom-background{
-  background-image:none
-}
-:root.minimal.header-style-split .header{
-  content-visibility:hidden;
-  display:none
-}
-:root.minimal :-webkit-any(.showcase__list-item,.story__thumbnail-image){
-  box-shadow:none
-}
-:root.minimal :is(.showcase__list-item,.story__thumbnail-image){
-  box-shadow:none
-}
-:root.minimal .site{
-  background-image:none
-}
-:root.minimal .header-background{
-  box-shadow:none;
-  filter:none;
-  max-width:unset;
-  left:0;
-  transform:none
-}
-:root.minimal body:not(.content-list-style-lines,.content-list-style-free) .card__link-list-item{
-  padding-left:.35em
-}
-:root.minimal :-webkit-any([data-view=list],.chapter-list) .chapter-group__list-item-link{
-  grid-area:1/1/2/3;
-  padding-left:8px
-}
-:root.minimal :is([data-view=list],.chapter-list) .chapter-group__list-item-link{
-  grid-area:1/1/2/3;
-  padding-left:8px
-}
-:root.minimal :-webkit-any([data-view=list],.chapter-list) .chapter-group__list-item-subrow{
-  grid-area:2/1/3/3;
-  padding-left:8px
-}
-:root.minimal :is([data-view=list],.chapter-list) .chapter-group__list-item-subrow{
-  grid-area:2/1/3/3;
-  padding-left:8px
-}
-:root.minimal .chapter-group__list-item-icon{
-  display:none
-}
-:root.minimal .story__blog-list-item{
-  padding:.5rem 8px
-}
-:root.minimal :-webkit-any(.progress,.header-background__wrapper){
-  content-visibility:hidden;
-  display:none
-}
-:root.minimal :is(.progress,.header-background__wrapper){
-  content-visibility:hidden;
-  display:none
-}
-:root.minimal :-webkit-any(.polygon,.litrpg-frame){
-  clip-path:none!important
-}
-:root.minimal :is(.polygon,.litrpg-frame){
-  clip-path:none!important
-}
-:root.minimal .litrpg-box{
-  filter:none
-}
-:root.minimal .litrpg-frame{
-  border-radius:var(--layout-border-radius-large)
-}
-:root.minimal .story .checkmark{
-  text-shadow:none
-}
-:root.minimal .padding-left{
-  padding-left:var(--layout-spacing-horizontal-minimal)
-}
-:root.minimal .padding-right{
-  padding-right:var(--layout-spacing-horizontal-minimal)
-}
-:root.minimal .padding-top{
-  padding-top:var(--layout-spacing-vertical-minimal)
-}
-:root.minimal .padding-bottom{
-  padding-bottom:var(--layout-spacing-vertical-minimal)
-}
-:root.minimal .has-sidebar{
-  --layout-spacing-horizontal:var(--layout-spacing-horizontal-minimal);
-  --layout-spacing-horizontal-small:var(--layout-spacing-horizontal-minimal)
-}
+/* ── Light mode scoped — selected paragraph ── */
+:root[data-mode=light] .selected-paragraph {
+  --paragraph-selection-background: hsl(var(--amber-free) / .12);
+  --paragraph-tools-filter: drop-shadow(0 -3px 6px #00000014)
+}
+
