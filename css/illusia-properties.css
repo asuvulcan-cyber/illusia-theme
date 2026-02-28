@@ -31,8 +31,11 @@
    * O modal altera --lightness-offset, --saturation-offset, etc.
    * via inline style em :root; as computed vars (--darken, --saturation…)
    * reagem automaticamente.
+   * NOTA: --hue-rotate é setado diretamente pelo modal JS como inline
+   * style com valor `(Xdeg + var(--hue-offset))`, por isso usamos
+   * --hue-rotate aqui (não --hue-offset, que nunca muda via modal).
    */
-  --illusia-hue-offset: var(--hue-offset, 0deg);
+  --illusia-hue-offset: var(--hue-rotate, 0deg);
   --illusia-saturation: var(--saturation);
   --illusia-darken: var(--darken);
   --illusia-font-saturation: var(--font-saturation);
