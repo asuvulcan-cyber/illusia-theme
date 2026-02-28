@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-02-28
+
+### Fixed
+- `css/illusia-properties.css` — Removidos overrides de background de componentes secundários (tabs, pagination, buttons, badges, inputs, tags) que quebravam o par fundo/texto no light mode; Fictioneer gerencia esses pares e a ponte bg→void garante o hue Illusia
+
 ## [1.1.0] - 2026-02-28
 
 ### Added

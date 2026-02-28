@@ -375,54 +375,18 @@
   --footnote-link-color: var(--amber);
   --footnote-link-color-hover: var(--amber-dim);
 
-  /* ── Tabs / pagination (darker than Fictioneer) ── */
-  --tab-background: var(--bg-700);
-  --tab-background-hover: var(--bg-600);
-  --pagination-background: var(--bg-700);
-  --pagination-background-hover: var(--bg-600);
-
-  /* ── Navigation ── */
-  --navigation-subitem-divider: 1px solid var(--border-0);
-
   /* ── Cards ── */
   --card-label-background: var(--amber-dim);
-  --card-frame-border-color: var(--border-1);
-
-  /* ── Buttons (darker than Fictioneer) ── */
-  --button-barberpole: var(--bg-700);
-  --button-primary-background: var(--bg-600);
-  --button-primary-background-disabled: var(--bg-700);
-  --button-secondary-background-hover: var(--bg-700);
-  --button-secondary-border: 1px solid var(--border-1);
-  --button-secondary-border-hover: 1px solid var(--border-2);
-  --button-secondary-border-disabled: 1px solid var(--border-1);
-  --button-quick-background: var(--bg-700);
-
-  /* ── Inputs ── */
-  --post-password-cutout: var(--bg-900);
-  --post-password-submit-color: var(--bg-700);
-  --input-token-background: var(--bg-700);
 
   /* ── Bookmarks → Illusia accents ── */
   --bookmark-color-beta: hsl(var(--crimson-free));
   --bookmark-color-gamma: hsl(var(--teal-free));
 
-  /* ── Notices ── */
-  --notice-warning-color: var(--fg-100);
-  --notice-success-color: var(--fg-100);
-
-  /* ── Badges ── */
-  --badge-generic-background: var(--bg-700);
-  --badge-supporter-color: var(--fg-100);
+  /* ── Badges → Illusia accents ── */
   --badge-supporter-background: hsl(var(--crimson-free));
-  --badge-moderator-color: var(--fg-100);
   --badge-moderator-background: hsl(210 30% 45%);
-  --badge-admin-color: var(--fg-100);
   --badge-admin-background: hsl(var(--violet-free));
-  --badge-author-color: var(--fg-100);
   --badge-author-background: var(--amber-dim);
-  --badge-override-color: var(--fg-100);
-  --badge-override-background: var(--bg-600);
 
   /* ── Misc ── */
   --transition-duration: var(--t-fast);
@@ -470,17 +434,6 @@
 }
 :root .current-reading {
   --tts-current-reading-background: hsl(0 0% 100% / .05)
-}
-:root .tag-pill {
-  --tag-background: var(--bg-600);
-  --tag-background-hover: var(--bg-300);
-  --tag-secondary-background-hover: var(--bg-600);
-  --tag-secondary-border: .5px solid var(--border-1);
-  --tag-secondary-border-hover: .5px solid transparent;
-  --tag-warning-background: hsl(var(--crimson-free) / .1);
-  --tag-warning-background-hover: hsl(var(--crimson-free) / .65);
-  --tag-warning-border: .5px solid var(--border-1);
-  --tag-warning-border-hover: .5px solid transparent
 }
 :root.minimal {
   --site-title-heading-color: var(--fg-100);
