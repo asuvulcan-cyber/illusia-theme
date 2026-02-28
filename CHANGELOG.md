@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.1.3] - 2026-02-28
+
+### Fixed
+- `functions.php` — Overrides de identidade visual (fontes, cores do título) movidos para inline CSS com prioridade 10000, resolvendo conflito com `customize.css` do Fictioneer (prioridade 9999); variáveis de layout/sizing permanecem controláveis pelo Customizer
+
 ## [1.1.2] - 2026-02-28
 
 ### Added

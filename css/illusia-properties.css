@@ -231,33 +231,8 @@
   /* ── Layout ── */
   --max-w: min(1100px, 94vw);
 
-  /* ══════════════════════════════════════════════════════════════
-   * 2. FICTIONEER CONTROL VARIABLES → Illusia
-   * ══════════════════════════════════════════════════════════════ */
-
-  --site-width: 1100px; /* → max-w */
-  --ff-base: var(--ff-ui); /* → Syne */
-  --ff-heading: var(--ff-display); /* → Playfair Display */
-  --ff-note: var(--ff-ui); /* → Syne */
-  --ff-mono: 'Fira Code', monospace; /* → Illusia ff-mono */
-  --ff-input: var(--ff-ui); /* → Syne */
-  --ff-card-title: var(--ff-display); /* → Playfair Display */
-  --ff-site-title: var(--ff-display); /* → Playfair Display */
-  --ff-story-title: var(--ff-display); /* → Playfair Display */
-  --ff-chapter-title: var(--ff-display); /* → Playfair Display */
-  --ff-chapter-list-title: var(--ff-ui); /* → Syne */
-  --ff-card-body: var(--ff-ui); /* → Syne */
-  --ff-nav-item: var(--ff-ui); /* → Syne */
-  --header-image-height: clamp(210px, 42.1875vw + 75px, 480px);
-  --header-height: calc(clamp(190px, 29.6875vw + 95px, 380px) - var(--page-inset-top, 0px));
-  --header-logo-height: 210px;
-  --site-title-font-size: clamp(32px, 4.375vw + 18px, 60px);
-  --site-title-tagline-font-size: clamp(13px, .78125vw + 10.5px, 18px);
-  --site-title-heading-color: var(--fg-100);
-  --site-title-tagline-color: var(--fg-950);
-  --site-title-text-shadow: none;
-  --data-image-2x2-black: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAAAAACMmsGiAAAAC0lEQVQI12NgwAQAABQAAeWGsEoAAAAASUVORK5CYII=);
-  --navigation-height: 48px
+  /* Section 2 (Fictioneer Control Variables) moved to functions.php
+   * as inline CSS to override Fictioneer's customize.css (priority 9999) */
 }
 
 /* ══════════════════════════════════════════════════════════════
