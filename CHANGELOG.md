@@ -12,6 +12,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `css/illusia-properties.css` — Override integral das custom properties do Fictioneer (v5.34.4)
 - `docs/IMPLEMENTATION-GUIDE.md` — Roteiro operacional para redesenho de componentes (Fase 0–3 + checklist)
 
+### Fixed
+- `css/illusia-properties.css` — Variáveis de controle reconectadas ao sistema de offsets do Fictioneer; modal de hue-rotate/darken/saturation volta a funcionar
+
 ### Changed
 - `functions.php` — Enqueue de `illusia-properties.css` com prioridade 99
 - Sistema de cores do design direction migrado de hex estático para HSL dinâmico com variáveis de controle (`--illusia-hue-offset`, `--illusia-saturation`, `--illusia-darken`, `--illusia-font-saturation`, `--illusia-font-lightness`)
