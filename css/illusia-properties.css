@@ -50,46 +50,99 @@
   --illusia-violet-hue: 260deg;
   --illusia-sage-hue: 134deg;
 
-  /* ── Void — fundos (triplets -free + cor final) ── */
-  --void-0-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(18% * var(--illusia-saturation)) clamp(1%, 3% * var(--illusia-darken), 53%);
-  --void-1-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(16% * var(--illusia-saturation)) clamp(2%, 6% * var(--illusia-darken), 56%);
-  --void-2-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(16% * var(--illusia-saturation)) clamp(3%, 8% * var(--illusia-darken), 58%);
-  --void-3-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(14% * var(--illusia-saturation)) clamp(4%, 11% * var(--illusia-darken), 61%);
-  --void-4-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(13% * var(--illusia-saturation)) clamp(5%, 14% * var(--illusia-darken), 64%);
-  --void-5-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(15% * var(--illusia-saturation)) clamp(6%, 17% * var(--illusia-darken), 67%);
+  /* ── Void — fundos (11 stops, paridade 1:1 com Fictioneer bg) ──
+   * Lightness idêntica ao bg original; hue = Illusia void (270°).
+   * Padrão clamp: min = base/2, max = 50 + base/2.
+   * void-0 = bg-950 (darkest) … void-10 = bg-50 (lightest)
+   */
+  --void-0-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(60% * var(--illusia-saturation))  clamp(2%, 4% * var(--illusia-darken), 52%);
+  --void-1-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(25% * var(--illusia-saturation))  clamp(4%, 8% * var(--illusia-darken), 54%);
+  --void-2-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(15% * var(--illusia-saturation))  clamp(8.5%, 17% * var(--illusia-darken), 58.5%);
+  --void-3-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(16% * var(--illusia-saturation))  clamp(10%, 20% * var(--illusia-darken), 60%);
+  --void-4-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(14% * var(--illusia-saturation))  clamp(11.75%, 23.5% * var(--illusia-darken), 61.75%);
+  --void-5-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(13% * var(--illusia-saturation))  clamp(13.25%, 26.5% * var(--illusia-darken), 63.25%);
+  --void-6-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(13% * var(--illusia-saturation))  clamp(15.5%, 31% * var(--illusia-darken), 65.5%);
+  --void-7-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(12% * var(--illusia-saturation))  clamp(19%, 38% * var(--illusia-darken), 69%);
+  --void-8-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(12% * var(--illusia-saturation))  clamp(27%, 54% * var(--illusia-darken), 77%);
+  --void-9-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(12% * var(--illusia-saturation))  clamp(34%, 68% * var(--illusia-darken), 84%);
+  --void-10-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(12% * var(--illusia-saturation))  clamp(40%, 80% * var(--illusia-darken), 90%);
 
-  --void-0: hsl(var(--void-0-free));
-  --void-1: hsl(var(--void-1-free));
-  --void-2: hsl(var(--void-2-free));
-  --void-3: hsl(var(--void-3-free));
-  --void-4: hsl(var(--void-4-free));
-  --void-5: hsl(var(--void-5-free));
+  --void-0:  hsl(var(--void-0-free));
+  --void-1:  hsl(var(--void-1-free));
+  --void-2:  hsl(var(--void-2-free));
+  --void-3:  hsl(var(--void-3-free));
+  --void-4:  hsl(var(--void-4-free));
+  --void-5:  hsl(var(--void-5-free));
+  --void-6:  hsl(var(--void-6-free));
+  --void-7:  hsl(var(--void-7-free));
+  --void-8:  hsl(var(--void-8-free));
+  --void-9:  hsl(var(--void-9-free));
+  --void-10: hsl(var(--void-10-free));
 
-  /* ── Ink — textos ── */
+  /* ── Ink — textos (10 stops + tinted + inverted, paridade 1:1 com Fictioneer fg) ──
+   * Lightness idêntica ao fg original; hue = Illusia ink (35°).
+   * ink-0 = fg-100 (lightest) … ink-9 = fg-950 (darkest visible).
+   * ink-inverted usa void-hue (270°) para texto escuro em fundo claro.
+   */
   --ink-0: hsl(
     calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-    max(calc(51% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
-    clamp(0%, calc(92% * var(--illusia-font-lightness, 1)), 100%)
+    max(calc(40% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    clamp(0%, calc(93% * var(--illusia-font-lightness, 1)), 100%)
   );
   --ink-1: hsl(
     calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-    max(calc(22% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
-    clamp(0%, calc(72% * var(--illusia-font-lightness, 1)), 100%)
+    max(calc(26% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    clamp(0%, calc(89% * var(--illusia-font-lightness, 1)), 100%)
   );
   --ink-2: hsl(
     calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-    max(calc(11% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
-    clamp(0%, calc(49% * var(--illusia-font-lightness, 1)), 100%)
+    max(calc(20% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    clamp(0%, calc(85% * var(--illusia-font-lightness, 1)), 100%)
   );
   --ink-3: hsl(
     calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-    max(calc(16% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
-    clamp(0%, calc(25% * var(--illusia-font-lightness, 1)), 100%)
+    max(calc(18% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    clamp(0%, calc(80.5% * var(--illusia-font-lightness, 1)), 100%)
   );
   --ink-4: hsl(
     calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-    max(calc(27% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
-    clamp(0%, calc(13% * var(--illusia-font-lightness, 1)), 100%)
+    max(calc(18% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    clamp(0%, calc(77% * var(--illusia-font-lightness, 1)), 100%)
+  );
+  --ink-5: hsl(
+    calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
+    max(calc(18% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    clamp(0%, calc(71% * var(--illusia-font-lightness, 1)), 100%)
+  );
+  --ink-6: hsl(
+    calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
+    max(calc(16% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    clamp(0%, calc(65% * var(--illusia-font-lightness, 1)), 100%)
+  );
+  --ink-7: hsl(
+    calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
+    max(calc(12% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    clamp(0%, calc(61% * var(--illusia-font-lightness, 1)), 100%)
+  );
+  --ink-8: hsl(
+    calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
+    max(calc(11% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    clamp(0%, calc(54% * var(--illusia-font-lightness, 1)), 100%)
+  );
+  --ink-9: hsl(
+    calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
+    max(calc(9% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    clamp(0%, calc(49% * var(--illusia-font-lightness, 1)), 100%)
+  );
+  --ink-tinted: hsl(
+    calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
+    max(calc(22% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    clamp(0%, calc(76% * var(--illusia-font-lightness, 1)), 100%)
+  );
+  --ink-inverted: hsl(
+    calc(var(--illusia-void-hue) + var(--illusia-hue-offset))
+    max(calc(20% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+    clamp(0%, calc(5% * var(--illusia-font-lightness, 1)), 100%)
   );
 
   /* ── Acentos — triplets -free + cor final ── */
@@ -131,7 +184,7 @@
   --border-active: hsl(var(--amber-free) / .45);
 
   /* ── Glass ── */
-  --glass-bg:     hsl(var(--void-2-free) / .7);
+  --glass-bg:     hsl(var(--void-1-free) / .7); /* → void-1 (8% L, was void-2) */
   --glass-blur:   blur(clamp(8px, 1.5vw, 16px));
   --glass-border: hsl(var(--illusia-border-base) / .08);
 
@@ -223,7 +276,7 @@
   --site-title-font-size: clamp(32px, 4.375vw + 18px, 60px);
   --site-title-tagline-font-size: clamp(13px, .78125vw + 10.5px, 18px);
   --site-title-heading-color: var(--ink-0); /* → ink-0 */
-  --site-title-tagline-color: var(--ink-2); /* → ink-2 */
+  --site-title-tagline-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
   --site-title-text-shadow: none;
   --data-image-2x2-black: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAAAAACMmsGiAAAAC0lEQVQI12NgwAQAABQAAeWGsEoAAAAASUVORK5CYII=);
   --navigation-height: 48px
@@ -234,9 +287,9 @@
  * ══════════════════════════════════════════════════════════════ */
 
 :root {
-  --theme-color-base: 270 18 3; /* → void-0 HSL */
+  --theme-color-base: 270 60 4; /* → void-0 HSL (updated to match new void-0) */
   --body-bg-color: var(--void-0); /* → void-0 */
-  --site-bg-color: var(--void-1); /* → void-1 */
+  --site-bg-color: var(--void-0); /* → void-0 (was void-1) */
   --fullscreen-background: var(--page-bg-color);
   --dark-shade-rgb: 0 0 0;
   --read-ribbon-background: var(--bg-50);
@@ -244,7 +297,7 @@
   --read-ribbon-box-shadow: 0 0 2px hsl(0 0% 0% / .3);
   --code-background: hsl(var(--void-0-free) / .6); /* → void-0 */
   --code-background-inline: hsl(var(--void-0-free) / .6); /* → void-0 */
-  --code-color: var(--ink-2); /* → ink-2 */
+  --code-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
   --spoiler-background: var(--bg-100);
   --spoiler-color-visible: var(--fg-inverted);
   --ins-background: var(--sage); /* → sage */
@@ -263,9 +316,9 @@
   --table-border-color: var(--fg-950);
   --table-border-color-striped: var(--fg-950);
   --table-background-striped: hsl(0 0% 0% / .15);
-  --calendar-th-background: var(--void-1); /* → void-1 */
-  --calendar-border-color: var(--void-1); /* → void-1 */
-  --calendar-color: var(--ink-2); /* → ink-2 */
+  --calendar-th-background: var(--void-1); /* → void-1 (8% L) */
+  --calendar-border-color: var(--void-1); /* → void-1 (8% L) */
+  --calendar-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
   --paragraph-spacing: 1.5em;
   --blockquote-background: hsl(0 0% 0% / .15);
   --placeholder-background: var(--void-0); /* → void-0 */
@@ -312,17 +365,18 @@
   --red-600: hsl(var(--crimson-dim-free)); /* → crimson-dim */
 
   /* ── bg-* → remapped to Illusia void hue ── */
-  --bg-50-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(8% * var(--illusia-saturation))  clamp(25%, 55% * var(--illusia-darken), 90%);
-  --bg-100-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(9% * var(--illusia-saturation))  clamp(20%, 42% * var(--illusia-darken), 85%);
-  --bg-200-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(10% * var(--illusia-saturation)) clamp(15%, 30% * var(--illusia-darken), 80%);
-  --bg-300-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(12% * var(--illusia-saturation)) clamp(10%, 22% * var(--illusia-darken), 72%);
-  --bg-400-free: var(--void-5-free); /* → void-5 */
-  --bg-500-free: var(--void-4-free); /* → void-4 */
-  --bg-600-free: var(--void-3-free); /* → void-3 */
-  --bg-700-free: var(--void-2-free); /* → void-2 */
-  --bg-800-free: var(--void-1-free); /* → void-1 */
-  --bg-900-free: var(--void-0-free); /* → void-0 */
-  --bg-950-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(18% * var(--illusia-saturation)) clamp(1%, 2% * var(--illusia-darken), 52%);
+  /* Mapping 1:1 — cada bg-X-free = void correspondente */
+  --bg-50-free:  var(--void-10-free); /* → void-10 (80% L) */
+  --bg-100-free: var(--void-9-free);  /* → void-9  (68% L) */
+  --bg-200-free: var(--void-8-free);  /* → void-8  (54% L) */
+  --bg-300-free: var(--void-7-free);  /* → void-7  (38% L) */
+  --bg-400-free: var(--void-6-free);  /* → void-6  (31% L) */
+  --bg-500-free: var(--void-5-free);  /* → void-5  (26.5% L) */
+  --bg-600-free: var(--void-4-free);  /* → void-4  (23.5% L) */
+  --bg-700-free: var(--void-3-free);  /* → void-3  (20% L) */
+  --bg-800-free: var(--void-2-free);  /* → void-2  (17% L) */
+  --bg-900-free: var(--void-1-free);  /* → void-1  (8% L) */
+  --bg-950-free: var(--void-0-free);  /* → void-0  (4% L) */
 
   --bg-50:  hsl(var(--bg-50-free));
   --bg-100: hsl(var(--bg-100-free));
@@ -366,12 +420,12 @@
   --minimal-drop-shadow: drop-shadow(0 0 1px hsl(0 0% 0% / .4));
   --header-image-drop-shadow: drop-shadow(0 0 2px hsl(0 0% 0% / .4));
   --page-inset-top: 3rem;
-  --page-bg-color: var(--void-2); /* → void-2 */
+  --page-bg-color: var(--void-1); /* → void-1 (8% L, was void-2) */
   --page-box-shadow: 0 0 3px hsl(0 0% 0% / .2);
   --page-drop-shadow: drop-shadow(0 1px 1.5px hsl(0 0% 0% / .25));
-  --card-bg-color: var(--void-3); /* → void-3 */
-  --card-footer-bg-color: var(--void-1); /* → void-1 */
-  --card-overlay-bg-color: var(--void-1); /* → void-1 */
+  --card-bg-color: var(--void-2); /* → void-2 (17% L, was void-3) */
+  --card-footer-bg-color: var(--void-0); /* → void-0 (was void-1) */
+  --card-overlay-bg-color: var(--void-0); /* → void-0 (was void-1) */
   --card-content-li-background: var(--card-content-li-background-gradient);
   --card-content-li-background-full: hsl(var(--bg-950-free) / 16%);
   --card-content-li-background-gradient: linear-gradient(to left, hsl(var(--bg-950-free) / 16%) 0%, hsl(var(--bg-950-free) / 16%) 55%, transparent 90%);
@@ -384,10 +438,10 @@
   --navigation-background: var(--void-0); /* → void-0 */
   --navigation-background-start-opacity: 0;
   --navigation-background-end-opacity: 1;
-  --navigation-submenu-background: var(--void-4); /* → void-4 */
-  --navigation-item-background-hover: var(--void-4); /* → void-4 */
-  --navigation-subitem-background-hover: var(--void-3); /* → void-3 */
-  --navigation-color: var(--ink-1); /* → ink-1 */
+  --navigation-submenu-background: var(--void-3); /* → void-3 (20% L, was void-4) */
+  --navigation-item-background-hover: var(--void-3); /* → void-3 (20% L, was void-4) */
+  --navigation-subitem-background-hover: var(--void-2); /* → void-2 (17% L, was void-3) */
+  --navigation-color: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
   --navigation-color-hover: var(--ink-0); /* → ink-0 */
   --navigation-font-size: clamp(14px, .508906vw + 12.0916px, 16px);
   --navigation-subitem-divider: 1px solid var(--border-0); /* → border-0 */
@@ -397,38 +451,38 @@
   --new-alert-icon-text-color: var(--fg-inverted);
 
   /* ── Tabs ── */
-  --tab-background: var(--void-4); /* → void-4 */
-  --tab-background-hover: var(--void-5); /* → void-5 */
+  --tab-background: var(--void-3); /* → void-3 (20% L, was void-4) */
+  --tab-background-hover: var(--void-4); /* → void-4 (23.5% L, was void-5) */
   --tab-background-active: var(--bg-100);
-  --tab-color: var(--ink-2); /* → ink-2 */
-  --tab-color-hover: var(--ink-1); /* → ink-1 */
+  --tab-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
+  --tab-color-hover: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
   --tab-color-active: var(--fg-inverted);
   --tab-text-shadow: none;
 
   /* ── Filter reel ── */
   --filter-reel-background: hsl(var(--bg-950-free) / 16%);
   --filter-reel-background-active: var(--bg-100);
-  --filter-reel-color: var(--ink-2); /* → ink-2 */
-  --filter-reel-color-hover: var(--ink-1); /* → ink-1 */
+  --filter-reel-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
+  --filter-reel-color-hover: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
   --filter-reel-color-active: var(--fg-inverted);
   --filter-reel-text-shadow: none;
   --filter-reel-lightbox-hover-shadow: linear-gradient(to bottom, hsl(0 0% 0% / .25) 0%, transparent 100%);
   --filter-reel-filter-hover-shadow: linear-gradient(to top, hsl(0 0% 0% / .15) 0%, transparent 100%);
 
   /* ── Pagination ── */
-  --pagination-background: var(--void-4); /* → void-4 */
-  --pagination-background-hover: var(--void-5); /* → void-5 */
+  --pagination-background: var(--void-3); /* → void-3 (20% L, was void-4) */
+  --pagination-background-hover: var(--void-4); /* → void-4 (23.5% L, was void-5) */
   --pagination-background-current: var(--bg-200);
-  --pagination-color: var(--ink-2); /* → ink-2 */
-  --pagination-color-hover: var(--ink-1); /* → ink-1 */
+  --pagination-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
+  --pagination-color-hover: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
   --pagination-color-current: var(--fg-inverted);
-  --fg-isolated-footer: var(--ink-2); /* → ink-2 */
+  --fg-isolated-footer: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
   --fg-isolated-footer-hover: var(--ink-0); /* → ink-0 */
   --bg-isolated-footer: var(--void-0); /* → void-0 */
 
   /* ── Modal ── */
   --modal-overlay: hsl(0 0% 0% / .35);
-  --modal-bg-color: var(--void-3); /* → void-3 */
+  --modal-bg-color: var(--void-2); /* → void-2 (17% L, was void-3) */
 
   /* ── Shadows ── */
   --box-shadow-border: 0 0 0 1.5px var(--card-frame-border-color, hsl(0 0% 0% / .6));
@@ -447,7 +501,7 @@
   --drop-shadow-xl: drop-shadow(0 3px 5px hsl(0 0% 0% / .11)) drop-shadow(0 3px 6px hsl(0 0% 0% / .11));
 
   /* ── Mobile menu ── */
-  --mobile-menu-background: var(--void-2); /* → void-2 */
+  --mobile-menu-background: var(--void-1); /* → void-1 (8% L, was void-2) */
   --mobile-menu-advanced-background: var(--void-0); /* → void-0 */
   --mobile-menu-box-shadow: 2px 0 3px hsl(0 0% 0% / .3);
   --mobile-advanced-menu-site-box-shadow: inset -5px 0 3px -4px hsl(0 0% 0% / .3);
@@ -507,7 +561,7 @@
   --block-fs-h6: var(--fs-s);
 
   /* ── Link colors ── */
-  --heading-link-color: var(--ink-1); /* → ink-1 */
+  --heading-link-color: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
   --heading-link-color-hover: var(--ink-0); /* → ink-0 */
   --inline-link-color: var(--amber); /* → amber */
   --inline-link-color-hover: var(--amber); /* → amber */
@@ -538,21 +592,21 @@
   --button-color-active: var(--fg-inverted);
   --button-background-active: var(--bg-100);
   --button-border-active: 1px solid transparent;
-  --button-barberpole: var(--void-4); /* → void-4 */
+  --button-barberpole: var(--void-3); /* → void-3 (20% L, was void-4) */
   --button-oauth-connected: var(--button-background-active);
-  --button-primary-background: var(--void-5); /* → void-5 */
+  --button-primary-background: var(--void-4); /* → void-4 (23.5% L, was void-5) */
   --button-primary-background-hover: var(--bg-300);
-  --button-primary-background-disabled: var(--void-4); /* → void-4 */
-  --button-primary-color: var(--ink-1); /* → ink-1 */
+  --button-primary-background-disabled: var(--void-3); /* → void-3 (20% L, was void-4) */
+  --button-primary-color: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
   --button-primary-color-hover: var(--ink-0); /* → ink-0 */
-  --button-primary-color-disabled: var(--ink-2); /* → ink-2 */
+  --button-primary-color-disabled: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
   --button-primary-filter-disabled: saturate(.7) opacity(.3) brightness(1.4);
   --button-secondary-background: transparent;
-  --button-secondary-background-hover: var(--void-4); /* → void-4 */
+  --button-secondary-background-hover: var(--void-3); /* → void-3 (20% L, was void-4) */
   --button-secondary-background-disabled: repeating-linear-gradient(-45deg, hsl(0 0% 100% / .06), hsl(0 0% 100% / .06) 2px, transparent 2px, transparent 4px);
-  --button-secondary-color: var(--ink-2); /* → ink-2 */
-  --button-secondary-color-hover: var(--ink-1); /* → ink-1 */
-  --button-secondary-color-disabled: var(--ink-3); /* → ink-3 */
+  --button-secondary-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
+  --button-secondary-color-hover: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
+  --button-secondary-color-disabled: var(--ink-9); /* → ink-9 (49% L, was ink-3) */
   --button-secondary-border: 1px solid var(--border-1); /* → border-1 */
   --button-secondary-border-hover: 1px solid var(--border-2); /* → border-2 */
   --button-secondary-border-disabled: 1px solid var(--border-1); /* → border-1 */
@@ -564,25 +618,25 @@
   --button-suggestion-color-hover: var(--fg-inverted);
   --button-suggestion-background: var(--bg-100);
   --button-suggestion-background-hover: var(--bg-50);
-  --button-quick-background: var(--void-4); /* → void-4 */
+  --button-quick-background: var(--void-3); /* → void-3 (20% L, was void-4) */
   --button-quick-background-hover: var(--bg-300);
-  --button-quick-color: var(--ink-2); /* → ink-2 */
-  --button-quick-color-hover: var(--ink-1); /* → ink-1 */
+  --button-quick-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
+  --button-quick-color-hover: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
 
   /* ── Input ── */
   --post-password-background: var(--input-background);
-  --post-password-cutout: var(--void-2); /* → void-2 */
-  --post-password-submit-color: var(--void-4); /* → void-4 */
-  --input-placeholder-color: var(--ink-3); /* → ink-3 */
+  --post-password-cutout: var(--void-1); /* → void-1 (8% L, was void-2) */
+  --post-password-submit-color: var(--void-3); /* → void-3 (20% L, was void-4) */
+  --input-placeholder-color: var(--ink-9); /* → ink-9 (49% L, was ink-3) */
   --input-background: hsl(var(--void-0-free) / .6); /* → void-0 glass */
   --input-background-disabled: hsl(0 0% 0% / .15) repeating-linear-gradient(-45deg, hsl(0 0% 0% / .15), hsl(0 0% 0% / .15) 2px, transparent 2px, transparent 5px);
-  --input-color: var(--ink-1); /* → ink-1 */
-  --input-color-disabled: var(--ink-3); /* → ink-3 */
-  --input-fill: var(--ink-2); /* → ink-2 */
-  --input-range-thumb: var(--ink-2); /* → ink-2 */
+  --input-color: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
+  --input-color-disabled: var(--ink-9); /* → ink-9 (49% L, was ink-3) */
+  --input-fill: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
+  --input-range-thumb: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
   --input-range-thumb-hover: var(--ink-0); /* → ink-0 */
-  --input-token-background: var(--void-4); /* → void-4 */
-  --input-token-color: var(--ink-1); /* → ink-1 */
+  --input-token-background: var(--void-3); /* → void-3 (20% L, was void-4) */
+  --input-token-color: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
 
   /* ── Popups & menus ── */
   --popup-menu-background: var(--bg-50);
@@ -590,7 +644,7 @@
   --popup-menu-color: var(--fg-inverted);
   --popup-menu-color-hover: var(--fg-inverted);
   --micro-menu-background: var(--void-0); /* → void-0 */
-  --micro-menu-color: var(--ink-1); /* → ink-1 */
+  --micro-menu-color: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
   --micro-menu-color-hover: var(--ink-0); /* → ink-0 */
   --micro-menu-box-shadow: var(--box-shadow-l);
   --tooltip-background: var(--bg-50);
@@ -614,20 +668,20 @@
   --comment-border-sticky: 1px dashed hsl(0 0% 100% / .2);
   --load-comments-background: hsl(0 0% 0% / .15);
   --load-comments-background-hover: hsl(0 0% 0% / .25);
-  --load-comments-color: var(--ink-2); /* → ink-2 */
-  --load-comments-color-hover: var(--ink-1); /* → ink-1 */
+  --load-comments-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
+  --load-comments-color-hover: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
 
   /* ── Misc ── */
   --transition-duration: var(--t-fast); /* → t-fast (110ms) */
   --text-selection-background: hsl(var(--amber-free) / .2); /* → amber glass */
   --text-selection-color: var(--ink-0); /* → ink-0 */
-  --scrollbar-background: var(--void-1); /* → void-1 */
+  --scrollbar-background: var(--void-0); /* → void-0 (was void-1) */
   --scrollbar-thumb: var(--amber-dim); /* → amber-dim */
   --scrollbar-box-shadow: none;
 
   /* ── Badges ── */
-  --badge-generic-color: var(--ink-1); /* → ink-1 */
-  --badge-generic-background: var(--void-4); /* → void-4 */
+  --badge-generic-color: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
+  --badge-generic-background: var(--void-3); /* → void-3 (20% L, was void-4) */
   --badge-supporter-color: var(--ink-0); /* → ink-0 */
   --badge-supporter-background: hsl(var(--crimson-free)); /* → crimson */
   --badge-moderator-color: var(--ink-0); /* → ink-0 */
@@ -637,7 +691,7 @@
   --badge-author-color: var(--ink-0); /* → ink-0 */
   --badge-author-background: var(--amber-dim); /* → amber-dim */
   --badge-override-color: var(--ink-0); /* → ink-0 */
-  --badge-override-background: var(--void-5) /* → void-5 */
+  --badge-override-background: var(--void-4) /* → void-4 (23.5% L, was void-5) */
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -645,18 +699,19 @@
  * ══════════════════════════════════════════════════════════════ */
 
 :root, :root .chapter-formatting {
-  --fg-100: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(51% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(92% * var(--illusia-font-lightness, 1)), 100%)); /* ≈ ink-0 */
-  --fg-200: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(40% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(86% * var(--illusia-font-lightness, 1)), 100%));
-  --fg-300: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(30% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(80% * var(--illusia-font-lightness, 1)), 100%));
-  --fg-400: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(22% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(72% * var(--illusia-font-lightness, 1)), 100%)); /* ≈ ink-1 */
-  --fg-500: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(18% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(66% * var(--illusia-font-lightness, 1)), 100%));
-  --fg-600: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(15% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(58% * var(--illusia-font-lightness, 1)), 100%));
-  --fg-700: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(11% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(49% * var(--illusia-font-lightness, 1)), 100%)); /* ≈ ink-2 */
-  --fg-800: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(13% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(37% * var(--illusia-font-lightness, 1)), 100%));
-  --fg-900: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(16% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(25% * var(--illusia-font-lightness, 1)), 100%)); /* ≈ ink-3 */
-  --fg-950: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(27% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(13% * var(--illusia-font-lightness, 1)), 100%)); /* ≈ ink-4 */
-  --fg-tinted: var(--ink-1); /* → ink-1 */
-  --fg-inverted: hsl(calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) max(calc(18% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(5% * var(--illusia-font-lightness, 1)), 100%))
+  /* Mapping 1:1 — cada fg-X = ink correspondente */
+  --fg-100: var(--ink-0);        /* → ink-0  (93% L) */
+  --fg-200: var(--ink-1);        /* → ink-1  (89% L) */
+  --fg-300: var(--ink-2);        /* → ink-2  (85% L) */
+  --fg-400: var(--ink-3);        /* → ink-3  (80.5% L) */
+  --fg-500: var(--ink-4);        /* → ink-4  (77% L) */
+  --fg-600: var(--ink-5);        /* → ink-5  (71% L) */
+  --fg-700: var(--ink-6);        /* → ink-6  (65% L) */
+  --fg-800: var(--ink-7);        /* → ink-7  (61% L) */
+  --fg-900: var(--ink-8);        /* → ink-8  (54% L) */
+  --fg-950: var(--ink-9);        /* → ink-9  (49% L) */
+  --fg-tinted: var(--ink-tinted);    /* → ink-tinted  (76% L) */
+  --fg-inverted: var(--ink-inverted) /* → ink-inverted (5% L, void-hue) */
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -674,7 +729,7 @@
   --wp--preset--font-size--gigantic: 2.5em
 }
 :root .consent-banner {
-  --consent-banner-color: var(--ink-2); /* → ink-2 */
+  --consent-banner-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
   --consent-banner-background: var(--void-0) /* → void-0 */
 }
 :root .selected-paragraph {
@@ -694,7 +749,7 @@
   --toggle-background: transparent;
   --toggle-background-checked: var(--bg-100);
   --toggle-background-hover: var(--bg-50);
-  --toggle-color: var(--ink-2); /* → ink-2 */
+  --toggle-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
   --toggle-color-hover: var(--ink-0); /* → ink-0 */
   --toggle-color-checked: var(--fg-inverted);
   --toggle-color-checked-hover: var(--fg-inverted);
@@ -703,21 +758,21 @@
   --toggle-border-hover: var(--bg-50)
 }
 :root .tag-pill {
-  --tag-background: var(--void-5); /* → void-5 */
+  --tag-background: var(--void-4); /* → void-4 (23.5% L, was void-5) */
   --tag-background-hover: var(--bg-300);
-  --tag-color: var(--ink-1); /* → ink-1 */
+  --tag-color: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
   --tag-color-hover: var(--ink-0); /* → ink-0 */
   --tag-secondary-background: transparent;
-  --tag-secondary-background-hover: var(--void-5); /* → void-5 */
-  --tag-secondary-color: var(--ink-3); /* → ink-3 */
+  --tag-secondary-background-hover: var(--void-4); /* → void-4 (23.5% L, was void-5) */
+  --tag-secondary-color: var(--ink-9); /* → ink-9 (49% L, was ink-3) */
   --tag-secondary-color-hover: var(--ink-0); /* → ink-0 */
   --tag-secondary-border: .5px solid var(--border-1); /* → border-1 */
   --tag-secondary-border-hover: .5px solid transparent;
-  --tag-inline-color: var(--ink-2); /* → ink-2 */
-  --tag-inline-color-hover: var(--ink-1); /* → ink-1 */
+  --tag-inline-color: var(--ink-9); /* → ink-9 (49% L, was ink-2) */
+  --tag-inline-color-hover: var(--ink-5); /* → ink-5 (71% L, was ink-1) */
   --tag-warning-background: hsl(var(--crimson-free) / .1); /* → crimson glass */
   --tag-warning-background-hover: hsl(var(--crimson-free) / .65); /* → crimson glass */
-  --tag-warning-color: var(--ink-3); /* → ink-3 */
+  --tag-warning-color: var(--ink-9); /* → ink-9 (49% L, was ink-3) */
   --tag-warning-color-hover: var(--ink-0); /* → ink-0 */
   --tag-warning-border: .5px solid var(--border-1); /* → border-1 */
   --tag-warning-border-hover: .5px solid transparent

@@ -22,8 +22,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `css/illusia-properties.css` — Design Direction aplicado: todos os tokens Illusia definidos e variáveis Fictioneer mapeadas
   - Variáveis de controle Illusia (`--illusia-hue-offset`, `--illusia-saturation`, `--illusia-darken`, etc.)
   - Matizes base por família (void 270°, ink 35°, amber 37°, teal 170°, crimson 0°, violet 260°, sage 134°)
-  - Void colors (fundos) com triplets `-free` + `hsl()` — 6 níveis de 3% a 17% lightness
-  - Ink colors (textos) com `font-saturation` / `font-lightness` — 5 níveis de 13% a 92%
+  - Void colors (fundos) com triplets `-free` + `hsl()` — 11 stops (void-0 a void-10, 4%–80% lightness), paridade 1:1 com Fictioneer bg-950→bg-50
+  - Ink colors (textos) com `font-saturation` / `font-lightness` — 10 stops + tinted + inverted (ink-0 a ink-9, 93%–49% lightness), paridade 1:1 com Fictioneer fg-100→fg-950
+  - Mapeamento bg-*/fg-* simplificado para referências diretas a void/ink tokens (sem fórmulas duplicadas)
+  - ~125 referências semânticas remapeadas para os novos índices void/ink preservando hierarquia visual
   - Accent colors (amber, teal, crimson, violet, sage) com triplets `-free` e variantes dim
   - Glows, halos, bordas semânticas (border-0 a border-active), glass tokens
   - Espaçamento (`--space-*`), tipografia (`--text-*`, `--ff-display/ui/mono`), raio de borda (`--r-*`)
