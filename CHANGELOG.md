@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-02-28
+
+### Removed
+- `includes/illusia-atmosphere.php` — Arquivo removido; orbs de luz ambiente descartados (efeito visual não atingiu o objetivo de "luz ambiente")
+- `css/illusia-atmosphere.css` — Seção de orbs removida (CSS, keyframes, stacking context do `.main__wrapper`)
+- `functions.php` — Removidos require do includes, hook `illusia_register_atmosphere_hooks` e seção INCLUDES
+
+### Changed
+- `css/illusia-atmosphere.css` — Grain noise opacity ajustada para .30 (equilíbrio entre presença e sutileza)
+
 ## [1.2.2] - 2026-02-28
 
 ### Fixed

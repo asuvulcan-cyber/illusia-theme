@@ -1,10 +1,10 @@
 /**
  * ════════════════════════════════════════════════════════════════
- * ILLUSIA ATMOSPHERE — Grain, Orbs & Scrollbar
+ * ILLUSIA ATMOSPHERE — Grain & Scrollbar
  * ════════════════════════════════════════════════════════════════
  *
  * Camada atmosférica global do Dark Editorial Observatory.
- * Grain = materialidade física. Orbs = luz ambiente. Scrollbar = detalhe.
+ * Grain = materialidade física. Scrollbar = detalhe.
  *
  * @since 1.2.0
  * ════════════════════════════════════════════════════════════════
@@ -21,50 +21,12 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 9999;
-  opacity: .08;
+  opacity: .30;
   mix-blend-mode: overlay;
 }
 
 /* ══════════════════════════════════════════════════════════════
- * 2. ORBS — Luz Ambiente
- * ══════════════════════════════════════════════════════════════ */
-
-.illusia-orb {
-  position: fixed;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 1;
-  animation: illusia-orb-drift 25s var(--ease-std) infinite;
-}
-
-.illusia-orb--amber {
-  width: clamp(300px, 40vw, 600px);
-  height: clamp(300px, 40vw, 600px);
-  top: 10%;
-  right: -5%;
-  background: radial-gradient(circle, hsl(var(--amber-free) / .13) 0%, transparent 70%);
-  filter: blur(clamp(60px, 10vw, 120px));
-}
-
-.illusia-orb--violet {
-  width: clamp(250px, 35vw, 500px);
-  height: clamp(250px, 35vw, 500px);
-  bottom: 10%;
-  left: -8%;
-  background: radial-gradient(circle, hsl(var(--violet-free) / .10) 0%, transparent 70%);
-  filter: blur(clamp(60px, 10vw, 120px));
-  animation-delay: -8s;
-  animation-duration: 30s;
-}
-
-@keyframes illusia-orb-drift {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33%      { transform: translate(3%, 5%) scale(1.05); }
-  66%      { transform: translate(-3%, -3%) scale(.96); }
-}
-
-/* ══════════════════════════════════════════════════════════════
- * 3. SCROLLBAR
+ * 2. SCROLLBAR
  * ══════════════════════════════════════════════════════════════ */
 
 /* Firefox */
