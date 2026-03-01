@@ -1,0 +1,398 @@
+/* ══════════════════════════════════════════════════════════════
+ * Illusia Badges — Override visual do Fictioneer
+ *
+ * Redesenho de tags, badges e rating labels seguindo design-guide.html:
+ * - Tag pills: Fira Code mono, r-xs, cores semânticas por taxonomia
+ * - Comment badges: admin→violet, author→amber, supporter→crimson
+ * - Rating labels: sage(E), amber(T), crimson(M)
+ *
+ * Usa tokens bridge (--bg-* / --fg-*) em vez de --void-* / --ink-*
+ * para compatibilidade com dark mode E light mode.
+ * Cores via triplets -free (zero rgba literal) — reagem ao modal
+ * hue-rotate do Fictioneer automaticamente.
+ *
+ * @since 1.4.0
+ * ══════════════════════════════════════════════════════════════ */
+
+/* ── 1. Custom Properties — Tag Pills ── */
+
+:root {
+  /* Tag pill (block display) */
+  --tag-background: var(--bg-700);
+  --tag-background-hover: var(--bg-600);
+  --tag-color: var(--fg-400);
+  --tag-color-hover: var(--fg-100);
+
+  /* Tag inline (card taxonomies) */
+  --tag-inline-color: var(--fg-600);
+  --tag-inline-color-hover: var(--amber);
+
+  /* Tag secondary */
+  --tag-secondary-background: transparent;
+  --tag-secondary-background-hover: hsl(var(--amber-free) / .04);
+  --tag-secondary-color: var(--fg-300);
+  --tag-secondary-color-hover: var(--fg-100);
+  --tag-secondary-border: 1px solid var(--border-1);
+  --tag-secondary-border-hover: 1px solid var(--border-2);
+
+  /* Tag warning (content warnings) */
+  --tag-warning-background: hsl(var(--crimson-free) / .07);
+  --tag-warning-background-hover: hsl(var(--crimson-free) / .12);
+  --tag-warning-color: var(--crimson);
+  --tag-warning-color-hover: var(--crimson);
+  --tag-warning-border: 1px solid hsl(var(--crimson-free) / .22);
+  --tag-warning-border-hover: 1px solid hsl(var(--crimson-free) / .35);
+
+  /* Comment badges */
+  --badge-generic-background: var(--bg-600);
+  --badge-generic-color: var(--fg-400);
+}
+
+/* ── 2. Tag Pill Base Style ── */
+
+:root .tag-pill:not(._inline) {
+  position: relative;
+  overflow: hidden;
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: .05em;
+  padding: .28em .7em .28em 1.7em;
+  border-radius: var(--r-xs);
+  border: 1px solid var(--border-1);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: filter var(--t-fast) var(--ease-std);
+}
+
+:root .tag-pill:not(._inline):hover {
+  filter: brightness(1.2);
+}
+
+:root .tag-pill:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+}
+
+/* ── 3. Tag Pill Inline (Cards) ── */
+
+:root .tag-pill._inline {
+  font-family: var(--ff-mono);
+  letter-spacing: .03em;
+  transition: color var(--t-fast) var(--ease-std);
+}
+
+/* ── 4. Taxonomy Colors (semantic) ── */
+
+/* Genre → Teal */
+:root .tag-pill._genre,
+:root .tag-pill._taxonomy-genre {
+  color: var(--teal);
+  border-color: hsl(var(--teal-free) / .2);
+  background: hsl(var(--teal-free) / .06);
+}
+
+/* Fandom → Violet */
+:root .tag-pill._fandom,
+:root .tag-pill._taxonomy-fandom {
+  color: var(--violet);
+  border-color: hsl(var(--violet-free) / .22);
+  background: hsl(var(--violet-free) / .07);
+}
+
+/* Character → Amber */
+:root .tag-pill._character,
+:root .tag-pill._taxonomy-character {
+  color: var(--amber);
+  border-color: var(--border-amber);
+  background: var(--amber-glow);
+}
+
+/* Generic tag → Neutral */
+:root .tag-pill._tag {
+  color: var(--fg-300);
+  border-color: var(--border-1);
+  background: hsl(0 0% 100% / .03);
+}
+
+/* Content warning → Crimson */
+:root .tag-pill._secondary._taxonomy-content_warning {
+  color: var(--crimson);
+  border-color: hsl(var(--crimson-free) / .22);
+  background: hsl(var(--crimson-free) / .07);
+}
+
+:root .tag-pill._secondary._taxonomy-content_warning:hover {
+  border-color: hsl(var(--crimson-free) / .35);
+  background: hsl(var(--crimson-free) / .12);
+}
+
+/* ── 5. Tag Group / Container ── */
+
+:root .tag-group {
+  gap: var(--space-xs);
+}
+
+/* Card tag list — single line with fade mask */
+:root .card__tag-list._pills {
+  flex-wrap: nowrap;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, black 0%, black 72%, transparent 100%);
+  mask-image: linear-gradient(to right, black 0%, black 72%, transparent 100%);
+}
+
+/* ── 6. Comment Badges ── */
+
+:root .fictioneer-comment__badge {
+  font-family: var(--ff-mono);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  border-radius: var(--r-xs);
+}
+
+/* ── 7. Rating Labels ── */
+
+:root .rating-letter-label {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: .05em;
+  border-radius: var(--r-xs);
+  min-width: 1.9em;
+  text-align: center;
+}
+
+/* Everyone → Sage */
+:root .rating-letter-label._g {
+  color: var(--fg-inverted);
+  background: var(--sage);
+  border-color: var(--sage);
+  font-weight: 700;
+}
+
+/* Teen → Amber */
+:root .rating-letter-label._pg,
+:root .rating-letter-label._pg13 {
+  color: var(--fg-inverted);
+  background: var(--amber);
+  border-color: var(--amber);
+  font-weight: 700;
+}
+
+/* Mature → Crimson */
+:root .rating-letter-label._r,
+:root .rating-letter-label._nc17 {
+  color: var(--fg-100);
+  background: var(--crimson-dim);
+  border-color: var(--crimson);
+  font-weight: 700;
+}
+
+/* ── 8. Status Badges (Story Meta) ── */
+
+:root .story__status {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+/* ══════════════════════════════════════════════════════════════
+ * 9. LIGHT MODE — accent contrast adjustments
+ *
+ * Acentos (62-67% L) perdem contraste em fundo claro (~96% L).
+ * Texto usa variantes -dim (38-44% L) para WCAG 4.5:1.
+ * Bordas e backgrounds ganham mais opacidade para visibilidade.
+ * ══════════════════════════════════════════════════════════════ */
+
+:root[data-mode=light] {
+  /* Tag inline hover → amber-dim */
+  --tag-inline-color-hover: var(--amber-dim);
+
+  /* Tag warning → crimson-dim para contraste */
+  --tag-warning-color: var(--crimson-dim);
+  --tag-warning-color-hover: var(--crimson-dim);
+}
+
+/* ── Taxonomy text → dim variants ── */
+
+/* Genre → Teal-dim */
+:root[data-mode=light] .tag-pill._genre,
+:root[data-mode=light] .tag-pill._taxonomy-genre {
+  color: var(--teal-dim);
+  border-color: hsl(var(--teal-free) / .3);
+  background: hsl(var(--teal-free) / .08);
+}
+
+/* Fandom → Violet-dim */
+:root[data-mode=light] .tag-pill._fandom,
+:root[data-mode=light] .tag-pill._taxonomy-fandom {
+  color: var(--violet-dim);
+  border-color: hsl(var(--violet-free) / .3);
+  background: hsl(var(--violet-free) / .08);
+}
+
+/* Character → Amber-dim */
+:root[data-mode=light] .tag-pill._character,
+:root[data-mode=light] .tag-pill._taxonomy-character {
+  color: var(--amber-dim);
+  border-color: hsl(var(--amber-free) / .3);
+  background: hsl(var(--amber-free) / .08);
+}
+
+/* Content warning → Crimson-dim */
+:root[data-mode=light] .tag-pill._secondary._taxonomy-content_warning {
+  color: var(--crimson-dim);
+  border-color: hsl(var(--crimson-free) / .3);
+  background: hsl(var(--crimson-free) / .08);
+}
+
+:root[data-mode=light] .tag-pill._secondary._taxonomy-content_warning:hover {
+  border-color: hsl(var(--crimson-free) / .45);
+  background: hsl(var(--crimson-free) / .12);
+}
+
+/* ── Rating labels → texto escuro em fundo sólido ── */
+
+:root[data-mode=light] .rating-letter-label._g {
+  color: var(--fg-100);
+}
+
+:root[data-mode=light] .rating-letter-label._pg,
+:root[data-mode=light] .rating-letter-label._pg13 {
+  color: var(--fg-100);
+}
+
+/* Focus outline → amber-dim */
+:root[data-mode=light] .tag-pill:focus-visible {
+  outline-color: var(--amber-dim);
+}
+
+/* ══════════════════════════════════════════════════════════════
+ * 10. WATERMARK ICONS — Taxonomy visual cues
+ *
+ * Ícone decorativo sutil no fundo das tag pills, posicionado à
+ * esquerda e desvanecendo para a direita via mask-image.
+ * Ícones genéricos usam fill na cor da taxonomia (amber, teal,
+ * crimson, violet). Fandom usa bandeiras simplificadas por slug.
+ *
+ * @since 1.4.3
+ * ══════════════════════════════════════════════════════════════ */
+
+/* ── 10a. Pseudo-elemento base (compartilhado) ── */
+
+:root .tag-pill._taxonomy-character::before,
+:root .tag-pill._taxonomy-genre::before,
+:root .tag-pill._taxonomy-content_warning::before,
+:root .tag-pill._taxonomy-fandom::before,
+:root .tag-pill._tag::before,
+:root .tag-pill._taxonomy-post_tag::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3em;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-position: center left;
+  background-size: auto 100%;
+  opacity: .1;
+  -webkit-mask-image: linear-gradient(to right, black 10%, transparent 90%);
+  mask-image: linear-gradient(to right, black 10%, transparent 90%);
+}
+
+/* Inline pills — sem watermark */
+:root .tag-pill._inline::before {
+  display: none;
+}
+
+/* ── 10b. Ícones genéricos (fill na cor da taxonomia) ── */
+
+/* Character → Pessoa (silhueta) — Amber #e8b86d */
+:root .tag-pill._taxonomy-character::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e8b86d'%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3Cpath d='M12 13c-4.42 0-8 1.79-8 4v1h16v-1c0-2.21-3.58-4-8-4z'/%3E%3C/svg%3E");
+}
+
+/* Genre → Livro aberto — Teal #6ecfbe */
+:root .tag-pill._taxonomy-genre::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236ecfbe'%3E%3Cpath d='M21 4H3a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1zm-1 14H4V6h7v9l3-2 3 2V6h3v12z'/%3E%3C/svg%3E");
+}
+
+/* Content warning → Triângulo de alerta — Crimson #e85d75 */
+:root .tag-pill._taxonomy-content_warning::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e85d75'%3E%3Cpath d='M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z'/%3E%3C/svg%3E");
+}
+
+/* Generic tag → Hashtag — Neutral fg-300 approx #8a8a8a */
+:root .tag-pill._tag::before,
+:root .tag-pill._taxonomy-post_tag::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238a8a8a'%3E%3Cpath d='M10 3L8 9H3v2h4.5l-1 4H3v2h3l-2 6h2l2-6h4l-2 6h2l2-6h3v-2h-2.5l1-4H19V9h-3l2-6h-2l-2 6h-4l2-6h-2zm-.5 8h4l-1 4h-4l1-4z'/%3E%3C/svg%3E");
+}
+
+/* ── 10c. Fandom — Globo (fallback para slugs não mapeados) — Violet #a78bfa ── */
+
+:root .tag-pill._taxonomy-fandom::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a78bfa'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/%3E%3C/svg%3E");
+}
+
+/* ── 10d. Fandom — Bandeiras por slug ── */
+
+/* Brasil 🇧🇷 */
+:root .tag-pill._taxonomy-fandom._taxonomy-slug-brasileira::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 20'%3E%3Crect width='30' height='20' fill='%23009739'/%3E%3Cpolygon points='15,2 28,10 15,18 2,10' fill='%23FEDD00'/%3E%3Ccircle cx='15' cy='10' r='4.5' fill='%23012169'/%3E%3C/svg%3E");
+  opacity: .12;
+}
+
+/* Moçambique 🇲🇿 */
+:root .tag-pill._taxonomy-fandom._taxonomy-slug-mocambicana::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 20'%3E%3Crect width='30' height='7' fill='%23009739'/%3E%3Crect y='7' width='30' height='6' fill='%23000'/%3E%3Crect y='13' width='30' height='7' fill='%23FFD100'/%3E%3Cpolygon points='0,0 12,10 0,20' fill='%23D21034'/%3E%3C/svg%3E");
+  opacity: .12;
+}
+
+/* China 🇨🇳 */
+:root .tag-pill._taxonomy-fandom._taxonomy-slug-chinesa::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 20'%3E%3Crect width='30' height='20' fill='%23DE2910'/%3E%3Cpolygon points='5,3 6.2,6.5 3,4.8 7,4.8 3.8,6.5' fill='%23FFDE00'/%3E%3C/svg%3E");
+  opacity: .12;
+}
+
+/* Coreia do Sul 🇰🇷 */
+:root .tag-pill._taxonomy-fandom._taxonomy-slug-coreana::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 20'%3E%3Crect width='30' height='20' fill='%23fff'/%3E%3Ccircle cx='15' cy='10' r='5' fill='%23C60C30'/%3E%3Cpath d='M15,5a5,5 0 0,1 0,10a2.5,2.5 0 0,1 0-5a2.5,2.5 0 0,0 0-5z' fill='%23003478'/%3E%3C/svg%3E");
+  opacity: .10;
+}
+
+/* Japão 🇯🇵 */
+:root .tag-pill._taxonomy-fandom._taxonomy-slug-japonesa::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 20'%3E%3Crect width='30' height='20' fill='%23fff'/%3E%3Ccircle cx='15' cy='10' r='5' fill='%23BC002D'/%3E%3C/svg%3E");
+  opacity: .10;
+}
+
+/* Ocidental (multi-país) → usa o globo padrão do fandom */
+
+/* ── 10e. Watermark Icons — Light Mode ── */
+
+/* Ícones coloridos: opacidade ajustada para fundo claro */
+:root[data-mode=light] .tag-pill._taxonomy-character::before,
+:root[data-mode=light] .tag-pill._taxonomy-genre::before,
+:root[data-mode=light] .tag-pill._taxonomy-content_warning::before,
+:root[data-mode=light] .tag-pill._tag::before,
+:root[data-mode=light] .tag-pill._taxonomy-post_tag::before {
+  opacity: .12;
+}
+
+/* Fandom globo: menor opacidade em fundo claro */
+:root[data-mode=light] .tag-pill._taxonomy-fandom::before {
+  opacity: .08;
+}
+
+/* Bandeiras de fundo branco: reduz opacidade (branco some em fundo claro) */
+:root[data-mode=light] .tag-pill._taxonomy-fandom._taxonomy-slug-coreana::before,
+:root[data-mode=light] .tag-pill._taxonomy-fandom._taxonomy-slug-japonesa::before {
+  opacity: .08;
+}
+
+/* Bandeiras coloridas: mantém opacidade reduzida */
+:root[data-mode=light] .tag-pill._taxonomy-fandom._taxonomy-slug-brasileira::before,
+:root[data-mode=light] .tag-pill._taxonomy-fandom._taxonomy-slug-mocambicana::before,
+:root[data-mode=light] .tag-pill._taxonomy-fandom._taxonomy-slug-chinesa::before {
+  opacity: .10;
+}

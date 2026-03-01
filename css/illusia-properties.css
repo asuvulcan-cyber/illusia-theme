@@ -492,7 +492,19 @@
   --ins-background: var(--sage);
   --del-background: var(--crimson);
   --inline-link-color-hover: var(--amber-dim);
-  --widget-link-color-hover: var(--amber)
+  --widget-link-color-hover: var(--amber);
+
+  /* ── Border base invertida para light mode ──
+   * Dark mode: creme claro (91% L) + opacidade baixa → sutil em fundo escuro
+   * Light mode: tom escuro (15% L) + mesmas opacidades → visível em fundo claro
+   */
+  --illusia-border-base: calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
+                         calc(20% * var(--illusia-saturation)) 15%;
+  --border-0:      hsl(var(--illusia-border-base) / .04);
+  --border-1:      hsl(var(--illusia-border-base) / .08);
+  --border-2:      hsl(var(--illusia-border-base) / .13);
+  --border-amber:  hsl(var(--amber-free) / .3);
+  --border-active: hsl(var(--amber-free) / .55)
 }
 
 /* fg-* light mode: Fictioneer sat/lightness, Illusia ink hue */

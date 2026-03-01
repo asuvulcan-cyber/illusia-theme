@@ -6,6 +6,41 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.4.5] - 2026-03-01
+
+### Added
+- `css/components/illusia-badges.css` — Watermark hashtag icon para tags genéricas (`._tag`, `._taxonomy-post_tag`); padding-left aumentado (1.7em) nas tag pills para acomodar ícones
+
+## [1.4.4] - 2026-03-01
+
+### Changed
+- `css/components/illusia-badges.css` — Watermark icons agora usam fill na cor da taxonomia (amber, teal, crimson, violet) em vez de branco; ícones cobrem 100% da altura do pill com fade suave da esquerda para direita
+
+## [1.4.3] - 2026-03-01
+
+### Added
+- `css/components/illusia-badges.css` — Watermark icons nas tag pills de taxonomia: ícones decorativos sutis no fundo (character→pessoa, genre→livro, warning→triângulo, fandom→globo/bandeira), fade da esquerda para direita via `mask-image`, bandeiras simplificadas por slug (brasileira, moçambicana, chinesa, coreana, japonesa), ajustes de opacidade para light mode
+
+## [1.4.2] - 2026-03-01
+
+### Fixed
+- `css/illusia-properties.css` — Border base invertida no light mode: `--illusia-border-base` de 91% L (creme claro, invisível em fundo branco) para 15% L (tom escuro); `--border-amber` e `--border-active` com opacidades aumentadas (.3/.55) para visibilidade
+
+## [1.4.1] - 2026-03-01
+
+### Fixed
+- `css/components/illusia-buttons.css` — Tokens bridge (`--bg-*`/`--fg-*`) em vez de `--void-*`/`--ink-*` para compatibilidade light mode; seção light mode com acentos `-dim` para contraste WCAG 4.5:1 (CTA texto escuro, tabs/pagination amber-dim, focus outline amber-dim)
+- `css/components/illusia-badges.css` — Tokens bridge para light mode; borda default `--border-1` nas tag pills (contorno visível); seção light mode com cores de taxonomia `-dim` (teal-dim, violet-dim, amber-dim, crimson-dim), opacidades aumentadas em bordas/backgrounds, rating labels com texto escuro em fundo sólido
+
+## [1.4.0] - 2026-03-01
+
+### Added
+- `css/components/illusia-buttons.css` — Redesenho visual de botões: custom properties para 4 variantes (CTA âmbar, outline, ghost, danger), tipografia Syne uppercase, border-radius `--r-md`, motion com `--ease-expo`, focus-visible âmbar, tabs Fira Code mono, pagination estilizada
+- `css/components/illusia-badges.css` — Redesenho visual de badges e tags: custom properties para tag-pill (block + inline + secondary + warning), cores semânticas por taxonomia (genre→teal, fandom→violet, character→amber, warning→crimson), comment badges mono, rating labels (E→sage, T→amber, M→crimson), fade mask para listas single-line
+
+### Changed
+- `functions.php` — Enqueue de `illusia-buttons.css` e `illusia-badges.css` com dependência `illusia-properties`
+
 ## [1.3.0] - 2026-02-28
 
 ### Removed

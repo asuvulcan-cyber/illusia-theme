@@ -4,7 +4,7 @@
 // CONSTANTS
 // =============================================================================
 
-define( 'CHILD_VERSION', '1.3.0' );
+define( 'CHILD_VERSION', '1.4.5' );
 define( 'CHILD_NAME', 'Illusia Theme' );
 
 // =============================================================================
@@ -29,6 +29,22 @@ function illusia_enqueue_styles_and_scripts(): void {
   wp_enqueue_style(
     'illusia-atmosphere',
     get_stylesheet_directory_uri() . '/css/illusia-atmosphere.css',
+    ['illusia-properties'],
+    CHILD_VERSION
+  );
+
+  // Componentes: botões
+  wp_enqueue_style(
+    'illusia-buttons',
+    get_stylesheet_directory_uri() . '/css/components/illusia-buttons.css',
+    ['illusia-properties'],
+    CHILD_VERSION
+  );
+
+  // Componentes: badges, tags, rating labels
+  wp_enqueue_style(
+    'illusia-badges',
+    get_stylesheet_directory_uri() . '/css/components/illusia-badges.css',
     ['illusia-properties'],
     CHILD_VERSION
   );
