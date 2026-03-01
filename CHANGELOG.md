@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.1.4] - 2026-02-28
+
+### Changed
+- `functions.php` — Removido inline CSS override; fontes, cores do título e layout agora controlados inteiramente pelo Customizer do Fictioneer
+- `css/illusia-properties.css` — Seção 2 (Control Variables) removida do CSS; variáveis delegadas ao Customizer
+
 ## [1.1.3] - 2026-02-28
 
 ### Fixed
