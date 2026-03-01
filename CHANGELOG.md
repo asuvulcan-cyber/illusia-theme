@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.1.5] - 2026-02-28
+
+### Changed
+- `functions.php` — Removido enqueue manual de Google Fonts (Playfair Display + Syne); fontes agora gerenciadas via painel Fictioneer > Fonts > Google Fonts
+
 ## [1.1.4] - 2026-02-28
 
 ### Changed

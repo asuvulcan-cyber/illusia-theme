@@ -4,7 +4,7 @@
 // CONSTANTS
 // =============================================================================
 
-define( 'CHILD_VERSION', '1.1.4' );
+define( 'CHILD_VERSION', '1.1.5' );
 define( 'CHILD_NAME', 'Illusia Theme' );
 
 // =============================================================================
@@ -16,19 +16,11 @@ define( 'CHILD_NAME', 'Illusia Theme' );
  */
 
 function illusia_enqueue_styles_and_scripts() {
-  // Google Fonts: Playfair Display (headings) + Syne (UI)
-  wp_enqueue_style(
-    'illusia-google-fonts',
-    'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;500;600;700&display=swap',
-    [],
-    null
-  );
-
   // Override das custom properties do Fictioneer
   wp_enqueue_style(
     'illusia-properties',
     get_stylesheet_directory_uri() . '/css/illusia-properties.css',
-    ['fictioneer-application', 'illusia-google-fonts'],
+    ['fictioneer-application'],
     CHILD_VERSION
   );
 }
