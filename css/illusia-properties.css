@@ -218,6 +218,7 @@
   /* ── Famílias tipográficas ── */
   --ff-display: 'Playfair Display', Georgia, serif;
   --ff-ui:      'Syne', sans-serif;
+  --ff-mono:    'Fira Code', monospace;
 
   /* ── Easing ── */
   --ease-expo: cubic-bezier(.16,1,.3,1);
@@ -231,8 +232,6 @@
   /* ── Layout ── */
   --max-w: min(1100px, 94vw);
 
-  /* Section 2 (Fictioneer Control Variables) moved to functions.php
-   * as inline CSS to override Fictioneer's customize.css (priority 9999) */
 }
 
 /* ══════════════════════════════════════════════════════════════

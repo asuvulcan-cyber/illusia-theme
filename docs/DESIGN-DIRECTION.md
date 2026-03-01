@@ -1,5 +1,5 @@
 # Direção Artística — Illusia Theme
-> Última modificação: 2026-02-25
+> Última modificação: 2026-02-28
 
 Documento extraído do `design-guide.html`. Define a identidade visual completa do Illusia — tokens, cores, tipografia, componentes, motion e regras invioláveis. Todo CSS e HTML do projeto **deve** seguir este documento.
 
@@ -82,14 +82,18 @@ Todas as cores do Illusia são **calculadas via HSL** com variáveis de controle
 
 ```css
 :root {
-  /* ── Ajustes globais ── */
-  --illusia-hue-offset: 0deg;         /* Rotação global de matiz (shift de tema) */
-  --illusia-saturation: 1;            /* Multiplicador de saturação (0 = cinza, 1 = normal) */
-  --illusia-darken: 1;                /* Multiplicador de luminosidade dos fundos */
+  /* ── Ajustes globais ──
+   * Ponte para computed vars do Fictioneer — o modal de
+   * hue-rotate / darken / saturation altera essas vars via
+   * inline style em :root; os tokens Illusia reagem automaticamente.
+   */
+  --illusia-hue-offset: var(--hue-rotate, 0deg); /* Rotação global de matiz */
+  --illusia-saturation: var(--saturation);        /* Multiplicador de saturação */
+  --illusia-darken: var(--darken);                /* Multiplicador de luminosidade dos fundos */
 
   /* ── Ajustes de texto ── */
-  --illusia-font-saturation: 1;       /* Saturação dos textos (independente dos fundos) */
-  --illusia-font-lightness: 1;        /* Luminosidade dos textos */
+  --illusia-font-saturation: var(--font-saturation); /* Saturação dos textos */
+  --illusia-font-lightness: var(--font-lightness);   /* Luminosidade dos textos */
 
   /* ── Matizes base por família ── */
   --illusia-void-hue: 270deg;         /* Roxo profundo — fundos */
@@ -129,72 +133,92 @@ Cada cor segue o padrão `-free` / `hsl()` do Fictioneer:
 
 ### Void — fundos (escuridão em camadas)
 
-Todas as cores void derivam de `--illusia-void-hue` (270°). Padrão de fundos: luminosidade cresce de 3% a 17% em 6 passos.
+Todas as cores void derivam de `--illusia-void-hue` (270°). 11 stops com paridade 1:1 com Fictioneer bg-950→bg-50. Luminosidade cresce de 4% a 80%.
 
-| Token | HSL base | Uso |
-|---|---|---|
-| `--void-0` | `270° 18% 3%` | Fundo raiz (body) |
-| `--void-1` | `270° 16% 6%` | Header, nav, scrollbar track |
-| `--void-2` | `270° 16% 8%` | Cards, code blocks |
-| `--void-3` | `270° 14% 11%` | Cards hover |
-| `--void-4` | `270° 13% 14%` | Elementos interativos |
-| `--void-5` | `270° 15% 17%` | Alt dark |
+| Token | HSL base | Uso | Fictioneer equiv. |
+|---|---|---|---|
+| `--void-0` | `270° 60% 4%` | Fundo raiz (body) | bg-950 |
+| `--void-1` | `270° 25% 8%` | Header, nav, scrollbar track | bg-900 |
+| `--void-2` | `270° 15% 17%` | Cards, code blocks | bg-800 |
+| `--void-3` | `270° 16% 20%` | Cards hover | bg-700 |
+| `--void-4` | `270° 14% 23.5%` | Elementos interativos | bg-600 |
+| `--void-5` | `270° 13% 26.5%` | Alt dark | bg-500 |
+| `--void-6` | `270° 13% 31%` | — | bg-400 |
+| `--void-7` | `270° 12% 38%` | — | bg-300 |
+| `--void-8` | `270° 12% 54%` | — | bg-200 |
+| `--void-9` | `270° 12% 68%` | — | bg-100 |
+| `--void-10` | `270° 12% 80%` | — | bg-50 |
 
 ```css
-/* Void — triplets -free + cor final */
---void-0-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(18% * var(--illusia-saturation)) clamp(1%, 3% * var(--illusia-darken), 53%);
---void-1-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(16% * var(--illusia-saturation)) clamp(2%, 6% * var(--illusia-darken), 56%);
---void-2-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(16% * var(--illusia-saturation)) clamp(3%, 8% * var(--illusia-darken), 58%);
---void-3-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(14% * var(--illusia-saturation)) clamp(4%, 11% * var(--illusia-darken), 61%);
---void-4-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(13% * var(--illusia-saturation)) clamp(5%, 14% * var(--illusia-darken), 64%);
---void-5-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(15% * var(--illusia-saturation)) clamp(6%, 17% * var(--illusia-darken), 67%);
+/* Void — triplets -free + cor final (11 stops, paridade 1:1 com bg-950→bg-50) */
+--void-0-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(60% * var(--illusia-saturation))  clamp(2%, 4% * var(--illusia-darken), 52%);
+--void-1-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(25% * var(--illusia-saturation))  clamp(4%, 8% * var(--illusia-darken), 54%);
+--void-2-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(15% * var(--illusia-saturation))  clamp(8.5%, 17% * var(--illusia-darken), 58.5%);
+--void-3-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(16% * var(--illusia-saturation))  clamp(10%, 20% * var(--illusia-darken), 60%);
+--void-4-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(14% * var(--illusia-saturation))  clamp(11.75%, 23.5% * var(--illusia-darken), 61.75%);
+--void-5-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(13% * var(--illusia-saturation))  clamp(13.25%, 26.5% * var(--illusia-darken), 63.25%);
+--void-6-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(13% * var(--illusia-saturation))  clamp(15.5%, 31% * var(--illusia-darken), 65.5%);
+--void-7-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(12% * var(--illusia-saturation))  clamp(19%, 38% * var(--illusia-darken), 69%);
+--void-8-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(12% * var(--illusia-saturation))  clamp(27%, 54% * var(--illusia-darken), 77%);
+--void-9-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(12% * var(--illusia-saturation))  clamp(34%, 68% * var(--illusia-darken), 84%);
+--void-10-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(12% * var(--illusia-saturation))  clamp(40%, 80% * var(--illusia-darken), 90%);
 
---void-0: hsl(var(--void-0-free));
---void-1: hsl(var(--void-1-free));
---void-2: hsl(var(--void-2-free));
---void-3: hsl(var(--void-3-free));
---void-4: hsl(var(--void-4-free));
---void-5: hsl(var(--void-5-free));
+--void-0:  hsl(var(--void-0-free));
+--void-1:  hsl(var(--void-1-free));
+--void-2:  hsl(var(--void-2-free));
+--void-3:  hsl(var(--void-3-free));
+--void-4:  hsl(var(--void-4-free));
+--void-5:  hsl(var(--void-5-free));
+--void-6:  hsl(var(--void-6-free));
+--void-7:  hsl(var(--void-7-free));
+--void-8:  hsl(var(--void-8-free));
+--void-9:  hsl(var(--void-9-free));
+--void-10: hsl(var(--void-10-free));
 ```
 
 ### Ink — textos
 
-Todas as cores ink derivam de `--illusia-ink-hue` (35°). Usam `--illusia-font-saturation` e `--illusia-font-lightness` para controle independente dos fundos.
+Todas as cores ink derivam de `--illusia-ink-hue` (35°). 10 stops + tinted + inverted, com paridade 1:1 com Fictioneer fg-100→fg-950. Usam `--illusia-font-saturation` e `--illusia-font-lightness` para controle independente dos fundos.
 
-| Token | HSL base | Uso |
-|---|---|---|
-| `--ink-0` | `35° 51% 92%` | Títulos, texto principal |
-| `--ink-1` | `35° 22% 72%` | Corpo de texto, parágrafos |
-| `--ink-2` | `35° 11% 49%` | Texto secundário, metadados |
-| `--ink-3` | `35° 16% 25%` | Desabilitado, placeholders |
-| `--ink-4` | `35° 27% 13%` | Fantasma (quase invisível) |
+**Saturação deliberadamente baixa (2–8%)** — reduzida na v1.1.2 para eliminar fadiga visual em leitura prolongada. Texto quase neutro com warmth sutil do hue 35°.
+
+| Token | HSL base | Uso | Fictioneer equiv. |
+|---|---|---|---|
+| `--ink-0` | `35° 8% 93%` | Títulos, texto principal | fg-100 |
+| `--ink-1` | `35° 7% 89%` | Texto de destaque | fg-200 |
+| `--ink-2` | `35° 6% 85%` | Corpo de texto | fg-300 |
+| `--ink-3` | `35° 5% 80.5%` | Corpo secundário | fg-400 |
+| `--ink-4` | `35° 5% 77%` | Texto auxiliar | fg-500 |
+| `--ink-5` | `35° 5% 71%` | Metadados | fg-600 |
+| `--ink-6` | `35° 4% 65%` | Metadados dim | fg-700 |
+| `--ink-7` | `35° 3% 61%` | Texto terciário | fg-800 |
+| `--ink-8` | `35° 3% 54%` | Desabilitado | fg-900 |
+| `--ink-9` | `35° 2% 49%` | Fantasma | fg-950 |
+| `--ink-tinted` | `35° 6% 76%` | Texto com tint sutil | fg-tinted |
+| `--ink-inverted` | `270° 6% 5%` | Texto escuro em fundo claro | fg-inverted |
 
 ```css
-/* Ink — padrão de texto com font-saturation e font-lightness */
+/* Ink — 10 stops + tinted + inverted (sat 2-8%, reduzida para legibilidade) */
 --ink-0: hsl(
   calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-  max(calc(51% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
-  clamp(0%, calc(92% * var(--illusia-font-lightness, 1)), 100%)
+  max(calc(8% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+  clamp(0%, calc(93% * var(--illusia-font-lightness, 1)), 100%)
 );
 --ink-1: hsl(
   calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-  max(calc(22% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
-  clamp(0%, calc(72% * var(--illusia-font-lightness, 1)), 100%)
+  max(calc(7% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+  clamp(0%, calc(89% * var(--illusia-font-lightness, 1)), 100%)
 );
---ink-2: hsl(
+/* ... ink-2 a ink-9 seguem o mesmo padrão com sat decrescente (6%→2%) */
+--ink-tinted: hsl(
   calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-  max(calc(11% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
-  clamp(0%, calc(49% * var(--illusia-font-lightness, 1)), 100%)
+  max(calc(6% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+  clamp(0%, calc(76% * var(--illusia-font-lightness, 1)), 100%)
 );
---ink-3: hsl(
-  calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-  max(calc(16% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
-  clamp(0%, calc(25% * var(--illusia-font-lightness, 1)), 100%)
-);
---ink-4: hsl(
-  calc(var(--illusia-ink-hue) + var(--illusia-hue-offset))
-  max(calc(27% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
-  clamp(0%, calc(13% * var(--illusia-font-lightness, 1)), 100%)
+--ink-inverted: hsl(
+  calc(var(--illusia-void-hue) + var(--illusia-hue-offset))
+  max(calc(6% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%)
+  clamp(0%, calc(5% * var(--illusia-font-lightness, 1)), 100%)
 );
 ```
 
@@ -433,7 +457,7 @@ Cards e superfícies elevadas usam vidro fosco. Nunca branco puro.
 Derivados dos triplets `-free` — mudam junto com a paleta.
 
 ```css
---glass-bg:     hsl(var(--void-2-free) / .7);
+--glass-bg:     hsl(var(--bg-900-free) / .7); /* usa bridge bg→void, não token direto */
 --glass-blur:   blur(clamp(8px, 1.5vw, 16px));
 --glass-border: hsl(var(--illusia-border-base) / .08);
 ```
@@ -658,12 +682,12 @@ Para Firefox, usar o equivalente:
 
 ```css
 :root {
-  /* ═══ VARIÁVEIS DE CONTROLE ═══ */
-  --illusia-hue-offset: 0deg;
-  --illusia-saturation: 1;
-  --illusia-darken: 1;
-  --illusia-font-saturation: 1;
-  --illusia-font-lightness: 1;
+  /* ═══ VARIÁVEIS DE CONTROLE (ponte para Fictioneer) ═══ */
+  --illusia-hue-offset: var(--hue-rotate, 0deg);
+  --illusia-saturation: var(--saturation);
+  --illusia-darken: var(--darken);
+  --illusia-font-saturation: var(--font-saturation);
+  --illusia-font-lightness: var(--font-lightness);
 
   /* ═══ MATIZES BASE ═══ */
   --illusia-void-hue:    270deg;
@@ -674,27 +698,44 @@ Para Firefox, usar o equivalente:
   --illusia-violet-hue:  260deg;
   --illusia-sage-hue:    134deg;
 
-  /* ═══ VOID — fundos (triplets + cor) ═══ */
-  --void-0-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(18% * var(--illusia-saturation)) clamp(1%, 3% * var(--illusia-darken), 53%);
-  --void-1-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(16% * var(--illusia-saturation)) clamp(2%, 6% * var(--illusia-darken), 56%);
-  --void-2-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(16% * var(--illusia-saturation)) clamp(3%, 8% * var(--illusia-darken), 58%);
-  --void-3-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(14% * var(--illusia-saturation)) clamp(4%, 11% * var(--illusia-darken), 61%);
-  --void-4-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(13% * var(--illusia-saturation)) clamp(5%, 14% * var(--illusia-darken), 64%);
-  --void-5-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(15% * var(--illusia-saturation)) clamp(6%, 17% * var(--illusia-darken), 67%);
+  /* ═══ VOID — fundos (11 stops, paridade 1:1 com bg-950→bg-50) ═══ */
+  --void-0-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(60% * var(--illusia-saturation))  clamp(2%, 4% * var(--illusia-darken), 52%);
+  --void-1-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(25% * var(--illusia-saturation))  clamp(4%, 8% * var(--illusia-darken), 54%);
+  --void-2-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(15% * var(--illusia-saturation))  clamp(8.5%, 17% * var(--illusia-darken), 58.5%);
+  --void-3-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(16% * var(--illusia-saturation))  clamp(10%, 20% * var(--illusia-darken), 60%);
+  --void-4-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(14% * var(--illusia-saturation))  clamp(11.75%, 23.5% * var(--illusia-darken), 61.75%);
+  --void-5-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(13% * var(--illusia-saturation))  clamp(13.25%, 26.5% * var(--illusia-darken), 63.25%);
+  --void-6-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(13% * var(--illusia-saturation))  clamp(15.5%, 31% * var(--illusia-darken), 65.5%);
+  --void-7-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(12% * var(--illusia-saturation))  clamp(19%, 38% * var(--illusia-darken), 69%);
+  --void-8-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(12% * var(--illusia-saturation))  clamp(27%, 54% * var(--illusia-darken), 77%);
+  --void-9-free:  calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(12% * var(--illusia-saturation))  clamp(34%, 68% * var(--illusia-darken), 84%);
+  --void-10-free: calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) calc(12% * var(--illusia-saturation))  clamp(40%, 80% * var(--illusia-darken), 90%);
 
-  --void-0: hsl(var(--void-0-free));
-  --void-1: hsl(var(--void-1-free));
-  --void-2: hsl(var(--void-2-free));
-  --void-3: hsl(var(--void-3-free));
-  --void-4: hsl(var(--void-4-free));
-  --void-5: hsl(var(--void-5-free));
+  --void-0:  hsl(var(--void-0-free));
+  --void-1:  hsl(var(--void-1-free));
+  --void-2:  hsl(var(--void-2-free));
+  --void-3:  hsl(var(--void-3-free));
+  --void-4:  hsl(var(--void-4-free));
+  --void-5:  hsl(var(--void-5-free));
+  --void-6:  hsl(var(--void-6-free));
+  --void-7:  hsl(var(--void-7-free));
+  --void-8:  hsl(var(--void-8-free));
+  --void-9:  hsl(var(--void-9-free));
+  --void-10: hsl(var(--void-10-free));
 
-  /* ═══ INK — textos ═══ */
-  --ink-0: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(51% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(92% * var(--illusia-font-lightness, 1)), 100%));
-  --ink-1: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(22% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(72% * var(--illusia-font-lightness, 1)), 100%));
-  --ink-2: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(11% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(49% * var(--illusia-font-lightness, 1)), 100%));
-  --ink-3: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(16% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(25% * var(--illusia-font-lightness, 1)), 100%));
-  --ink-4: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(27% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(13% * var(--illusia-font-lightness, 1)), 100%));
+  /* ═══ INK — textos (10 stops + tinted + inverted, sat 2-8%) ═══ */
+  --ink-0: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(8% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(93% * var(--illusia-font-lightness, 1)), 100%));
+  --ink-1: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(7% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(89% * var(--illusia-font-lightness, 1)), 100%));
+  --ink-2: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(6% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(85% * var(--illusia-font-lightness, 1)), 100%));
+  --ink-3: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(5% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(80.5% * var(--illusia-font-lightness, 1)), 100%));
+  --ink-4: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(5% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(77% * var(--illusia-font-lightness, 1)), 100%));
+  --ink-5: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(5% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(71% * var(--illusia-font-lightness, 1)), 100%));
+  --ink-6: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(4% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(65% * var(--illusia-font-lightness, 1)), 100%));
+  --ink-7: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(3% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(61% * var(--illusia-font-lightness, 1)), 100%));
+  --ink-8: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(3% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(54% * var(--illusia-font-lightness, 1)), 100%));
+  --ink-9: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(2% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(49% * var(--illusia-font-lightness, 1)), 100%));
+  --ink-tinted: hsl(calc(var(--illusia-ink-hue) + var(--illusia-hue-offset)) max(calc(6% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(76% * var(--illusia-font-lightness, 1)), 100%));
+  --ink-inverted: hsl(calc(var(--illusia-void-hue) + var(--illusia-hue-offset)) max(calc(6% * (var(--illusia-font-saturation) + var(--illusia-saturation) - 1)), 0%) clamp(0%, calc(5% * var(--illusia-font-lightness, 1)), 100%));
 
   /* ═══ ACENTOS — triplets + cor ═══ */
   --amber-free:       calc(var(--illusia-amber-hue) + var(--illusia-hue-offset)) calc(73% * var(--illusia-saturation)) 67%;
@@ -734,7 +775,7 @@ Para Firefox, usar o equivalente:
   --border-active: hsl(var(--amber-free) / .45);
 
   /* ═══ GLASS ═══ */
-  --glass-bg:     hsl(var(--void-2-free) / .7);
+  --glass-bg:     hsl(var(--bg-900-free) / .7); /* usa bridge bg→void */
   --glass-blur:   blur(clamp(8px, 1.5vw, 16px));
   --glass-border: hsl(var(--illusia-border-base) / .08);
 
@@ -769,7 +810,7 @@ Para Firefox, usar o equivalente:
   /* ═══ FAMÍLIAS TIPOGRÁFICAS ═══ */
   --ff-display: 'Playfair Display', Georgia, serif;
   --ff-ui:      'Syne', sans-serif;
-  --ff-mono:    'Fira Code', monospace;
+  --ff-mono:    'Fira Code', monospace; /* carregada via Google Fonts no admin Fictioneer */
 
   /* ═══ EASING ═══ */
   --ease-expo: cubic-bezier(.16,1,.3,1);

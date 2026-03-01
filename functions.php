@@ -4,18 +4,25 @@
 // CONSTANTS
 // =============================================================================
 
-define( 'CHILD_VERSION', '1.1.5' );
+define( 'CHILD_VERSION', '1.2.0' );
 define( 'CHILD_NAME', 'Illusia Theme' );
+
+// =============================================================================
+// INCLUDES
+// =============================================================================
+
+require_once get_stylesheet_directory() . '/includes/illusia-atmosphere.php';
 
 // =============================================================================
 // CHILD THEME SETUP
 // =============================================================================
 
 /**
- * Enqueue child theme styles and scripts
+ * Enqueue child theme styles and scripts.
+ *
+ * @since 1.0.0
  */
-
-function illusia_enqueue_styles_and_scripts() {
+function illusia_enqueue_styles_and_scripts(): void {
   // Override das custom properties do Fictioneer
   wp_enqueue_style(
     'illusia-properties',
@@ -23,8 +30,26 @@ function illusia_enqueue_styles_and_scripts() {
     ['fictioneer-application'],
     CHILD_VERSION
   );
+
+  // Atmosfera global (grain, orbs, scrollbar)
+  wp_enqueue_style(
+    'illusia-atmosphere',
+    get_stylesheet_directory_uri() . '/css/illusia-atmosphere.css',
+    ['illusia-properties'],
+    CHILD_VERSION
+  );
 }
 add_action( 'wp_enqueue_scripts', 'illusia_enqueue_styles_and_scripts', 99 );
+
+/**
+ * Register atmosphere hooks on the frontend.
+ *
+ * @since 1.2.0
+ */
+function illusia_register_atmosphere_hooks(): void {
+  add_action( 'fictioneer_body', 'illusia_render_atmosphere_orbs', 5 );
+}
+add_action( 'after_setup_theme', 'illusia_register_atmosphere_hooks' );
 
 /**
  * Add or remove parent filters and actions on the frontend

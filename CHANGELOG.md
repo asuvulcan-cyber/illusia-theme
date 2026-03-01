@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-02-28
+
+### Added
+- `css/illusia-atmosphere.css` — Camada atmosférica global: grain noise overlay (`body::before`), orbs de luz ambiente (amber + violet), scrollbar customizada (4px, thumb âmbar)
+- `includes/illusia-atmosphere.php` — Hook PHP para injetar orbs no body via `fictioneer_body`
+- `css/illusia-properties.css` — Token `--ff-mono` ('Fira Code', monospace) adicionado à seção de famílias tipográficas
+
+### Changed
+- `docs/DESIGN-DIRECTION.md` — Sincronizado com illusia-properties.css (fonte de verdade): void expandido de 6→11 stops, ink expandido de 5→10 stops + tinted + inverted, saturação ink corrigida de 9-51%→2-8%, glass corrigido para usar bridge `--bg-900-free`, variáveis de controle agora documentam ponte com Fictioneer computed vars
+- `functions.php` — Adicionados require de includes, enqueue do illusia-atmosphere.css, e registro do hook de orbs via `after_setup_theme`
+
 ## [1.1.5] - 2026-02-28
 
 ### Changed
