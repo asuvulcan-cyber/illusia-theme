@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-02-28
+
+### Fixed
+- `css/illusia-atmosphere.css` — Orbs z-index de 0 para 1 (ficavam atrás do stacking context do #site); opacidade dos gradientes aumentada de .07/.05 para .13/.10 para visibilidade sutil
+
 ## [1.2.1] - 2026-02-28
 
 ### Fixed
