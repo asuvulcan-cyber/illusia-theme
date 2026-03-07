@@ -613,8 +613,8 @@
 .illusia-card__stat-value--status-canceled { color: var(--crimson); }
 
 /* Override Fictioneer status icons — more semantic */
-.illusia-card__stat-value--status-ongoing i::before { content: '\f5ad'; }  /* fa-pen-nib */
-.illusia-card__stat-value--status-oneshot i::before { content: '\f0e7'; }  /* fa-bolt */
+.illusia-card__stat-value--status-ongoing .fa-circle::before { content: '\f5ad'; }  /* fa-pen-nib */
+.illusia-card__stat-value--status-oneshot .fa-circle-check::before { content: '\f0e7'; }  /* fa-bolt */
 
 /* ── 12b. Readings Label ── */
 
