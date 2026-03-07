@@ -77,8 +77,20 @@
 
 :root .tag-pill._inline {
   font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
   letter-spacing: .03em;
-  transition: color var(--t-fast) var(--ease-std);
+  padding: .2em .55em;
+  border-radius: var(--r-xs);
+  border: 1px solid var(--border-1);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition:
+    color var(--t-fast) var(--ease-std),
+    filter var(--t-fast) var(--ease-std);
+}
+
+:root .tag-pill._inline:hover {
+  filter: brightness(1.15);
 }
 
 /* ── 4. Taxonomy Colors (semantic) ── */

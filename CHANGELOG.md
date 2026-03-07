@@ -6,6 +6,90 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-03-07
+
+### Added
+- `stories.php` — Template override da página /stories/ do Fictioneer; query logic espelhada do pai com markup Illusia; stats panel "Observatory Instruments" com valores em Playfair Display âmbar (`--text-lg`), labels em Fira Code (`--text-2xs`) uppercase; sort UI do pai preservada via chamada direta a `fictioneer_sort_order_filter_interface`; layout single column para cards; paginação estilizada
+- `css/components/illusia-stories.css` — Estilos da página /stories/:
+  - Header editorial com shimmer line âmbar sob o título
+  - Stats panel compacto 4×1 (2×2 mobile) com gap 1px, shimmer line, valores âmbar, cells com fundo escuro
+  - Sort UI na paleta Observatory Panel: micro-label "ORDENAR" em Fira Code, botões com borda/fundo escuro/hover âmbar, popups com backdrop blur e tipografia Illusia
+  - Card list flex column com staggered fade-in (`calc(--i * 60ms)` por card, até 8)
+  - Empty state Observatory com borda dashed, fundo glass, tipografia mono uppercase
+  - Paginação com mono numbers e hover/current âmbar
+  - Light mode completo (header shimmer, stat values `--amber-dim`, sort, pagination)
+  - Reduced motion (stats, cards, pagination)
+  - Responsive: tablet ≤900px, mobile ≤640px (stats 2×2), small ≤400px
+- `css/illusia-properties.css` — Tokens `--text-3xs` e `--space-3xs` adicionados à escala fluida
+
+### Changed
+- `functions.php` — Enqueue condicional `illusia-stories` CSS (só em `is_page_template('stories.php')`)
+- `css/components/illusia-cards.css` — Cover stats overflow fix (`min-width: 0`, `width: 100%`, `text-overflow: ellipsis`); label font-size migrado de `clamp()` hardcoded para `var(--text-3xs)`; removidos fallbacks hardcoded `.6rem`; ícones de status customizados: Ongoing `fa-circle` → `fa-pen-nib`, Oneshot `fa-circle-check` → `fa-bolt`
+
+## [1.5.12] - 2026-03-04
+
+### Fixed
+- `partials/_card-story.php` — Segurança: escape de outputs (`esc_html` em título, contagens, título de capítulo; `wp_kses` em ícone de status; `wp_kses_post` em excerpt); corrigido bug de precedência de operador em `$hide_author`; substituído `current_time('timestamp')` deprecado por `time()`
+- `css/components/illusia-cards.css` — Substituídos font-sizes hardcoded (`.6rem`/`.65rem`/`.7rem`) por tokens (`--text-2xs`/`--text-3xs`); substituído `--fs-em-xxs` (token do parent) por `--text-xs`; removido `gap: 0` redundante e `border-radius` duplicado; adicionados estilos `:focus-visible` em links e botões interativos; ampliado clamp do stat-label; removido `-webkit-line-clamp: 2` duplicado no mobile
+
+## [1.5.11] - 2026-03-04
+
+### Changed
+- `css/components/illusia-cards.css` — Footer removido no desktop para cards com cover (info vive nos stats + ribbon); rating badge migrou para ribbon na capa (posicionado no canto superior direito com backdrop-blur, variantes por rating); grid reduzido para 3 rows (header/middle/tax); taxonomies com padding-bottom aumentado (último row visível); mobile: footer restaurado, ribbon e stats hidden
+- `partials/_card-story.php` — Rating ribbon (`illusia-card__rating-ribbon`) adicionado dentro do cover-link com variantes por rating (everyone/teen/mature/adult)
+
+## [1.5.10] - 2026-03-04
+
+### Fixed
+- `css/components/illusia-cards.css` — Cover frame: `justify-content: space-between` empurra stats para o fundo do frame (elimina espaço vazio); footer items duplicados nos stats (caps, palavras, comentários, status) hidden no desktop via `--in-stats`; itens restaurados no mobile onde stats panel é hidden
+- `partials/_card-story.php` — Classes `--in-stats` nos footer items chapters/words/comments e status badge
+
+## [1.5.9] - 2026-03-02
+
+### Changed
+- `css/components/illusia-cards.css` — Redesenho "Observatory Panel": cover vive em moldura própria (padding, fundo escuro, border-radius) com grid de mini stats abaixo (caps, palavras, comments, status); cover-w aumentado para `clamp(110px, 18vw, 180px)`; cover-link com border-radius `--r-md`; label "Recent Chapters" acima da chapter list; cores de status no stat-cell; mobile: stats hidden (migram pro footer), cover frame compacto
+- `partials/_card-story.php` — Cover frame com stats panel (chapter_count, word_count_short, comment_count, status icon+label); label "Recent Chapters" acima da chapter list
+
+## [1.5.8] - 2026-03-02
+
+### Changed
+- `css/components/illusia-cards.css` — Desktop: cover-link usa `aspect-ratio: 3/4` fixo em vez de `height: 100%` (imagem proporcional no topo, não estica como banner lateral); cover div continua `grid-row: 1/-1` como separador visual
+
+## [1.5.7] - 2026-03-01
+
+### Changed
+- `css/components/illusia-cards.css` — Mobile: cover com `aspect-ratio: 3/4` (imagem aparece inteira); grid row 2 como `1fr` (absorve espaço extra da cover, elimina gap); header `align-self: end`; no-cover excerpt re-aplica `-webkit-box-orient: vertical` e `line-clamp: 4` (fix leak ao toggle display); desktop: aspect-ratio corrigido de 2/3 para 3/4
+
+## [1.5.6] - 2026-03-01
+
+### Changed
+- `css/components/illusia-cards.css` — Mobile: redesenho do trecho cover + header + excerpt; cover agora usa height content-driven (sem aspect-ratio forçado, elimina gap vazio); cover-img com position absolute + object-fit cover para preencher qualquer altura; header com `align-self: end` para proximidade natural ao excerpt; título mobile com 2 linhas (clamp 1 apenas em ≤400px); excerpt inline com 3 linhas; desktop: aspect-ratio corrigido de 2/3 para 3/4
+
+## [1.5.5] - 2026-03-01
+
+### Changed
+- `css/components/illusia-badges.css` — Tag pills inline (`._inline`) agora têm estilo pill completo (font-size, padding, border-radius, border, white-space) em vez de apenas texto colorido
+- `css/components/illusia-cards.css` — Rating badge adult: fundo escuro com borda/texto claro, padrão outline; popup menu toggle: cor `--fg-400` e borda `--border-1` (mais visível); popup menu dropdown: glass bg com blur, borda, shadow e hover amber nos itens; mobile: cover com aspect-ratio 2/3, título 1 linha (--text-sm), header/excerpt mais compactos
+
+## [1.5.1] - 2026-03-01
+
+### Changed
+- `partials/_card-story.php` — Removido autor duplicado do footer (já visível no header); datas do footer e chapter list agora usam `human_time_diff()` para formato relativo ("há 3 dias")
+- `css/components/illusia-cards.css` — Excerpt limitado a 2 linhas; popup menu toggle refinado (glass bg, transições suaves, estado `:active`); tag pills com `white-space: nowrap` forçado; rating badges redesenhados (everyone/teen/mature como outline sutil, adult com bg escuro e borda/texto claro); light mode rating badges adicionados; mobile completamente reescrito (proporções compactas, tipografia reduzida, chapter list e taxonomias ajustados, variante no-cover tratada)
+
+## [1.5.0] - 2026-03-01
+
+### Added
+- `partials/_card-story.php` — Template override completo do Story Card do Fictioneer com markup original Illusia: estrutura semântica (`<article>`, `<header>`, `<footer>`), classes BEM `.illusia-card*`, grid CSS 2 colunas (cover + conteúdo)
+- `css/components/illusia-cards.css` — Estilos do story card: glass gradient bg, shimmer line, amber hover, chapter list com barra lateral animada (scaleY), taxonomias em linha com fade mask, footer com meta items mono, badges de status/rating por cor semântica
+- Variantes: `--sticky` (borda/bg âmbar, radial gradient corner), `--no-cover` (coluna única + barra lateral âmbar 3px), `--no-tax`
+- Responsivo mobile (≤640px): cover spana header+excerpt, capítulos/taxa/footer full-width, excerpt inline ao lado da capa
+- Light mode com acentos `-dim` para WCAG, reduced motion support
+- Staggered entry animation (`illusia-card-in`) com delays incrementais
+
+### Changed
+- `functions.php` — Adicionado enqueue de `illusia-cards.css` (depende de `illusia-properties` + `illusia-badges`); versão bumped para 1.5.0
+
 ## [1.4.5] - 2026-03-01
 
 ### Added

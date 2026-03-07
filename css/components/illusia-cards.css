@@ -1,0 +1,1194 @@
+/* ══════════════════════════════════════════════════════════════
+ * Illusia Cards — Story Card Redesign
+ *
+ * Redesenho completo do card de história com markup original Illusia.
+ * Template override em partials/_card-story.php com HTML semântico
+ * e classes BEM .illusia-card*.
+ *
+ * Usa tokens bridge (--bg-* / --fg-*) em vez de --void-* / --ink-*
+ * para compatibilidade com dark mode E light mode.
+ * Cores via triplets -free (zero rgba literal) — reagem ao modal
+ * hue-rotate do Fictioneer automaticamente.
+ *
+ * @since 1.5.0
+ * ══════════════════════════════════════════════════════════════ */
+
+/* ── 1. Custom Properties ── */
+
+:root {
+  --illusia-cover-w: clamp(110px, 18vw, 180px);
+}
+
+/* ── 2. Card Base ── */
+
+.illusia-card {
+  position: relative;
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border-1);
+  background: linear-gradient(
+    160deg,
+    hsl(var(--bg-800-free) / .9) 0%,
+    hsl(var(--bg-900-free) / .95) 100%
+  );
+  overflow: visible;
+  transition:
+    border-color var(--t-mid) var(--ease-std),
+    box-shadow   var(--t-mid) var(--ease-std),
+    transform    var(--t-mid) var(--ease-expo);
+  animation: illusia-card-in var(--t-slow) var(--ease-expo) both;
+}
+
+/* Staggered entry — 80ms increments, capped at 320ms for 5+ cards */
+.illusia-card:nth-child(1) { animation-delay: 0ms; }
+.illusia-card:nth-child(2) { animation-delay: 80ms; }
+.illusia-card:nth-child(3) { animation-delay: 160ms; }
+.illusia-card:nth-child(4) { animation-delay: 240ms; }
+.illusia-card:nth-child(n+5) { animation-delay: 320ms; }
+
+@keyframes illusia-card-in {
+  from { opacity: 0; transform: translateY(clamp(8px, 1.5vw, 16px)); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── 3. Shimmer Line ── */
+
+.illusia-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(var(--amber-free) / .15),
+    transparent
+  );
+  border-radius: 1px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── 4. Hover ── */
+
+.illusia-card:hover {
+  border-color: var(--border-amber);
+  box-shadow:
+    0 0 0 1px hsl(var(--amber-free) / .08),
+    0 clamp(8px, 2vw, 20px) clamp(24px, 5vw, 50px) hsl(var(--bg-950-free) / .5),
+    0 0 clamp(30px, 6vw, 60px) hsl(var(--amber-free) / .04);
+  transform: translateY(-2px);
+}
+
+/* ── 4b. Focus-visible ── */
+
+.illusia-card__title-link:focus-visible,
+.illusia-card__cover-link:focus-visible,
+.illusia-card__author a:focus-visible,
+.illusia-chapter-list__link:focus-visible,
+.illusia-meta-item a:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+  border-radius: var(--r-xs);
+}
+
+.illusia-card .card__popup-menu-toggle:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+  border-color: var(--border-amber);
+  color: var(--amber);
+}
+
+/* ── 5. Sticky Variant ── */
+
+.illusia-card--sticky {
+  border-color: hsl(var(--amber-free) / .18);
+  background: linear-gradient(
+    160deg,
+    hsl(var(--amber-free) / .06) 0%,
+    hsl(var(--bg-900-free) / .95) 100%
+  );
+}
+
+.illusia-card--sticky::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse at 20% 0%,
+    hsl(var(--amber-free) / .05) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+/* ── 6. Grid Layout ── */
+
+.illusia-card__body {
+  display: grid;
+  grid-template-columns: var(--illusia-cover-w) 1fr;
+  grid-template-rows: auto 1fr auto;
+  /* rows:              header  middle  tax */
+  border-radius: inherit;
+  overflow: hidden;
+  position: relative;
+}
+
+.illusia-card--no-cover .illusia-card__body {
+  grid-template-columns: 1fr;
+}
+
+.illusia-card--no-tax .illusia-card__taxonomies {
+  display: none;
+}
+
+/* ── 7. Cover Frame (Observatory Panel) ── */
+
+.illusia-card__cover {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: var(--space-xs);
+  border-right: 1px solid var(--border-0);
+  background: hsl(var(--bg-950-free) / .5);
+}
+
+.illusia-card__cover-link {
+  display: block;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 1px solid var(--border-1);
+  position: relative;
+}
+
+.illusia-card__cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--t-slow) var(--ease-expo);
+}
+
+.illusia-card:hover .illusia-card__cover-img {
+  transform: scale(1.04);
+}
+
+.illusia-card__cover-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    transparent 60%,
+    hsl(var(--bg-950-free) / .25) 100%
+  );
+  pointer-events: none;
+}
+
+/* ── 7a. Rating Ribbon (on cover) ── */
+
+.illusia-card__rating-ribbon {
+  position: absolute;
+  top: var(--space-2xs);
+  right: var(--space-2xs);
+  z-index: 2;
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  min-width: 1.8em;
+  text-align: center;
+  padding: .2em .45em;
+  border-radius: var(--r-xs);
+  line-height: 1.4;
+  pointer-events: none;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.illusia-card__rating-ribbon--everyone {
+  color: var(--sage);
+  background: hsl(var(--sage-free) / .15);
+  border: 1px solid hsl(var(--sage-free) / .3);
+}
+
+.illusia-card__rating-ribbon--teen {
+  color: var(--amber);
+  background: hsl(var(--amber-free) / .15);
+  border: 1px solid hsl(var(--amber-free) / .3);
+}
+
+.illusia-card__rating-ribbon--mature {
+  color: var(--crimson);
+  background: hsl(var(--crimson-free) / .15);
+  border: 1px solid hsl(var(--crimson-free) / .3);
+}
+
+.illusia-card__rating-ribbon--adult {
+  color: var(--fg-300);
+  background: hsl(var(--bg-950-free) / .8);
+  border: 1px solid hsl(0 0% 100% / .15);
+}
+
+/* ── 7b. Cover Stats (instrument panel) ── */
+
+.illusia-card__cover-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  border: 1px solid var(--border-0);
+  min-width: 0;
+  width: 100%;
+}
+
+.illusia-card__stat-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-2xs);
+  background: hsl(var(--bg-900-free) / .5);
+  gap: 1px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.illusia-card__stat-value {
+  font-family: var(--ff-display);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--fg-100);
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.illusia-card__stat-label {
+  font-family: var(--ff-mono);
+  font-size: var(--text-3xs);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--fg-900);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* No-cover: hide stats, left accent bar */
+.illusia-card--no-cover .illusia-card__cover-stats {
+  display: none;
+}
+
+.illusia-card--no-cover .illusia-card__body::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, var(--amber), hsl(var(--amber-free) / .2));
+  border-radius: 3px 0 0 3px;
+  z-index: 1;
+}
+
+/* ── 8. Header ── */
+
+.illusia-card__header {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-md) var(--space-xs);
+}
+
+.illusia-card--no-cover .illusia-card__header {
+  grid-column: 1;
+}
+
+.illusia-card__title-group {
+  flex: 1;
+  min-width: 0;
+}
+
+.illusia-card__label {
+  display: inline-block;
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--amber-dim);
+  margin-bottom: var(--space-2xs);
+}
+
+.illusia-card__title {
+  font-family: var(--ff-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: var(--space-2xs);
+}
+
+.illusia-card__title-link {
+  color: var(--fg-100);
+  transition: color var(--t-fast);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.illusia-card__title-link:hover {
+  color: var(--amber);
+}
+
+.illusia-card__password-icon {
+  color: var(--fg-700);
+  font-size: .8em;
+  margin-right: .3em;
+}
+
+.illusia-card__author {
+  font-size: var(--text-xs);
+  color: var(--fg-600);
+  font-style: italic;
+}
+
+.illusia-card__author a {
+  color: var(--amber-dim);
+  transition: color var(--t-fast);
+}
+
+.illusia-card__author a:hover {
+  color: var(--amber);
+}
+
+/* ── 9. Fictioneer Card Controls (within Illusia context) ── */
+
+.illusia-card .card__controls {
+  display: flex;
+  gap: var(--space-2xs);
+  flex-shrink: 0;
+  padding-top: .1em;
+}
+
+.illusia-card .card__controls .card__sticky-icon,
+.illusia-card .card__controls .card__reminder-icon,
+.illusia-card .card__controls .card__followed-icon,
+.illusia-card .card__controls .card__checkmark-icon {
+  color: var(--fg-700);
+  font-size: var(--text-xs);
+  transition: color var(--t-fast);
+}
+
+.illusia-card .card__controls .card__sticky-icon {
+  color: var(--amber-dim);
+}
+
+.illusia-card .card__popup-menu-toggle {
+  width: clamp(26px, 3.5vw, 32px);
+  height: clamp(26px, 3.5vw, 32px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-1);
+  background: hsl(var(--bg-800-free) / .5);
+  color: var(--fg-400);
+  font-size: .75rem;
+  cursor: pointer;
+  transition:
+    border-color var(--t-fast),
+    color var(--t-fast),
+    background var(--t-fast);
+}
+
+.illusia-card .card__popup-menu-toggle:hover {
+  border-color: var(--border-amber);
+  color: var(--amber);
+  background: hsl(var(--amber-free) / .08);
+}
+
+.illusia-card .card__popup-menu-toggle:active {
+  background: hsl(var(--amber-free) / .12);
+}
+
+.illusia-card .popup-menu {
+  background: hsl(var(--bg-900-free) / .95);
+  border: 1px solid var(--border-1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    0 4px 20px hsl(var(--bg-950-free) / .5),
+    0 0 0 1px hsl(var(--bg-800-free) / .3);
+  border-radius: var(--r-md);
+}
+
+.illusia-card .popup-menu a,
+.illusia-card .popup-menu button,
+.illusia-card .popup-menu label {
+  color: var(--fg-400);
+  transition: color var(--t-fast), background var(--t-fast);
+}
+
+.illusia-card .popup-menu a:hover,
+.illusia-card .popup-menu button:hover,
+.illusia-card .popup-menu label:hover {
+  color: var(--fg-100);
+  background: hsl(var(--amber-free) / .06);
+}
+
+/* ── 10. Excerpt Inline (mobile — ao lado da capa) ── */
+
+.illusia-card__excerpt-inline {
+  display: none;
+}
+
+/* ── 11. Middle ── */
+
+.illusia-card__middle {
+  grid-column: 2;
+  grid-row: 2;
+  padding: var(--space-xs) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.illusia-card--no-cover .illusia-card__middle {
+  grid-column: 1;
+}
+
+.illusia-card__excerpt {
+  font-size: var(--text-sm);
+  line-height: 1.75;
+  color: var(--fg-400);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.illusia-card__excerpt--empty {
+  color: var(--fg-700);
+  font-style: italic;
+}
+
+/* ── 12. Chapter List ── */
+
+.illusia-chapter-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-0);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.illusia-chapter-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: .42em var(--space-sm);
+  border-bottom: 1px solid var(--border-0);
+  transition: background var(--t-fast);
+  position: relative;
+}
+
+/* Amber sidebar bar */
+.illusia-chapter-list__item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--amber);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform var(--t-mid) var(--ease-expo);
+}
+
+.illusia-chapter-list__item:last-child {
+  border-bottom: none;
+}
+
+.illusia-chapter-list__item:hover {
+  background: hsl(var(--amber-free) / .03);
+}
+
+.illusia-chapter-list__item:hover::before {
+  transform: scaleY(1);
+}
+
+.illusia-chapter-list__item--password .illusia-chapter-list__link {
+  color: var(--fg-700);
+}
+
+.illusia-chapter-list__left {
+  display: flex;
+  align-items: center;
+  gap: .4em;
+  min-width: 0;
+  flex: 1;
+}
+
+.illusia-chapter-list__icon {
+  color: var(--amber-dim);
+  font-size: .65em;
+  flex-shrink: 0;
+}
+
+.illusia-chapter-list__link {
+  font-size: var(--text-xs);
+  color: var(--fg-400);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color var(--t-fast);
+}
+
+.illusia-chapter-list__item:hover .illusia-chapter-list__link {
+  color: var(--fg-100);
+}
+
+.illusia-chapter-list__right {
+  display: flex;
+  align-items: center;
+  gap: .3em;
+  flex-shrink: 0;
+}
+
+.illusia-chapter-list__words {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  color: var(--fg-700);
+  white-space: nowrap;
+}
+
+.illusia-chapter-list__label {
+  color: var(--fg-900);
+}
+
+.illusia-chapter-list__separator {
+  color: var(--fg-900);
+  font-size: .7em;
+}
+
+.illusia-chapter-list__date {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  color: var(--fg-700);
+  white-space: nowrap;
+}
+
+.illusia-chapter-list__date--new {
+  background: hsl(var(--amber-free) / .1);
+  color: var(--amber);
+  border: 1px solid hsl(var(--amber-free) / .2);
+  border-radius: var(--r-xs);
+  padding: 0 .4em;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* Stat value status colors */
+.illusia-card__stat-value--status-ongoing { color: var(--teal); }
+.illusia-card__stat-value--status-completed { color: var(--sage); }
+.illusia-card__stat-value--status-hiatus { color: var(--amber); }
+.illusia-card__stat-value--status-oneshot { color: var(--violet); }
+.illusia-card__stat-value--status-canceled { color: var(--crimson); }
+
+/* Override Fictioneer status icons — more semantic */
+.illusia-card__stat-value--status-ongoing i::before { content: '\f5ad'; }  /* fa-pen-nib */
+.illusia-card__stat-value--status-oneshot i::before { content: '\f0e7'; }  /* fa-bolt */
+
+/* ── 12b. Readings Label ── */
+
+.illusia-card__readings-label {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--amber-dim);
+  display: flex;
+  align-items: center;
+  gap: .5em;
+}
+
+.illusia-card__readings-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-0);
+}
+
+/* ── 13. Taxonomies ── */
+
+.illusia-card__taxonomies {
+  grid-column: 2;
+  grid-row: 3;
+  padding: 0 var(--space-md) var(--space-sm);
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--space-2xs);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, black 0%, black 72%, transparent 100%);
+  mask-image: linear-gradient(to right, black 0%, black 72%, transparent 100%);
+}
+
+.illusia-card--no-cover .illusia-card__taxonomies {
+  grid-column: 1;
+}
+
+/* Ensure tag pills inside cards never break */
+.illusia-card__taxonomies .tag-pill {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── 14. Footer ── */
+
+/* Hidden on desktop for cards with cover (info lives in stats + ribbon) */
+.illusia-card:not(.illusia-card--no-cover) .illusia-card__footer {
+  display: none;
+}
+
+.illusia-card__footer {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md) var(--space-sm);
+  border-top: 1px solid var(--border-0);
+  flex-wrap: wrap;
+  row-gap: var(--space-xs);
+}
+
+.illusia-card--no-cover .illusia-card__footer {
+  grid-column: 1;
+}
+
+.illusia-card__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.illusia-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: .35em;
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  color: var(--fg-700);
+  letter-spacing: .04em;
+}
+
+.illusia-meta-icon {
+  color: var(--fg-900);
+  font-size: .9em;
+}
+
+.illusia-meta-item a {
+  color: var(--amber-dim);
+  transition: color var(--t-fast);
+}
+
+.illusia-meta-item a:hover {
+  color: var(--amber);
+}
+
+/* ── 14b. Hide stats-duplicated items on desktop (visible on mobile where stats are hidden) ── */
+
+.illusia-card:not(.illusia-card--no-cover) .illusia-meta-item--in-stats,
+.illusia-card:not(.illusia-card--no-cover) .illusia-badge--in-stats {
+  display: none;
+}
+
+/* ── 15. Status & Rating Badges ── */
+
+.illusia-card__status-badges {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  flex-shrink: 0;
+}
+
+.illusia-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .3em;
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: .05em;
+  padding: .25em .65em;
+  border-radius: var(--r-xs);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1.5;
+}
+
+/* Status variants */
+.illusia-badge--status {
+  font-weight: 500;
+  padding: .28em .75em;
+}
+
+.illusia-badge--status-ongoing {
+  color: var(--teal);
+  border-color: hsl(var(--teal-free) / .3);
+  background: hsl(var(--teal-free) / .08);
+}
+
+.illusia-badge--status-completed {
+  color: var(--sage);
+  border-color: hsl(var(--sage-free) / .3);
+  background: hsl(var(--sage-free) / .07);
+}
+
+.illusia-badge--status-hiatus {
+  color: var(--amber);
+  border-color: var(--border-amber);
+  background: hsl(var(--amber-free) / .08);
+}
+
+.illusia-badge--status-oneshot {
+  color: var(--violet);
+  border-color: hsl(var(--violet-free) / .3);
+  background: hsl(var(--violet-free) / .07);
+}
+
+.illusia-badge--status-canceled {
+  color: var(--crimson);
+  border-color: hsl(var(--crimson-free) / .3);
+  background: hsl(var(--crimson-free) / .07);
+}
+
+/* Rating variants */
+.illusia-badge--rating {
+  font-weight: 700;
+  min-width: 1.8em;
+  justify-content: center;
+}
+
+.illusia-badge--rating-everyone {
+  color: var(--sage);
+  background: hsl(var(--sage-free) / .1);
+  border-color: hsl(var(--sage-free) / .3);
+}
+
+.illusia-badge--rating-teen {
+  color: var(--amber);
+  background: hsl(var(--amber-free) / .1);
+  border-color: hsl(var(--amber-free) / .3);
+}
+
+.illusia-badge--rating-mature {
+  color: var(--crimson);
+  background: hsl(var(--crimson-free) / .1);
+  border-color: hsl(var(--crimson-free) / .3);
+}
+
+.illusia-badge--rating-adult {
+  color: var(--fg-300);
+  background: hsl(var(--bg-950-free) / .8);
+  border-color: hsl(0 0% 100% / .15);
+}
+
+/* ── 16. Responsive — Mobile ── */
+
+@media (max-width: 640px) {
+  :root {
+    --illusia-cover-w: clamp(90px, 26vw, 120px);
+  }
+
+  .illusia-card {
+    border-radius: var(--r-lg);
+  }
+
+  /* ── Grid: stacked layout ──
+   * Row 1: [cover | header ]  — side by side
+   * Row 2: [cover | excerpt ]  — side by side (inline excerpt)
+   * Row 3: [   middle       ]  — full width (chapters only)
+   * Row 4: [   taxonomies   ]  — full width
+   * Row 5: [   footer       ]  — full width
+   */
+  .illusia-card__body {
+    grid-template-columns: var(--illusia-cover-w) 1fr;
+    grid-template-rows: auto 1fr auto auto auto;
+  }
+
+  /* Cover frame: spans rows 1-2, simplified */
+  .illusia-card__cover {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    padding: var(--space-2xs);
+    gap: var(--space-2xs);
+  }
+
+  /* Hide stats and ribbon on mobile — info moves to footer */
+  .illusia-card__cover-stats,
+  .illusia-card__rating-ribbon {
+    display: none;
+  }
+
+  .illusia-card__cover-link {
+    min-height: unset;
+    aspect-ratio: 3 / 4;
+  }
+
+  .illusia-card__cover-img {
+    aspect-ratio: 3 / 4;
+  }
+
+  /* Header: col 2, row 1 — compact, pushed down */
+  .illusia-card__header {
+    grid-column: 2;
+    grid-row: 1;
+    padding: var(--space-sm) var(--space-sm) 0;
+    gap: var(--space-2xs);
+    align-self: end;
+  }
+
+  .illusia-card__title {
+    font-size: var(--text-sm);
+    margin-bottom: .1em;
+  }
+
+  .illusia-card__label {
+    font-size: var(--text-3xs);
+    margin-bottom: .1em;
+  }
+
+  .illusia-card__author {
+    font-size: var(--text-2xs);
+  }
+
+  /* Excerpt inline: visible on mobile, col 2, row 2 */
+  .illusia-card__excerpt-inline {
+    grid-column: 2;
+    grid-row: 2;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    padding: var(--space-2xs) var(--space-sm) var(--space-sm);
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--fg-500);
+    align-self: start;
+  }
+
+  /* Middle → full width, row 3 */
+  .illusia-card__middle {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    padding: var(--space-xs) var(--space-sm);
+    border-top: 1px solid var(--border-0);
+    gap: var(--space-xs);
+  }
+
+  /* Hide desktop excerpt on mobile (using inline instead) */
+  .illusia-card__middle .illusia-card__excerpt {
+    display: none;
+  }
+
+  /* Chapter list: tighter on mobile */
+  .illusia-chapter-list {
+    border-radius: var(--r-sm);
+  }
+
+  .illusia-chapter-list__item {
+    padding: .35em var(--space-xs);
+  }
+
+  .illusia-chapter-list__link {
+    font-size: var(--text-2xs);
+  }
+
+  .illusia-chapter-list__words,
+  .illusia-chapter-list__separator {
+    display: none;
+  }
+
+  .illusia-chapter-list__date {
+    font-size: var(--text-3xs);
+  }
+
+  /* Taxonomies → full width, row 4 */
+  .illusia-card__taxonomies {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    padding: 0 var(--space-sm) var(--space-2xs);
+    gap: .3em;
+    -webkit-mask-image: linear-gradient(to right, black 0%, black 80%, transparent 100%);
+    mask-image: linear-gradient(to right, black 0%, black 80%, transparent 100%);
+  }
+
+  .illusia-card__taxonomies .tag-pill {
+    font-size: var(--text-3xs);
+    padding: .15em .45em;
+  }
+
+  /* Footer → visible again on mobile, full width, row 5 */
+  .illusia-card:not(.illusia-card--no-cover) .illusia-card__footer {
+    display: flex;
+  }
+
+  .illusia-card__footer {
+    grid-column: 1 / -1;
+    grid-row: 5;
+    padding: var(--space-xs) var(--space-sm) var(--space-sm);
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  /* Restore stats-duplicated items on mobile (stats panel is hidden) */
+  .illusia-card:not(.illusia-card--no-cover) .illusia-meta-item--in-stats,
+  .illusia-card:not(.illusia-card--no-cover) .illusia-badge--in-stats {
+    display: inline-flex;
+  }
+
+  .illusia-card__meta {
+    gap: var(--space-xs);
+  }
+
+  .illusia-meta-item {
+    font-size: var(--text-3xs);
+  }
+
+  .illusia-badge {
+    font-size: var(--text-3xs);
+    padding: .2em .5em;
+  }
+
+  /* Card controls: compact */
+  .illusia-card .card__popup-menu-toggle {
+    width: 26px;
+    height: 26px;
+    font-size: var(--text-2xs);
+  }
+
+  /* No-cover variant on mobile: single column */
+  .illusia-card--no-cover .illusia-card__body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+  }
+
+  .illusia-card--no-cover .illusia-card__header {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .illusia-card--no-cover .illusia-card__excerpt-inline {
+    display: none;
+  }
+
+  .illusia-card--no-cover .illusia-card__middle {
+    grid-row: 2;
+    border-top: none;
+  }
+
+  .illusia-card--no-cover .illusia-card__middle .illusia-card__excerpt {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+  }
+
+  .illusia-card--no-cover .illusia-card__taxonomies {
+    grid-row: 3;
+  }
+
+  .illusia-card--no-cover .illusia-card__footer {
+    grid-row: 4;
+  }
+}
+
+@media (max-width: 400px) {
+  :root {
+    --illusia-cover-w: clamp(72px, 24vw, 95px);
+  }
+
+  .illusia-card__header {
+    padding: var(--space-xs) var(--space-xs) 0;
+  }
+
+  .illusia-card__title {
+    font-size: var(--text-sm);
+  }
+
+  .illusia-card__excerpt-inline {
+    padding: var(--space-2xs) var(--space-xs) var(--space-xs);
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .illusia-card__title-link {
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
+
+  /* Simplify footer on very small screens */
+  .illusia-card__footer {
+    padding: var(--space-xs);
+  }
+
+  .illusia-card__status-badges {
+    gap: .2em;
+  }
+}
+
+/* ── 17. Light Mode ── */
+
+:root[data-mode=light] .illusia-card {
+  background: linear-gradient(
+    160deg,
+    hsl(var(--bg-800-free) / .6) 0%,
+    hsl(var(--bg-900-free) / .5) 100%
+  );
+  border-color: hsl(var(--illusia-border-base) / .1);
+}
+
+:root[data-mode=light] .illusia-card::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(var(--amber-dim-free) / .15),
+    transparent
+  );
+}
+
+:root[data-mode=light] .illusia-card:hover {
+  border-color: hsl(var(--amber-free) / .3);
+  box-shadow:
+    0 0 0 1px hsl(var(--amber-free) / .06),
+    0 8px 30px hsl(var(--bg-950-free) / .15);
+}
+
+:root[data-mode=light] .illusia-card--sticky {
+  border-color: hsl(var(--amber-free) / .2);
+  background: linear-gradient(
+    160deg,
+    hsl(var(--amber-dim-free) / .06) 0%,
+    hsl(var(--bg-900-free) / .5) 100%
+  );
+}
+
+:root[data-mode=light] .illusia-card__cover {
+  background: hsl(var(--bg-50-free) / .3);
+}
+
+:root[data-mode=light] .illusia-card__stat-cell {
+  background: hsl(var(--bg-100-free) / .3);
+}
+
+:root[data-mode=light] .illusia-card__readings-label {
+  color: var(--amber-dim);
+}
+
+:root[data-mode=light] .illusia-card__title-link:hover {
+  color: var(--amber-dim);
+}
+
+:root[data-mode=light] .illusia-card__author a {
+  color: var(--amber-dim);
+}
+
+:root[data-mode=light] .illusia-card__author a:hover {
+  color: var(--amber);
+}
+
+:root[data-mode=light] .illusia-chapter-list__item::before {
+  background: var(--amber-dim);
+}
+
+:root[data-mode=light] .illusia-chapter-list__item:hover {
+  background: hsl(var(--amber-free) / .04);
+}
+
+:root[data-mode=light] .illusia-chapter-list__date--new {
+  color: var(--amber-dim);
+  background: hsl(var(--amber-free) / .08);
+  border-color: hsl(var(--amber-free) / .15);
+}
+
+:root[data-mode=light] .illusia-meta-item a:hover {
+  color: var(--amber-dim);
+}
+
+/* Light mode status badges → dim variants */
+:root[data-mode=light] .illusia-badge--status-ongoing {
+  color: var(--teal-dim);
+}
+
+:root[data-mode=light] .illusia-badge--status-completed {
+  color: var(--sage-dim);
+}
+
+:root[data-mode=light] .illusia-badge--status-hiatus {
+  color: var(--amber-dim);
+}
+
+:root[data-mode=light] .illusia-badge--status-oneshot {
+  color: var(--violet-dim);
+}
+
+:root[data-mode=light] .illusia-badge--status-canceled {
+  color: var(--crimson-dim);
+}
+
+/* Light mode rating badges */
+:root[data-mode=light] .illusia-badge--rating-everyone {
+  color: var(--sage-dim);
+}
+
+:root[data-mode=light] .illusia-badge--rating-teen {
+  color: var(--amber-dim);
+}
+
+:root[data-mode=light] .illusia-badge--rating-mature {
+  color: var(--crimson-dim);
+}
+
+:root[data-mode=light] .illusia-badge--rating-adult {
+  color: var(--fg-900);
+  background: hsl(0 0% 10% / .85);
+  border-color: hsl(0 0% 100% / .2);
+}
+
+/* ── 18. Reduced Motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .illusia-card {
+    animation: none;
+  }
+
+  .illusia-card,
+  .illusia-card__cover-img,
+  .illusia-chapter-list__item,
+  .illusia-chapter-list__item::before,
+  .illusia-chapter-list__link,
+  .illusia-card__title-link,
+  .illusia-card .card__popup-menu-toggle {
+    transition-duration: 0.01ms !important;
+  }
+}

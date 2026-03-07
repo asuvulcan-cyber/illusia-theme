@@ -1,0 +1,446 @@
+/* ══════════════════════════════════════════════════════════════
+ * Illusia Stories — Página /stories/ Redesign
+ *
+ * Template override stories.php com stats panel, header editorial
+ * e paginação estilizada no design "Dark Editorial Observatory".
+ *
+ * Usa tokens bridge (--bg-* / --fg-*) para dark+light mode.
+ * Cores via triplets -free — reagem ao modal hue-rotate.
+ *
+ * @since 1.6.0
+ * ══════════════════════════════════════════════════════════════ */
+
+/* ── 1. Page Header ── */
+
+.illusia-stories__header {
+  text-align: center;
+  padding: var(--space-lg) 0 var(--space-sm);
+  position: relative;
+}
+
+/* Shimmer accent — bottom edge of header */
+.illusia-stories__header::after {
+  content: '';
+  display: block;
+  width: min(12em, 60%);
+  height: 1px;
+  margin: var(--space-sm) auto 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(var(--amber-free) / .25),
+    transparent
+  );
+}
+
+.illusia-stories__title {
+  font-family: var(--ff-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: var(--fg-100);
+  letter-spacing: .02em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.illusia-stories__content {
+  text-align: center;
+  color: var(--fg-400);
+  font-family: var(--ff-ui);
+  max-width: 42em;
+  margin: 0 auto var(--space-md);
+}
+
+/* ── 2. Stats Panel — Observatory Instruments ── */
+
+.illusia-stories__stats {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border-1);
+  overflow: hidden;
+  margin-bottom: var(--space-lg);
+  animation: illusia-stats-in var(--t-slow) var(--ease-expo) both;
+}
+
+/* Shimmer line — top edge (same pattern as cards) */
+.illusia-stories__stats::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(var(--amber-free) / .12),
+    transparent
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.illusia-stories__stat-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3xs);
+  padding: var(--space-sm) var(--space-sm);
+  background: hsl(var(--bg-900-free) / .5);
+}
+
+.illusia-stories__stat-value {
+  font-family: var(--ff-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--amber);
+  line-height: 1.1;
+}
+
+.illusia-stories__stat-label {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  font-weight: 400;
+  color: var(--fg-500);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  line-height: 1;
+}
+
+@keyframes illusia-stats-in {
+  from { opacity: 0; transform: translateY(clamp(8px, 1.5vw, 16px)); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── 3. Sort/Order UI — Observatory Panel ── */
+
+.illusia-stories .sort-order-filter {
+  margin-bottom: var(--space-lg);
+  position: relative;
+}
+
+/* Contextual micro-label */
+.illusia-stories .sort-order-filter::before {
+  content: 'ORDENAR';
+  font-family: var(--ff-mono);
+  font-size: var(--text-3xs);
+  font-weight: 400;
+  color: var(--fg-600);
+  letter-spacing: .15em;
+  margin-right: auto;
+}
+
+/* Toggle buttons (orderby, date range, order) */
+.illusia-stories .sort-order-filter .list-button {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  color: var(--fg-400);
+  letter-spacing: .04em;
+  border: 1px solid var(--border-1);
+  border-radius: var(--r-sm, 6px);
+  padding: var(--space-3xs) var(--space-xs);
+  background: hsl(var(--bg-900-free) / .5);
+  transition:
+    border-color var(--t-mid) var(--ease-std),
+    color        var(--t-mid) var(--ease-std),
+    background   var(--t-mid) var(--ease-std);
+}
+
+.illusia-stories .sort-order-filter .list-button:hover {
+  border-color: hsl(var(--amber-free) / .4);
+  color: var(--amber);
+  background: hsl(var(--amber-free) / .06);
+}
+
+/* Active order toggle */
+.illusia-stories .sort-order-filter .list-button._order._on {
+  border-color: hsl(var(--amber-free) / .3);
+  color: var(--amber);
+}
+
+/* Popup dropdown menu */
+.illusia-stories .sort-order-filter .popup-menu {
+  background: hsl(var(--bg-900-free) / .95);
+  border: 1px solid var(--border-1);
+  border-radius: var(--r-sm, 6px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px hsl(0 0% 0% / .4);
+  padding: var(--space-3xs) 0;
+}
+
+/* Popup heading ("Order By", "Time Range") */
+.illusia-stories .sort-order-filter .popup-heading {
+  font-family: var(--ff-mono);
+  font-size: var(--text-3xs);
+  font-weight: 400;
+  color: var(--fg-500);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+/* Popup menu links */
+.illusia-stories .sort-order-filter .popup-menu a {
+  font-family: var(--ff-ui);
+  font-size: var(--text-xs);
+  font-weight: 400;
+  color: var(--fg-300);
+  transition:
+    background var(--t-mid) var(--ease-std),
+    color      var(--t-mid) var(--ease-std);
+}
+
+.illusia-stories .sort-order-filter .popup-menu a:hover {
+  background: hsl(var(--amber-free) / .08);
+  color: var(--amber);
+}
+
+/* ── 4. Card List ── */
+
+.illusia-stories__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Card entrance — staggered fade-in */
+.illusia-stories__cards > li {
+  animation: illusia-card-in var(--t-slow) var(--ease-expo) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+.illusia-stories__cards > li:nth-child(1)  { --i: 0; }
+.illusia-stories__cards > li:nth-child(2)  { --i: 1; }
+.illusia-stories__cards > li:nth-child(3)  { --i: 2; }
+.illusia-stories__cards > li:nth-child(4)  { --i: 3; }
+.illusia-stories__cards > li:nth-child(5)  { --i: 4; }
+.illusia-stories__cards > li:nth-child(6)  { --i: 5; }
+.illusia-stories__cards > li:nth-child(7)  { --i: 6; }
+.illusia-stories__cards > li:nth-child(8)  { --i: 7; }
+.illusia-stories__cards > li:nth-child(n+9) { --i: 8; }
+
+@keyframes illusia-card-in {
+  from { opacity: 0; transform: translateY(clamp(8px, 1.5vw, 16px)); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* No results — Observatory empty state */
+.illusia-stories__no-results {
+  text-align: center;
+  padding: var(--space-xl) var(--space-md);
+  color: var(--fg-500);
+  font-family: var(--ff-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  border: 1px dashed var(--border-1);
+  border-radius: var(--r-xl);
+  background: hsl(var(--bg-900-free) / .3);
+}
+
+/* ── 4. Pagination ── */
+
+.illusia-stories__pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2xs);
+  flex-wrap: wrap;
+  padding: var(--space-lg) 0 var(--space-sm);
+  list-style: none;
+}
+
+/* All pagination elements (links + spans) */
+.illusia-stories__pagination .page-numbers {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.25em;
+  height: 2.25em;
+  padding: 0 var(--space-xs);
+  border-radius: var(--r-sm, 6px);
+  border: 1px solid var(--border-1);
+  background: hsl(var(--bg-800-free) / .5);
+  color: var(--fg-300);
+  font-family: var(--ff-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    border-color var(--t-mid) var(--ease-std),
+    background   var(--t-mid) var(--ease-std),
+    color        var(--t-mid) var(--ease-std),
+    box-shadow   var(--t-mid) var(--ease-std);
+}
+
+/* Hover state for clickable page numbers */
+.illusia-stories__pagination a.page-numbers:hover {
+  border-color: hsl(var(--amber-free) / .4);
+  color: var(--amber);
+  background: hsl(var(--amber-free) / .06);
+}
+
+/* Current page */
+.illusia-stories__pagination .page-numbers.current {
+  background: hsl(var(--amber-free) / .15);
+  border-color: hsl(var(--amber-free) / .3);
+  color: var(--amber);
+  font-weight: 700;
+}
+
+/* Dots (ellipsis) */
+.illusia-stories__pagination .page-numbers.dots {
+  border-color: transparent;
+  background: transparent;
+  color: var(--fg-500);
+  min-width: 1.5em;
+  cursor: default;
+}
+
+/* Prev/Next text links */
+.illusia-stories__pagination .page-numbers.prev,
+.illusia-stories__pagination .page-numbers.next {
+  font-family: var(--ff-ui);
+  letter-spacing: .04em;
+}
+
+/* Focus visible */
+.illusia-stories__pagination a.page-numbers:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+/* ── 5. Responsive — Tablet (≤900px) ── */
+
+@media (max-width: 900px) {
+  .illusia-stories__title {
+    font-size: var(--text-2xl);
+  }
+}
+
+/* ── 6. Responsive — Mobile (≤640px) ── */
+
+@media (max-width: 640px) {
+  .illusia-stories__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .illusia-stories__title {
+    font-size: var(--text-xl);
+  }
+
+  .illusia-stories__header {
+    padding: var(--space-md) 0 var(--space-xs);
+  }
+}
+
+/* ── 7. Responsive — Small (≤400px) ── */
+
+@media (max-width: 400px) {
+  .illusia-stories__stat-value {
+    font-size: var(--text-md);
+  }
+
+  .illusia-stories__pagination .page-numbers {
+    min-width: 2em;
+    height: 2em;
+    font-size: var(--text-2xs);
+  }
+}
+
+/* ── 8. Light Mode ── */
+
+:root[data-mode=light] .illusia-stories__header::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(var(--amber-dim-free) / .2),
+    transparent
+  );
+}
+
+:root[data-mode=light] .illusia-stories__stat-value {
+  color: var(--amber-dim);
+}
+
+:root[data-mode=light] .illusia-stories .sort-order-filter .list-button {
+  background: hsl(var(--bg-900-free) / .3);
+  border-color: hsl(var(--illusia-border-base) / .1);
+}
+
+:root[data-mode=light] .illusia-stories .sort-order-filter .list-button:hover {
+  border-color: hsl(var(--amber-free) / .3);
+  color: var(--amber-dim);
+  background: hsl(var(--amber-free) / .04);
+}
+
+:root[data-mode=light] .illusia-stories .sort-order-filter .list-button._order._on {
+  border-color: hsl(var(--amber-free) / .2);
+  color: var(--amber-dim);
+}
+
+:root[data-mode=light] .illusia-stories .sort-order-filter .popup-menu {
+  background: hsl(var(--bg-900-free) / .92);
+  border-color: hsl(var(--illusia-border-base) / .1);
+  box-shadow: 0 4px 24px hsl(0 0% 0% / .1);
+}
+
+:root[data-mode=light] .illusia-stories .sort-order-filter .popup-menu a:hover {
+  background: hsl(var(--amber-free) / .06);
+  color: var(--amber-dim);
+}
+
+:root[data-mode=light] .illusia-stories__stats {
+  border-color: hsl(var(--illusia-border-base) / .1);
+}
+
+:root[data-mode=light] .illusia-stories__stats::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(var(--amber-dim-free) / .15),
+    transparent
+  );
+}
+
+:root[data-mode=light] .illusia-stories__stat-cell {
+  background: hsl(var(--bg-900-free) / .3);
+}
+
+:root[data-mode=light] .illusia-stories__pagination .page-numbers {
+  background: hsl(var(--bg-800-free) / .3);
+  border-color: hsl(var(--illusia-border-base) / .1);
+}
+
+:root[data-mode=light] .illusia-stories__pagination a.page-numbers:hover {
+  border-color: hsl(var(--amber-free) / .3);
+  color: var(--amber-dim);
+  background: hsl(var(--amber-free) / .04);
+}
+
+:root[data-mode=light] .illusia-stories__pagination .page-numbers.current {
+  background: hsl(var(--amber-free) / .1);
+  border-color: hsl(var(--amber-free) / .2);
+  color: var(--amber-dim);
+}
+
+/* ── 9. Reduced Motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .illusia-stories__stats {
+    animation: none;
+  }
+
+  .illusia-stories__cards > li {
+    animation: none;
+  }
+
+  .illusia-stories__pagination .page-numbers {
+    transition-duration: 0.01ms !important;
+  }
+}

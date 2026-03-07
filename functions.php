@@ -4,7 +4,7 @@
 // CONSTANTS
 // =============================================================================
 
-define( 'CHILD_VERSION', '1.4.5' );
+define( 'CHILD_VERSION', '1.6.0' );
 define( 'CHILD_NAME', 'Illusia Theme' );
 
 // =============================================================================
@@ -48,6 +48,24 @@ function illusia_enqueue_styles_and_scripts(): void {
     ['illusia-properties'],
     CHILD_VERSION
   );
+
+  // Componentes: story cards
+  wp_enqueue_style(
+    'illusia-cards',
+    get_stylesheet_directory_uri() . '/css/components/illusia-cards.css',
+    ['illusia-properties', 'illusia-badges'],
+    CHILD_VERSION
+  );
+
+  // Componentes: stories page (archive) — só na página /stories/
+  if ( is_page_template( 'stories.php' ) ) {
+    wp_enqueue_style(
+      'illusia-stories',
+      get_stylesheet_directory_uri() . '/css/components/illusia-stories.css',
+      ['illusia-properties', 'illusia-cards'],
+      CHILD_VERSION
+    );
+  }
 }
 add_action( 'wp_enqueue_scripts', 'illusia_enqueue_styles_and_scripts', 99 );
 
