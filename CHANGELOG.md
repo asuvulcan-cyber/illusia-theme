@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-03-07
+
+### Fixed
+- `stories.php` — Paginação quebrada: variável `$page` era sobrescrita para 1 pelo `setup_postdata()` do WordPress (global reservada para paginação `<!--nextpage-->`); renomeada para `$current_page` em todo o template para evitar colisão com a global do WP
+
+### Changed
+- `css/components/illusia-cards.css` — Ícones de status agora são todos standalone (sem círculo) para consistência visual: Completed `fa-circle-check` → `fa-trophy`, Hiatus `fa-circle-pause` → `fa-pause`, Canceled `fa-ban` → `fa-xmark`
+
 ## [1.6.0] - 2026-03-07
 
 ### Added

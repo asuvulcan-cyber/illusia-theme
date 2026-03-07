@@ -24,7 +24,7 @@ use Fictioneer\Utils;
 // =============================================================================
 
 $post_id = get_the_ID();
-$page = Utils::get_global_page();
+$current_page = Utils::get_global_page();
 $order = Sanitizer::sanitize_query_var( $_GET['order'] ?? 0, ['desc', 'asc'], 'desc' );
 $orderby = Sanitizer::sanitize_query_var( $_GET['orderby'] ?? 0, fictioneer_allowed_orderby(), 'modified' );
 $ago = $_GET['ago'] ?? 0;
@@ -37,7 +37,7 @@ $query_args = array(
   'post_status' => 'publish',
   'order' => $order,
   'orderby' => $orderby,
-  'paged' => $page,
+  'paged' => $current_page,
   'posts_per_page' => get_option( 'posts_per_page', 8 ),
   'update_post_term_cache' => ! get_option( 'fictioneer_hide_taxonomies_on_story_cards' ),
 );
@@ -142,7 +142,7 @@ if ( ! $statistics ) {
   );
 
   $statistics = apply_filters( 'fictioneer_filter_stories_statistics', $statistics, array(
-    'current_page' => $page,
+    'current_page' => $current_page,
     'post_id' => $post_id,
     'stories' => $list_of_stories,
     'queried_type' => 'fcn_story',
@@ -160,7 +160,7 @@ $card_args = array(
 );
 
 $card_args = apply_filters( 'fictioneer_filter_stories_card_args', $card_args, array(
-  'current_page' => $page,
+  'current_page' => $current_page,
   'post_id' => $post_id,
   'stories' => $list_of_stories,
   'queried_type' => 'fcn_story',
@@ -225,7 +225,7 @@ get_header();
 
         <?php
           $hook_args = array(
-            'current_page' => $page,
+            'current_page' => $current_page,
             'post_id' => $post->ID,
             'stories' => $list_of_stories,
             'queried_type' => 'fcn_story',
@@ -259,7 +259,7 @@ get_header();
                 }
 
                 do_action( 'fictioneer_stories_end_of_results', array(
-                  'current_page' => $page,
+                  'current_page' => $current_page,
                   'post_id' => $post_id,
                   'stories' => $list_of_stories,
                   'queried_type' => 'fcn_story',
@@ -273,7 +273,7 @@ get_header();
             <?php else : ?>
 
               <?php do_action( 'fictioneer_stories_no_results', array(
-                'current_page' => $page,
+                'current_page' => $current_page,
                 'post_id' => $post_id,
                 'stories' => $list_of_stories,
                 'queried_type' => 'fcn_story',
@@ -296,7 +296,7 @@ get_header();
                 <?php
                   // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fictioneer_paginate_links() wraps core paginate_links()
                   echo wp_kses_post( fictioneer_paginate_links( array(
-                    'current' => $page,
+                    'current' => $current_page,
                     'total' => $list_of_stories->max_num_pages,
                     'prev_text' => fcntr( 'previous' ),
                     'next_text' => fcntr( 'next' ),
@@ -323,7 +323,7 @@ get_header();
   $footer_args = array(
     'post_type' => 'page',
     'post_id' => $post_id,
-    'current_page' => $page,
+    'current_page' => $current_page,
     'stories' => $list_of_stories,
     'breadcrumbs' => array(
       [ fcntr( 'frontpage' ), get_home_url() ],
