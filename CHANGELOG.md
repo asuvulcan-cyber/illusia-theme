@@ -6,6 +6,88 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.10.4] - 2026-03-08
+
+### Fixed
+- `css/illusia-page-style-frame.css` — Alvo migrado de `.main__wrapper` para `.main__background` (mesmo elemento usado pelos page styles nativos do Fictioneer como Chamfered, Wave, etc.); pseudo-elementos `::before`/`::after` agora no target correto
+- `css/illusia-page-style-frame.css` — Cores amber no corner ornament agora usam `hsl(var(--amber-free) / .2)` em vez de `rgba()` hardcoded; light mode usa `--amber-dim-free` e `--illusia-border-base`
+- `functions.php` — Versão bumped para 1.10.4
+
+## [1.10.1] - 2026-03-08
+
+### Added
+- `css/illusia-page-style-frame.css` — Page style "Illusia Frame" para o Customizer:
+  - Moldura decorativa sutil (`::before`) com borda arredondada em `.main__background`
+  - Ornamento de canto âmbar (`::after`) no topo esquerdo
+  - Light mode com opacidades reduzidas
+  - Responsive ≤400px: frame removida (muito apertado)
+- `functions.php` — Filtro `fictioneer_filter_customizer_page_style` para registrar opção "Illusia Frame" no dropdown de Page Style do Customizer
+
+### Changed
+- `css/components/illusia-stories.css` — Moldura decorativa (seção 1: `::before`/`::after`) removida; agora fornecida globalmente pelo page style `illusia-page-style-frame.css`
+- `functions.php` — Enqueue de `illusia-page-style-frame.css` (global, sempre carregado); versão bumped para 1.10.1
+
+## [1.10.0] - 2026-03-08
+
+### Changed
+- `stories.php` — Adicionado overline monospace "Observatory Archive" acima do título; adicionado divider decorativo com diamante entre header e stats
+- `css/components/illusia-stories.css` — Redesign "Catalog Room":
+  - Moldura decorativa sutil (`::before`) envolvendo o conteúdo com borda arredondada
+  - Ornamento de canto âmbar (`::after`) no topo esquerdo
+  - Overline monospace com letter-spacing .3em e cor amber-dim
+  - Divider com linhas gradient convergentes e diamante central (6px rotacionado 45°)
+  - Stats como fichas de catálogo unidas (flex em vez de grid), bordas arredondadas apenas nas pontas (primeiro/último)
+  - Sort com border-bottom separator entre controles e card list
+  - Mobile ≤640px: stats 2×2 wrap com radius nos 4 cantos, padding reduzido
+  - Small ≤400px: frame removida (muito apertado), padding mínimo
+  - Light mode atualizado para frame, overline, divider, diamond
+
+### Added
+- `docs/stories-page-ideas.html` — Design guide com 5 conceitos exploratórios para a página /stories/ (Catalog Room, Observatory Broadcast, Manuscript Archive, Gallery Wall, Chronicle Ledger)
+
+## [1.9.0] - 2026-03-07
+
+### Added
+- `collections.php` — Template override da página /collections/ do Fictioneer; query logic espelhada do pai com markup Illusia; sort UI do pai preservada via chamada direta a `fictioneer_sort_order_filter_interface`; layout single column para cards; paginação estilizada
+- `css/components/illusia-collections.css` — Estilos da página /collections/:
+  - Header editorial com shimmer line âmbar sob o título
+  - Sort UI na paleta Observatory Panel: micro-label "ORDENAR" em Fira Code, botões com borda/fundo escuro/hover âmbar, popups com backdrop blur e tipografia Illusia
+  - Card list flex column com staggered fade-in (`calc(--i * 60ms)` por card, até 8)
+  - Empty state Observatory com borda dashed, fundo glass, tipografia mono uppercase
+  - Paginação com mono numbers e hover/current âmbar
+  - Light mode completo (header shimmer, sort, pagination)
+  - Reduced motion (cards, pagination)
+  - Responsive: tablet ≤900px, mobile ≤640px, small ≤400px
+
+### Changed
+- `functions.php` — Enqueue condicional `illusia-collections` CSS (só em `is_page_template('collections.php')`); versão bumped para 1.9.0
+
+## [1.8.1] - 2026-03-07
+
+### Fixed
+- `partials/_card-chapter.php` — Segurança: `esc_html()` em `$text_icon` (XSS), `esc_attr()` em `$post_id` nos atributos `id`/`class`/`data-*`
+- `partials/_card-collection.php` — Segurança: `esc_attr()` em `$post_id` nos atributos HTML
+- `partials/_card-recommendation.php` — Segurança: `esc_attr()` em `$post_id`; adicionado `nofollow` em `rel` dos links externos
+- `partials/_card-chapter.php` — Status da história principal ("Ongoing") agora traduzido via `fcntr()` para PT-BR
+
+### Changed
+- `partials/_card-chapter.php` — Labels traduzidos para PT-BR: "Parent Story" → "História Principal", aria-label "Chapter stats" → "Estatísticas do capítulo"
+- `partials/_card-collection.php` — Labels traduzidos para PT-BR: "Featured" → "Destaques", aria-label "Collection stats" → "Estatísticas da coleção"
+
+## [1.8.0] - 2026-03-07
+
+### Added
+- `partials/_card-chapter.php` — Template override do Chapter Card com markup Illusia: cover com fallback triplo (chapter thumb > story thumb > text_icon), rating ribbon herdável do story, 2 stat cells (words + comments), seção "História Principal" com link ao story pai e status traduzido, Stimulus controller preservado (`fictioneer-large-card`), card controls via `fictioneer_get_card_controls()`
+- `partials/_card-collection.php` — Template override do Collection Card: cover com 4 stat cells (stories, caps, words, comments) via `Stats::get_collection_statistics()`, lista "Destaques" com até 3 featured items de tipos mistos (Story/Chapter/Collection), sem Stimulus controller, sem card controls, sem author
+- `partials/_card-recommendation.php` — Template override do Recommendation Card: cover sem stats, autor via meta field `fictioneer_recommendation_author` (não WP author), lista de links externos com `rel="noopener nofollow"` e `target="_blank"`, lógica `$display_text` (maior entre `$one_sentence` e `$excerpt`), sem footer (`_no-footer`)
+- `css/components/illusia-cards.css` — Seção 18: Chapter Card variant — cover stats compact (grid 1×2), text-icon cover, story-unpublished opacity, parent-story-row com amber sidebar bar hover
+- `css/components/illusia-cards.css` — Seção 19: Collection Card variant — featured-list com padrão chapter-list (border, hover, amber bar), type labels mono
+- `css/components/illusia-cards.css` — Seção 20: Recommendation Card variant — `--no-footer` display none, links-list com cores amber-dim
+- `css/components/illusia-cards.css` — Focus-visible para `.illusia-featured-list__link`, `.illusia-links-list__link`, `.illusia-card__parent-story-link`
+- `css/components/illusia-cards.css` — Light mode para parent-story-row, featured-list, links-list
+- `css/components/illusia-cards.css` — Mobile (≤640px): parent-story-right hidden, featured-list date/separator hidden, collection footer grid
+- `css/components/illusia-cards.css` — Seção 21: Reduced Motion atualizada com todos os novos elementos animados
+
 ## [1.7.0] - 2026-03-07
 
 ### Fixed

@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Illusia Design Guide — Arca Literária</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Syne:wght@400;500;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════════
+   DESIGN TOKENS — fonte única da verdade
+════════════════════════════════════════════════════════════ */
+:root {
+  /* Espaçamento — fluido 375px → 1440px */
+  --space-2xs: clamp(.25rem,  .5vw,  .375rem);
+  --space-xs:  clamp(.375rem, .75vw, .625rem);
+  --space-sm:  clamp(.5rem,   1.2vw, .875rem);
+  --space-md:  clamp(.875rem, 2vw,   1.25rem);
+  --space-lg:  clamp(1.25rem, 3vw,   2rem);
+  --space-xl:  clamp(1.75rem, 4.5vw, 3rem);
+  --space-2xl: clamp(2.5rem,  6vw,   4.5rem);
+  --space-3xl: clamp(3rem,    8vw,   6rem);
+
+  /* Tipografia — fluida */
+  --text-2xs: clamp(.58rem, 1.1vw, .68rem);
+  --text-xs:  clamp(.68rem, 1.3vw, .78rem);
+  --text-sm:  clamp(.78rem, 1.5vw, .88rem);
+  --text-base:clamp(.88rem, 1.7vw, 1rem);
+  --text-md:  clamp(1rem,   2vw,   1.15rem);
+  --text-lg:  clamp(1.15rem,2.4vw, 1.45rem);
+  --text-xl:  clamp(1.45rem,3.2vw, 1.9rem);
+  --text-2xl: clamp(2rem,   5vw,   3.2rem);
+  --text-3xl: clamp(2.8rem, 7vw,   5rem);
+
+  /* Paleta — Camadas de escuridão (void) */
+  --void-0: #08070a;
+  --void-1: #100e13;
+  --void-2: #161219;
+  --void-3: #1e1820;
+  --void-4: #261f28;
+  --void-5: #2e2535;
+
+  /* Paleta — Texto (ink) */
+  --ink-0: #f5ede0;
+  --ink-1: #c8bca8;
+  --ink-2: #8a7d6e;
+  --ink-3: #4a4035;
+  --ink-4: #2a2118;
+
+  /* Paleta — Cores de acento */
+  --amber:       #e8b86d;
+  --amber-dim:   #a07840;
+  --amber-glow:  rgba(232,184,109,.12);
+  --amber-halo:  rgba(232,184,109,.06);
+
+  --teal:        #6ecfbe;
+  --teal-dim:    #3a8a7e;
+  --teal-glow:   rgba(110,207,190,.1);
+
+  --crimson:     #d45c5c;
+  --crimson-dim: #8a3a3a;
+
+  --violet:      #9b7fd4;
+  --violet-dim:  #5a4080;
+
+  --sage:        #7abf8a;
+  --sage-dim:    #3a6a46;
+
+  /* Bordas semânticas */
+  --border-0:      rgba(255,240,210,.04);
+  --border-1:      rgba(255,240,210,.08);
+  --border-2:      rgba(255,240,210,.13);
+  --border-amber:  rgba(232,184,109,.22);
+  --border-active: rgba(232,184,109,.45);
+
+  /* Superfície glass */
+  --glass-bg:     rgba(22,18,25,.7);
+  --glass-blur:   blur(clamp(8px,1.5vw,16px));
+  --glass-border: rgba(255,240,210,.08);
+
+  /* Raio de borda */
+  --r-xs: clamp(2px,  .3vw, 3px);
+  --r-sm: clamp(3px,  .5vw, 5px);
+  --r-md: clamp(6px,  .9vw, 9px);
+  --r-lg: clamp(9px,  1.4vw,14px);
+  --r-xl: clamp(12px, 1.8vw,20px);
+
+  /* Tipografia */
+  --ff-display: 'Playfair Display', Georgia, serif;
+  --ff-ui:      'Syne', sans-serif;
+  --ff-mono:    'Fira Code', monospace;
+
+  /* Easing */
+  --ease-expo: cubic-bezier(.16,1,.3,1);
+  --ease-std:  cubic-bezier(.4,0,.2,1);
+
+  /* Tempo */
+  --t-fast: 110ms;
+  --t-mid:  240ms;
+  --t-slow: 420ms;
+
+  /* Layout */
+  --max-w: min(1100px, 94vw);
+}
+
+/* ════════════════════════════════════════════════════════════
+   BASE
+════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  background: var(--void-0);
+  color: var(--ink-0);
+  font-family: var(--ff-ui);
+  font-weight: 400;
+  line-height: 1.65;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: .45;
+}
+a { text-decoration: none; color: inherit; }
+button { font-family: var(--ff-ui); cursor: pointer; border: none; background: none; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--void-1); }
+::-webkit-scrollbar-thumb { background: var(--amber-dim); border-radius: 4px; }
+
+/* ════════════════════════════════════════════════════════════
+   GUIDE LAYOUT
+════════════════════════════════════════════════════════════ */
+.guide-wrap {
+  display: grid;
+  grid-template-columns: clamp(180px, 18vw, 240px) 1fr;
+  min-height: 100vh;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Sidebar nav */
+.guide-nav {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--space-lg) var(--space-md);
+  border-right: 1px solid var(--border-1);
+  background: rgba(10,9,13,.8);
+  backdrop-filter: blur(12px);
+  scrollbar-width: thin;
+  scrollbar-color: var(--void-4) transparent;
+}
+.guide-nav__logo {
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-size: var(--text-md);
+  color: var(--amber);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-1);
+  display: block;
+}
+.guide-nav__logo span {
+  display: block;
+  font-family: var(--ff-mono);
+  font-style: normal;
+  font-size: var(--text-2xs);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-top: .2em;
+}
+.nav-group { margin-bottom: var(--space-md); }
+.nav-group__label {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: var(--space-xs);
+  padding-left: var(--space-xs);
+}
+.nav-group__links { display: flex; flex-direction: column; gap: 2px; }
+.nav-link {
+  font-size: var(--text-xs);
+  color: var(--ink-2);
+  padding: .35em var(--space-xs);
+  border-radius: var(--r-sm);
+  border-left: 2px solid transparent;
+  transition: all var(--t-fast);
+  display: block;
+}
+.nav-link:hover {
+  color: var(--ink-0);
+  background: rgba(255,255,255,.03);
+  border-left-color: var(--border-amber);
+}
+.nav-link.active {
+  color: var(--amber);
+  background: var(--amber-glow);
+  border-left-color: var(--amber);
+}
+
+/* Main content */
+.guide-main {
+  padding: var(--space-2xl) clamp(1.5rem, 4vw, 3.5rem);
+  max-width: 860px;
+}
+
+/* Sections */
+.guide-section {
+  margin-bottom: var(--space-3xl);
+  scroll-margin-top: var(--space-lg);
+}
+
+/* Section header */
+.section-eyebrow {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--amber);
+  opacity: .7;
+  margin-bottom: var(--space-xs);
+}
+.section-title {
+  font-family: var(--ff-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--ink-0);
+  margin-bottom: var(--space-md);
+}
+.section-title em {
+  font-style: italic;
+  color: var(--amber);
+}
+.section-lead {
+  font-size: var(--text-base);
+  line-height: 1.85;
+  color: var(--ink-1);
+  margin-bottom: var(--space-lg);
+  max-width: 65ch;
+}
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-amber), transparent 60%);
+  margin: var(--space-2xl) 0;
+}
+
+/* Sub-section */
+.subsection { margin-bottom: var(--space-xl); }
+.subsection-title {
+  font-family: var(--ff-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--ink-0);
+  margin-bottom: var(--space-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.subsection-title::before {
+  content: '';
+  display: inline-block;
+  width: clamp(16px, 3vw, 24px);
+  height: 1px;
+  background: var(--amber-dim);
+  opacity: .6;
+}
+.subsection-desc {
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+  line-height: 1.75;
+  margin-bottom: var(--space-md);
+  max-width: 60ch;
+}
+
+/* Rule callout */
+.rule {
+  background: rgba(22,18,25,.6);
+  border: 1px solid var(--border-1);
+  border-left: 3px solid var(--amber-dim);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+.rule__label {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--amber-dim);
+  margin-bottom: .25em;
+}
+.rule__text {
+  font-size: var(--text-sm);
+  color: var(--ink-1);
+  line-height: 1.7;
+}
+.rule--do   { border-left-color: var(--teal); }
+.rule--do   .rule__label { color: var(--teal-dim); }
+.rule--dont { border-left-color: var(--crimson); }
+.rule--dont .rule__label { color: var(--crimson-dim); }
+
+/* Code block */
+.code-block {
+  background: var(--void-2);
+  border: 1px solid var(--border-1);
+  border-radius: var(--r-md);
+  padding: var(--space-md);
+  font-family: var(--ff-mono);
+  font-size: var(--text-xs);
+  color: var(--ink-1);
+  line-height: 1.8;
+  overflow-x: auto;
+  margin-bottom: var(--space-sm);
+  tab-size: 2;
+  white-space: pre;
+}
+.code-block .c-token  { color: var(--amber); }
+.code-block .c-value  { color: var(--teal); }
+.code-block .c-comment{ color: var(--ink-3); font-style: italic; }
+.code-block .c-prop   { color: var(--violet); }
+
+/* Swatch grid */
+.swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(100px, 14vw, 140px), 1fr));
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+.swatch {
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 1px solid var(--border-1);
+}
+.swatch__color {
+  height: clamp(44px, 7vw, 60px);
+}
+.swatch__info {
+  padding: var(--space-xs);
+  background: var(--void-2);
+}
+.swatch__name {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  color: var(--ink-1);
+  display: block;
+}
+.swatch__hex {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  color: var(--ink-3);
+  display: block;
+  margin-top: .1em;
+}
+
+/* Type specimen */
+.type-specimen {
+  border: 1px solid var(--border-1);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-bottom: var(--space-md);
+}
+.type-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--border-0);
+  transition: background var(--t-fast);
+}
+.type-row:last-child { border-bottom: none; }
+.type-row:hover { background: rgba(255,255,255,.02); }
+.type-meta {
+  flex-shrink: 0;
+  width: clamp(80px, 14vw, 120px);
+}
+.type-meta__name {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  color: var(--amber-dim);
+  display: block;
+  letter-spacing: .06em;
+}
+.type-meta__size {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  color: var(--ink-3);
+  display: block;
+}
+.type-sample { flex: 1; color: var(--ink-0); line-height: 1.3; }
+
+/* Spacing scale */
+.space-scale { display: flex; flex-direction: column; gap: var(--space-xs); }
+.space-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+.space-bar-wrap { flex: 1; }
+.space-bar {
+  height: clamp(18px, 3vw, 26px);
+  background: linear-gradient(90deg, rgba(232,184,109,.25), rgba(232,184,109,.08));
+  border: 1px solid var(--border-amber);
+  border-radius: var(--r-xs);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-xs);
+}
+.space-bar span {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  color: var(--amber);
+}
+.space-meta {
+  width: clamp(100px, 18vw, 160px);
+  flex-shrink: 0;
+}
+.space-meta__name {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  color: var(--ink-1);
+}
+.space-meta__val {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  color: var(--ink-3);
+}
+
+/* Demo card container */
+.demo-frame {
+  background: var(--void-1);
+  border: 1px solid var(--border-1);
+  border-radius: var(--r-xl);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-md);
+  position: relative;
+}
+.demo-frame__label {
+  position: absolute;
+  top: calc(-1 * var(--space-xs) - 1px);
+  left: var(--space-md);
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--amber-dim);
+  background: var(--void-1);
+  padding: 0 var(--space-xs);
+}
+
+/* ════ COMPONENTS (demo) ════ */
+
+/* Buttons */
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  align-items: center;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5em;
+  padding: .65em 1.4em;
+  border-radius: var(--r-md);
+  font-family: var(--ff-ui);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  transition: all var(--t-mid) var(--ease-expo);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border: none;
+}
+.btn--cta {
+  background: var(--amber);
+  color: var(--void-0);
+  box-shadow: 0 4px 20px rgba(232,184,109,.25), inset 0 1px 0 rgba(255,255,255,.2);
+}
+.btn--cta:hover { background: #f0cc85; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(232,184,109,.35); }
+.btn--outline {
+  background: transparent;
+  border: 1px solid var(--border-amber);
+  color: var(--ink-1);
+}
+.btn--outline:hover { border-color: var(--border-active); color: var(--amber); background: var(--amber-glow); transform: translateY(-1px); }
+.btn--ghost {
+  background: transparent;
+  border: 1px solid var(--border-1);
+  color: var(--ink-2);
+}
+.btn--ghost:hover { border-color: var(--border-2); color: var(--ink-0); }
+.btn--icon {
+  width: clamp(32px,5vw,40px);
+  height: clamp(32px,5vw,40px);
+  padding: 0;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border-1);
+  color: var(--ink-2);
+  font-size: var(--text-sm);
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn--icon:hover { border-color: var(--border-active); color: var(--amber); background: var(--amber-glow); }
+
+/* Badges */
+.badge-row { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-bottom: var(--space-sm); }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .3em;
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: .05em;
+  padding: .28em .7em;
+  border-radius: var(--r-xs);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: default;
+  transition: filter var(--t-fast);
+}
+.badge:hover { filter: brightness(1.2); }
+.badge--genre    { color: var(--teal);    border-color: rgba(110,207,190,.2);  background: rgba(110,207,190,.06); }
+.badge--fandom   { color: var(--violet);  border-color: rgba(155,127,212,.22); background: rgba(155,127,212,.07); }
+.badge--character{ color: var(--amber);   border-color: var(--border-amber);   background: var(--amber-glow); }
+.badge--tag      { color: var(--ink-2);   border-color: var(--border-1);       background: rgba(255,255,255,.03); }
+.badge--warning  { color: var(--crimson); border-color: rgba(212,92,92,.22);   background: rgba(212,92,92,.07); }
+.badge--ongoing  { color: var(--teal);    border-color: rgba(110,207,190,.3);  background: rgba(110,207,190,.08); font-weight:500; }
+.badge--done     { color: var(--sage);    border-color: rgba(122,191,138,.3);  background: rgba(122,191,138,.07);font-weight:500; }
+.badge--hiatus   { color: var(--amber);   border-color: var(--border-amber);   background: var(--amber-glow);    font-weight:500; }
+.badge--rating-e { color: var(--void-0);  background: var(--sage);   border-color: var(--sage);   font-weight:700; min-width:1.9em; justify-content:center; }
+.badge--rating-t { color: var(--void-0);  background: var(--amber);  border-color: var(--amber);  font-weight:700; min-width:1.9em; justify-content:center; }
+.badge--rating-m { color: #fff;           background: var(--crimson-dim); border-color:var(--crimson); font-weight:700; min-width:1.9em; justify-content:center; }
+
+/* Cards */
+.card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  position: relative;
+  transition: border-color var(--t-mid), transform var(--t-mid) var(--ease-expo);
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,184,109,.12), transparent);
+  pointer-events: none;
+}
+.card:hover { border-color: var(--border-amber); transform: translateY(-1px); }
+.card__header {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--border-0);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.card__icon {
+  width: clamp(20px,3vw,26px);
+  height: clamp(20px,3vw,26px);
+  border-radius: var(--r-sm);
+  background: var(--amber-glow);
+  border: 1px solid var(--border-amber);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .7em;
+  color: var(--amber);
+  flex-shrink: 0;
+}
+.card__title-text {
+  font-family: var(--ff-display);
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--ink-0);
+}
+.card__body { padding: var(--space-md); }
+
+/* Input */
+.input {
+  width: 100%;
+  background: rgba(10,9,13,.6);
+  border: 1px solid var(--border-1);
+  border-radius: var(--r-md);
+  color: var(--ink-0);
+  font-family: var(--ff-ui);
+  font-size: var(--text-sm);
+  padding: .65em var(--space-md);
+  outline: none;
+  transition: border-color var(--t-mid), box-shadow var(--t-mid);
+  appearance: none;
+}
+.input:focus {
+  border-color: var(--border-amber);
+  box-shadow: 0 0 0 3px rgba(232,184,109,.08);
+}
+.input::placeholder { color: var(--ink-3); }
+
+/* Sidebar action button */
+.sb-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: .6em var(--space-md);
+  border-radius: var(--r-md);
+  border: 1px solid var(--border-0);
+  font-size: var(--text-xs);
+  color: var(--ink-1);
+  background: transparent;
+  transition: all var(--t-mid) var(--ease-expo);
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.sb-btn::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--amber);
+  transform: scaleY(0);
+  transition: transform var(--t-mid) var(--ease-expo);
+}
+.sb-btn:hover { border-color: var(--border-amber); color: var(--amber); background: var(--amber-halo); transform: translateX(2px); }
+.sb-btn:hover::before { transform: scaleY(1); }
+
+/* Progress bar */
+.progress-bg {
+  height: 3px;
+  background: rgba(255,255,255,.05);
+  border-radius: 3px;
+  overflow: visible;
+  position: relative;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--amber-dim), var(--amber));
+  position: relative;
+}
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  right: -4px; top: -1px;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 8px rgba(232,184,109,.6);
+}
+
+/* Chapter row */
+.chapter-row-demo {
+  display: grid;
+  grid-template-columns: 30px 1fr auto auto;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: .7em var(--space-md);
+  border-bottom: 1px solid var(--border-0);
+  cursor: pointer;
+  transition: background var(--t-fast);
+  position: relative;
+  overflow: hidden;
+}
+.chapter-row-demo::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--amber);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform var(--t-mid) var(--ease-expo);
+}
+.chapter-row-demo:last-child { border-bottom: none; }
+.chapter-row-demo:hover { background: rgba(232,184,109,.03); }
+.chapter-row-demo:hover::before { transform: scaleY(1); }
+
+/* Chip / filter pill */
+.pill {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  padding: .25em .75em;
+  border: 1px solid var(--border-1);
+  border-radius: 2px;
+  color: var(--ink-2);
+  background: transparent;
+  transition: all var(--t-fast);
+  cursor: pointer;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.pill.active { border-color: var(--border-amber); color: var(--amber); background: var(--amber-glow); }
+.pill:hover:not(.active) { border-color: var(--border-2); color: var(--ink-0); }
+
+/* Animations showcase */
+.anim-demo {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(120px,18vw,160px), 1fr));
+  gap: var(--space-sm);
+}
+.anim-box {
+  height: clamp(60px,10vw,80px);
+  border-radius: var(--r-md);
+  border: 1px solid var(--border-1);
+  background: rgba(30,24,32,.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  color: var(--ink-2);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--t-mid) var(--ease-expo);
+}
+.anim-box:hover { border-color: var(--border-amber); color: var(--amber); }
+.anim-box--lift:hover   { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,.4); }
+.anim-box--slide:hover  { transform: translateX(4px); }
+.anim-box--scale:hover  { transform: scale(1.04); }
+.anim-box--glow:hover   { box-shadow: 0 0 20px rgba(232,184,109,.15); }
+.anim-box__label {
+  position: absolute;
+  bottom: var(--space-xs); left: 0; right: 0;
+  text-align: center;
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  color: var(--ink-3);
+  letter-spacing: .06em;
+}
+
+/* Grid lines showcase */
+.grid-demo {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background: var(--border-0);
+  border: 1px solid var(--border-1);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+.grid-cell {
+  background: rgba(22,18,25,.9);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--ff-mono);
+  font-size: var(--text-xs);
+  color: var(--ink-2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.grid-cell:hover { background: rgba(30,24,32,.95); }
+.grid-cell__key { color: var(--ink-3); font-size: var(--text-2xs); letter-spacing: .08em; text-transform: uppercase; }
+
+/* Easing visualizer */
+.ease-row { display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-sm); }
+.ease-label { font-family: var(--ff-mono); font-size: var(--text-xs); color: var(--ink-2); width: clamp(100px,16vw,150px); flex-shrink: 0; }
+.ease-track {
+  flex: 1;
+  height: 6px;
+  background: var(--border-1);
+  border-radius: 3px;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+.ease-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--amber);
+  position: absolute;
+  top: -2px; left: 0;
+  transition-duration: .6s;
+  transition-property: left;
+  box-shadow: 0 0 8px rgba(232,184,109,.5);
+}
+.ease-track:hover .ease-dot { left: calc(100% - 10px); }
+.ease-track--expo .ease-dot  { transition-timing-function: cubic-bezier(.16,1,.3,1); }
+.ease-track--std  .ease-dot  { transition-timing-function: cubic-bezier(.4,0,.2,1); }
+.ease-track--linear .ease-dot{ transition-timing-function: linear; }
+.ease-track--bounce .ease-dot{ transition-timing-function: cubic-bezier(.34,1.56,.64,1); }
+
+/* Two-col rule layout */
+.rule-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+@media (max-width: 600px) { .rule-grid { grid-template-columns: 1fr; } }
+
+/* Inline mono highlight */
+code {
+  font-family: var(--ff-mono);
+  font-size: .88em;
+  background: rgba(232,184,109,.08);
+  border: 1px solid rgba(232,184,109,.15);
+  border-radius: var(--r-xs);
+  padding: .1em .4em;
+  color: var(--amber);
+}
+
+/* Breadcrumb demo */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.breadcrumb a { transition: color var(--t-fast); }
+.breadcrumb a:hover { color: var(--amber); }
+.breadcrumb__sep { opacity: .3; }
+
+/* Tabs demo */
+.tabs-demo { border-bottom: 1px solid var(--border-1); display: flex; }
+.tab-demo-btn {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: var(--space-sm) var(--space-md);
+  color: var(--ink-2);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all var(--t-mid);
+  background: transparent;
+  cursor: pointer;
+}
+.tab-demo-btn.active { color: var(--amber); border-bottom-color: var(--amber); }
+.tab-demo-btn:hover:not(.active) { color: var(--ink-0); }
+
+/* Mask fade demo */
+.mask-demo {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--space-2xs);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, black 0%, black 72%, transparent 100%);
+  mask-image:         linear-gradient(to right, black 0%, black 72%, transparent 100%);
+  padding: var(--space-xs) 0;
+}
+
+/* Responsive message */
+@media (max-width: 700px) {
+  .guide-wrap { grid-template-columns: 1fr; }
+  .guide-nav {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+  }
+  .guide-nav__logo { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .nav-group { margin-bottom: 0; }
+  .nav-group__label { display: none; }
+  .nav-group__links { flex-direction: row; flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<div class="guide-wrap">
+
+<!-- ════ SIDEBAR NAV ════ -->
+<nav class="guide-nav">
+  <a href="#" class="guide-nav__logo">
+    Illusia
+    <span>Design Guide v1.0</span>
+  </a>
+
+  <div class="nav-group">
+    <div class="nav-group__label">Fundamentos</div>
+    <div class="nav-group__links">
+      <a href="#filosofia"   class="nav-link active">Filosofia</a>
+      <a href="#tokens"      class="nav-link">Tokens CSS</a>
+      <a href="#cores"       class="nav-link">Cores</a>
+      <a href="#tipografia"  class="nav-link">Tipografia</a>
+      <a href="#espacamento" class="nav-link">Espaçamento</a>
+      <a href="#raio"        class="nav-link">Raio de Borda</a>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group__label">Atmosfera</div>
+    <div class="nav-group__links">
+      <a href="#texturas"    class="nav-link">Texturas & Ruído</a>
+      <a href="#orbs"        class="nav-link">Orbs Ambiente</a>
+      <a href="#glass"       class="nav-link">Glass Surface</a>
+      <a href="#bordas"      class="nav-link">Bordas Semânticas</a>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group__label">Componentes</div>
+    <div class="nav-group__links">
+      <a href="#botoes"      class="nav-link">Botões</a>
+      <a href="#badges"      class="nav-link">Badges & Tags</a>
+      <a href="#cards"       class="nav-link">Cards</a>
+      <a href="#inputs"      class="nav-link">Inputs</a>
+      <a href="#tabs"        class="nav-link">Tabs & Pills</a>
+      <a href="#listas"      class="nav-link">Listas de Item</a>
+      <a href="#progresso"   class="nav-link">Progresso</a>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group__label">Motion</div>
+    <div class="nav-group__links">
+      <a href="#easing"      class="nav-link">Easing</a>
+      <a href="#animacoes"   class="nav-link">Animações</a>
+      <a href="#micro"       class="nav-link">Microinterações</a>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group__label">Layout</div>
+    <div class="nav-group__links">
+      <a href="#grid"        class="nav-link">Grid & Responsivo</a>
+      <a href="#regras"      class="nav-link">Regras de Ouro</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ════ MAIN ════ -->
+<main class="guide-main">
+
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  FILOSOFIA                               ║
+       ╚══════════════════════════════════════════╝ -->
+  <section class="guide-section" id="filosofia">
+    <div class="section-eyebrow">01 — Fundamento</div>
+    <h1 class="section-title">A Filosofia do <em>Design Illusia</em></h1>
+    <p class="section-lead">
+      O Illusia é um sistema visual construído em torno de uma ideia central: <strong>um livro raro de colecionador dentro de um observatório astronômico</strong>. Escuridão profunda com detalhes que brilham. Densidade controlada. Cada elemento justifica sua presença ou não existe.
+    </p>
+
+    <div class="subsection">
+      <div class="subsection-title">Nome do estilo</div>
+      <div class="subsection-desc">
+        <strong>Dark Editorial Observatory</strong> — a intersecção entre o refinamento tipográfico de uma publicação literária de luxo e a precisão silenciosa de um painel de controle científico. Nunca genérico. Nunca barulhento.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Os quatro pilares</div>
+      <div class="rule-grid">
+        <div class="rule rule--do">
+          <div class="rule__label">✦ Atmosfera</div>
+          <div class="rule__text">Cada tela deve ter profundidade visual mesmo sem imagens. Ruído de grão, orbs de luz difusa, linhas de grade fantasmas e bordas hairline criam um ambiente vivo.</div>
+        </div>
+        <div class="rule rule--do">
+          <div class="rule__label">✦ Hierarquia</div>
+          <div class="rule__text">O olhar tem um caminho. Título serifado dramático → subtítulo mono sutil → corpo sans-serif leve. Nunca dois elementos disputando protagonismo no mesmo nível.</div>
+        </div>
+        <div class="rule rule--do">
+          <div class="rule__label">✦ Contenção</div>
+          <div class="rule__text">Menos é mais, mas menos errado é mais errado ainda. Cada cor, borda e sombra tem função semântica. Decoração sem propósito é ruído — não elegância.</div>
+        </div>
+        <div class="rule rule--do">
+          <div class="rule__label">✦ Fluidez</div>
+          <div class="rule__text">Nenhum valor de tamanho é fixo. Todo espaçamento, fonte e raio usa <code>clamp()</code> para se adaptar naturalmente de 375px a 1440px sem breakpoints artificiais.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule rule--dont">
+      <div class="rule__label">✗ O que este design nunca é</div>
+      <div class="rule__text">Gradientes roxos genéricos. Fundos brancos. Fontes Inter/Roboto. Cards com sombras coloridas excessivas. Animações desnecessárias em elementos estáticos. Bordas coloridas fortes sem motivo semântico. Mais de 3 tons de acento em uso simultâneo.</div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  TOKENS CSS                              ║
+       ╚══════════════════════════════════════════╝ -->
+  <section class="guide-section" id="tokens">
+    <div class="section-eyebrow">02 — Fundamento</div>
+    <h2 class="section-title">Tokens <em>CSS</em></h2>
+    <p class="section-lead">
+      Todos os valores do sistema vivem como custom properties no <code>:root</code>. Nunca use valores literais no código — sempre referencie um token. Isso garante consistência e permite mudar o tema inteiro com poucos ajustes.
+    </p>
+
+    <div class="subsection">
+      <div class="subsection-title">Estrutura do token</div>
+      <div class="subsection-desc">Os tokens seguem nomenclatura semântica em três camadas: <strong>categoria</strong>, <strong>escala</strong> e opcionalmente <strong>variante</strong>.</div>
+      <div class="code-block"><span class="c-comment">/* ✓ CORRETO — referencia token */</span>
+<span class="c-prop">padding</span>: <span class="c-token">var(--space-md)</span>;
+<span class="c-prop">font-size</span>: <span class="c-token">var(--text-sm)</span>;
+<span class="c-prop">border-color</span>: <span class="c-token">var(--border-amber)</span>;
+
+<span class="c-comment">/* ✗ ERRADO — valor literal hardcoded */</span>
+<span class="c-prop">padding</span>: <span class="c-value">12px</span>;
+<span class="c-prop">font-size</span>: <span class="c-value">.875rem</span>;
+<span class="c-prop">border-color</span>: <span class="c-value">rgba(232,184,109,.22)</span>;</div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Anatomia do clamp()</div>
+      <div class="subsection-desc">Todo valor fluido segue a fórmula: <code>clamp(mínimo, preferido-em-vw, máximo)</code>. O valor central em <code>vw</code> é o que faz a escala ser contínua entre os extremos.</div>
+      <div class="code-block"><span class="c-comment">/* Fórmula padrão */</span>
+--space-md: <span class="c-token">clamp</span>(<span class="c-value">.875rem</span>, <span class="c-value">2vw</span>, <span class="c-value">1.25rem</span>);
+<span class="c-comment">/*          ↑ 375px  ↑ cresce  ↑ 1440px */</span>
+
+<span class="c-comment">/* Raio de borda também é fluido */</span>
+--r-xl: <span class="c-token">clamp</span>(<span class="c-value">12px</span>, <span class="c-value">1.8vw</span>, <span class="c-value">20px</span>);</div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  CORES                                   ║
+       ╚══════════════════════════════════════════╝ -->
+  <section class="guide-section" id="cores">
+    <div class="section-eyebrow">03 — Fundamento</div>
+    <h2 class="section-title">Sistema de <em>Cores</em></h2>
+    <p class="section-lead">
+      A paleta é construída em três grupos: <strong>void</strong> (profundidades de fundo), <strong>ink</strong> (textos) e <strong>acentos</strong> (âmbar como primário, teal/violeta/crimson como semânticos). O âmbar é a única cor que aparece livremente — as demais têm papéis específicos.
+    </p>
+
+    <div class="subsection">
+      <div class="subsection-title">Void — fundos</div>
+      <div class="swatch-grid">
+        <div class="swatch"><div class="swatch__color" style="background:#08070a"></div><div class="swatch__info"><span class="swatch__name">--void-0</span><span class="swatch__hex">#08070a · Fundo raiz</span></div></div>
+        <div class="swatch"><div class="swatch__color" style="background:#100e13"></div><div class="swatch__info"><span class="swatch__name">--void-1</span><span class="swatch__hex">#100e13 · Header/Nav</span></div></div>
+        <div class="swatch"><div class="swatch__color" style="background:#161219"></div><div class="swatch__info"><span class="swatch__name">--void-2</span><span class="swatch__hex">#161219 · Cards</span></div></div>
+        <div class="swatch"><div class="swatch__color" style="background:#1e1820"></div><div class="swatch__info"><span class="swatch__name">--void-3</span><span class="swatch__hex">#1e1820 · Cards hover</span></div></div>
+        <div class="swatch"><div class="swatch__color" style="background:#261f28"></div><div class="swatch__info"><span class="swatch__name">--void-4</span><span class="swatch__hex">#261f28 · Elementos</span></div></div>
+        <div class="swatch"><div class="swatch__color" style="background:#2e2535"></div><div class="swatch__info"><span class="swatch__name">--void-5</span><span class="swatch__hex">#2e2535 · Alt dark</span></div></div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Ink — textos</div>
+      <div class="swatch-grid">
+        <div class="swatch"><div class="swatch__color" style="background:#f5ede0"></div><div class="swatch__info"><span class="swatch__name">--ink-0</span><span class="swatch__hex">#f5ede0 · Títulos</span></div></div>
+        <div class="swatch"><div class="swatch__color" style="background:#c8bca8"></div><div class="swatch__info"><span class="swatch__name">--ink-1</span><span class="swatch__hex">#c8bca8 · Corpo</span></div></div>
+        <div class="swatch"><div class="swatch__color" style="background:#8a7d6e"></div><div class="swatch__info"><span class="swatch__name">--ink-2</span><span class="swatch__hex">#8a7d6e · Secundário</span></div></div>
+        <div class="swatch"><div class="swatch__color" style="background:#4a4035"></div><div class="swatch__info"><span class="swatch__name">--ink-3</span><span class="swatch__hex">#4a4035 · Desabilitado</span></div></div>
+        <div class="swatch"><div class="swatch__color" style="background:#2a2118"></div><div class="swatch__info"><span class="swatch__name">--ink-4</span><span class="swatch__hex">#2a2118 · Fantasma</span></div></div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Acentos — papéis semânticos</div>
+      <div class="swatch-grid">
+        <div class="swatch"><div class="swatch__color" style="background:#e8b86d"></div><div class="swatch__info"><span class="swatch__name">--amber</span><span class="swatch__hex">Primário, CTAs</span></div></div>
+        <div class="swatch"><div class="swatch__color" style="background:#a07840"></div><div class="swatch__info"><span class="swatch__name">--amber-dim</span><span class="swatch__hex">Labels, ícones</span></div></div>
+        <div class="swatch"><div class="swatch__color" style="background:#6ecfbe"></div><div class="swatch__info"><span class="swatch__name">--teal</span><span class="swatch__hex">Em andamento</span></div></div>
+        <div class="swatch"><div class="swatch__color" style="background:#d45c5c"></div><div class="swatch__info"><span class="swatch__name">--crimson</span><span class="swatch__hex">Aviso, erro, adult</span></div></div>
+        <div class="swatch"><div class="swatch__color" style="background:#9b7fd4"></div><div class="swatch__info"><span class="swatch__name">--violet</span><span class="swatch__hex">Fandom, especial</span></div></div>
+        <div class="swatch"><div class="swatch__color" style="background:#7abf8a"></div><div class="swatch__info"><span class="swatch__name">--sage</span><span class="swatch__hex">Concluído, sucesso</span></div></div>
+      </div>
+
+      <div class="rule rule--dont">
+        <div class="rule__label">✗ Nunca use cores de acento livremente</div>
+        <div class="rule__text">Teal = status "em andamento" e gêneros. Crimson = avisos, conteúdo adulto, erros. Violet = fandoms. Sage = "concluído". Âmbar = todo o resto. Não inverta esses papéis por estética.</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Regra dos 3 tons</div>
+      <div class="rule rule--do">
+        <div class="rule__label">✓ Regra obrigatória</div>
+        <div class="rule__text">Nunca mais de 3 tons de acento em uso visível simultâneo numa mesma tela. Em geral: âmbar + teal + neutros. Crimson e violet aparecem apenas quando há semântica para isso (aviso, fandom).</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  TIPOGRAFIA                              ║
+       ╚══════════════════════════════════════════╝ -->
+  <section class="guide-section" id="tipografia">
+    <div class="section-eyebrow">04 — Fundamento</div>
+    <h2 class="section-title"><em>Tipografia</em> em Três Vozes</h2>
+    <p class="section-lead">
+      Três famílias tipográficas com papéis rígidos. A mistura deliberada entre serifado dramático, sans-serif geométrico e monospace cria o contraste que define a identidade visual.
+    </p>
+
+    <div class="subsection">
+      <div class="subsection-title">As três famílias</div>
+      <div class="type-specimen">
+        <div class="type-row">
+          <div class="type-meta">
+            <span class="type-meta__name">Display</span>
+            <span class="type-meta__size">Playfair Display</span>
+          </div>
+          <div class="type-sample" style="font-family:'Playfair Display',serif; font-size:clamp(1.4rem,3vw,2rem); font-weight:700;">
+            A Chama da <em style="color:var(--amber)">Última Torre</em>
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <span class="type-meta__name">UI / Corpo</span>
+            <span class="type-meta__size">Syne</span>
+          </div>
+          <div class="type-sample" style="font-family:'Syne',sans-serif; font-size:clamp(.9rem,1.8vw,1rem); color:var(--ink-1);">
+            Texto de parágrafo, botões, labels de interface. Peso 400–700.
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <span class="type-meta__name">Mono / Meta</span>
+            <span class="type-meta__size">Fira Code</span>
+          </div>
+          <div class="type-sample" style="font-family:'Fira Code',monospace; font-size:clamp(.65rem,1.2vw,.75rem); letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3);">
+            CAPÍTULOS RECENTES · 342K PALAVRAS · 47 CAPS
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Escala tipográfica completa</div>
+      <div class="type-specimen">
+        <div class="type-row"><div class="type-meta"><span class="type-meta__name">--text-3xl</span><span class="type-meta__size">2.8→5rem</span></div><div class="type-sample" style="font-family:'Playfair Display',serif;font-size:clamp(2.8rem,7vw,5rem);font-weight:900;line-height:1;">Héroe</div></div>
+        <div class="type-row"><div class="type-meta"><span class="type-meta__name">--text-2xl</span><span class="type-meta__size">2→3.2rem</span></div><div class="type-sample" style="font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;">Título de Seção</div></div>
+        <div class="type-row"><div class="type-meta"><span class="type-meta__name">--text-xl</span><span class="type-meta__size">1.45→1.9rem</span></div><div class="type-sample" style="font-family:'Playfair Display',serif;font-size:clamp(1.45rem,3.2vw,1.9rem);font-weight:600;">Subtítulo ou Stat</div></div>
+        <div class="type-row"><div class="type-meta"><span class="type-meta__name">--text-lg</span><span class="type-meta__size">1.15→1.45rem</span></div><div class="type-sample" style="font-family:'Playfair Display',serif;font-size:clamp(1.15rem,2.4vw,1.45rem);">Título de Card</div></div>
+        <div class="type-row"><div class="type-meta"><span class="type-meta__name">--text-md</span><span class="type-meta__size">1→1.15rem</span></div><div class="type-sample" style="font-size:clamp(1rem,2vw,1.15rem);">Texto de destaque</div></div>
+        <div class="type-row"><div class="type-meta"><span class="type-meta__name">--text-base</span><span class="type-meta__size">.88→1rem</span></div><div class="type-sample" style="font-size:clamp(.88rem,1.7vw,1rem);color:var(--ink-1);">Corpo de texto padrão para sinopses e parágrafos de conteúdo.</div></div>
+        <div class="type-row"><div class="type-meta"><span class="type-meta__name">--text-sm</span><span class="type-meta__size">.78→.88rem</span></div><div class="type-sample" style="font-size:clamp(.78rem,1.5vw,.88rem);color:var(--ink-2);">Metadados, datas, nomes de autor</div></div>
+        <div class="type-row"><div class="type-meta"><span class="type-meta__name">--text-xs</span><span class="type-meta__size">.68→.78rem</span></div><div class="type-sample" style="font-family:'Fira Code',monospace;font-size:clamp(.68rem,1.3vw,.78rem);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);">Labels de botão, contadores</div></div>
+        <div class="type-row"><div class="type-meta"><span class="type-meta__name">--text-2xs</span><span class="type-meta__size">.58→.68rem</span></div><div class="type-sample" style="font-family:'Fira Code',monospace;font-size:clamp(.58rem,1.1vw,.68rem);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);">EYEBROWS · BADGES · METADATA</div></div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Regras de uso</div>
+      <div class="rule-grid">
+        <div class="rule rule--do">
+          <div class="rule__label">✓ Playfair Display</div>
+          <div class="rule__text">Títulos de página, títulos de card, nomes de obra, seções importantes, números de destaque (stats). Sempre em peso 600–900. Itálico com âmbar para ênfase dramática.</div>
+        </div>
+        <div class="rule rule--do">
+          <div class="rule__label">✓ Fira Code</div>
+          <div class="rule__text">Tudo que é metadado: eyebrows, badges, tabs, pills, datas, contadores, breadcrumbs, labels de sidebar. Sempre em uppercase + letter-spacing quando for label. Nunca para corpo de texto.</div>
+        </div>
+      </div>
+      <div class="rule rule--dont">
+        <div class="rule__label">✗ Proibido</div>
+        <div class="rule__text">Nunca use Playfair para labels ou metadados. Nunca use Fira Code para parágrafos longos. Nunca mescle mais de dois pesos da mesma família no mesmo bloco visual.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  ESPAÇAMENTO                             ║
+       ╚══════════════════════════════════════════╝ -->
+  <section class="guide-section" id="espacamento">
+    <div class="section-eyebrow">05 — Fundamento</div>
+    <h2 class="section-title">Escala de <em>Espaçamento</em></h2>
+    <p class="section-lead">8 níveis fluidos. Cada nível cresce proporcionalmente com a tela. Nunca use um valor abaixo do adequado para a relação entre os elementos — espaço generoso é parte da linguagem.</p>
+
+    <div class="space-scale">
+      <div class="space-row"><div class="space-meta"><span class="space-meta__name">--space-2xs</span><span class="space-meta__val">clamp(.25→.375rem)</span></div><div class="space-bar-wrap"><div class="space-bar" style="width:5%"><span>2xs</span></div></div></div>
+      <div class="space-row"><div class="space-meta"><span class="space-meta__name">--space-xs</span><span class="space-meta__val">clamp(.375→.625rem)</span></div><div class="space-bar-wrap"><div class="space-bar" style="width:9%"><span>xs</span></div></div></div>
+      <div class="space-row"><div class="space-meta"><span class="space-meta__name">--space-sm</span><span class="space-meta__val">clamp(.5→.875rem)</span></div><div class="space-bar-wrap"><div class="space-bar" style="width:14%"><span>sm</span></div></div></div>
+      <div class="space-row"><div class="space-meta"><span class="space-meta__name">--space-md</span><span class="space-meta__val">clamp(.875→1.25rem)</span></div><div class="space-bar-wrap"><div class="space-bar" style="width:22%"><span>md</span></div></div></div>
+      <div class="space-row"><div class="space-meta"><span class="space-meta__name">--space-lg</span><span class="space-meta__val">clamp(1.25→2rem)</span></div><div class="space-bar-wrap"><div class="space-bar" style="width:34%"><span>lg</span></div></div></div>
+      <div class="space-row"><div class="space-meta"><span class="space-meta__name">--space-xl</span><span class="space-meta__val">clamp(1.75→3rem)</span></div><div class="space-bar-wrap"><div class="space-bar" style="width:50%"><span>xl</span></div></div></div>
+      <div class="space-row"><div class="space-meta"><span class="space-meta__name">--space-2xl</span><span class="space-meta__val">clamp(2.5→4.5rem)</span></div><div class="space-bar-wrap"><div class="space-bar" style="width:70%"><span>2xl</span></div></div></div>
+      <div class="space-row"><div class="space-meta"><span class="space-meta__name">--space-3xl</span><span class="space-meta__val">clamp(3→6rem)</span></div><div class="space-bar-wrap"><div class="space-bar" style="width:92%"><span>3xl</span></div></div></div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  RAIO DE BORDA                           ║
+       ╚══════════════════════════════════════════╝ -->
+  <section class="guide-section" id="raio">
+    <div class="section-eyebrow">06 — Fundamento</div>
+    <h2 class="section-title">Raio de <em>Borda</em></h2>
+    <p class="section-lead">
+      Cinco níveis fluidos que definem a "personalidade" de cada elemento. O raio comunica hierarquia: elementos menores e utilitários têm raio menor; containers maiores e mais importantes têm raio maior. Nunca use o mesmo raio para elementos de hierarquias diferentes.
+    </p>
+
+    <div class="subsection">
+      <div class="subsection-title">Escala completa</div>
+
+      <div style="display:flex;flex-direction:column;gap:var(--space-sm);margin-bottom:var(--space-md)">
+        <div style="display:flex;align-items:center;gap:var(--space-md)">
+          <div style="flex-shrink:0;width:clamp(120px,18vw,160px)">
+            <span style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);color:var(--ink-1);display:block">--r-xs</span>
+            <span style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);color:var(--ink-3)">clamp(2px, .3vw, 3px)</span>
+          </div>
+          <div style="height:clamp(32px,5vw,42px);flex:1;background:rgba(232,184,109,.08);border:1px solid var(--border-amber);border-radius:clamp(2px,.3vw,3px);display:flex;align-items:center;padding:0 var(--space-md)">
+            <span style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);color:var(--amber-dim)">Badges, pills, chips, new-badge inline</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:var(--space-md)">
+          <div style="flex-shrink:0;width:clamp(120px,18vw,160px)">
+            <span style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);color:var(--ink-1);display:block">--r-sm</span>
+            <span style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);color:var(--ink-3)">clamp(3px, .5vw, 5px)</span>
+          </div>
+          <div style="height:clamp(32px,5vw,42px);flex:1;background:rgba(232,184,109,.08);border:1px solid var(--border-amber);border-radius:clamp(3px,.5vw,5px);display:flex;align-items:center;padding:0 var(--space-md)">
+            <span style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);color:var(--amber-dim)">Botões icon, ctrl-btn, status badges, sort-btn</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:var(--space-md)">
+          <div style="flex-shrink:0;width:clamp(120px,18vw,160px)">
+            <span style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);color:var(--ink-1);display:block">--r-md</span>
+            <span style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);color:var(--ink-3)">clamp(6px, .9vw, 9px)</span>
+          </div>
+          <div style="height:clamp(32px,5vw,42px);flex:1;background:rgba(232,184,109,.08);border:1px solid var(--border-amber);border-radius:clamp(6px,.9vw,9px);display:flex;align-items:center;padding:0 var(--space-md)">
+            <span style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);color:var(--amber-dim)">Botões de ação, inputs, capa do cover, chapter-list</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:var(--space-md)">
+          <div style="flex-shrink:0;width:clamp(120px,18vw,160px)">
+            <span style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);color:var(--ink-1);display:block">--r-lg</span>
+            <span style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);color:var(--ink-3)">clamp(9px, 1.4vw, 14px)</span>
+          </div>
+          <div style="height:clamp(32px,5vw,42px);flex:1;background:rgba(232,184,109,.08);border:1px solid var(--border-amber);border-radius:clamp(9px,1.4vw,14px);display:flex;align-items:center;padding:0 var(--space-md)">
+            <span style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);color:var(--amber-dim)">Char cards, listas de capítulos, demo-frame</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:var(--space-md)">
+          <div style="flex-shrink:0;width:clamp(120px,18vw,160px)">
+            <span style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);color:var(--ink-1);display:block">--r-xl</span>
+            <span style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);color:var(--ink-3)">clamp(12px, 1.8vw, 20px)</span>
+          </div>
+          <div style="height:clamp(32px,5vw,42px);flex:1;background:rgba(232,184,109,.08);border:1px solid var(--border-amber);border-radius:clamp(12px,1.8vw,20px);display:flex;align-items:center;padding:0 var(--space-md)">
+            <span style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);color:var(--amber-dim)">Cards principais, story-card, modais, sidebar-card</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rule-grid">
+        <div class="rule rule--do">
+          <div class="rule__label">✓ Raio e hierarquia andam juntos</div>
+          <div class="rule__text">Quanto maior o container na hierarquia visual, maior o raio. Um badge (<code>--r-xs</code>) dentro de um card (<code>--r-xl</code>) cria contraste intencional que reforça o aninhamento.</div>
+        </div>
+        <div class="rule rule--dont">
+          <div class="rule__label">✗ Nunca arredondamento total</div>
+          <div class="rule__text">Pills e botões nunca usam <code>border-radius: 9999px</code> (pílula). O sistema é editorial, não playful. O máximo permitido é <code>--r-xl</code>, exceto em avatares circulares.</div>
+        </div>
+      </div>
+
+      <div class="rule rule--do">
+        <div class="rule__label">✓ Exceção: avatares</div>
+        <div class="rule__text">Avatares de personagem e de usuário usam <code>border-radius: 50%</code>. São os únicos elementos circulares do sistema — e essa exclusividade torna o círculo semanticamente significativo: representa uma pessoa.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  ATMOSFERA                               ║
+       ╚══════════════════════════════════════════╝ -->
+  <section class="guide-section" id="texturas">
+    <div class="section-eyebrow">06 — Atmosfera</div>
+    <h2 class="section-title">Texturas & <em>Ruído</em></h2>
+    <p class="section-lead">O grão de ruído é aplicado globalmente via <code>body::before</code> com <code>position: fixed</code>. Ele cria a sensação de materialidade física e quebra a artificialidade do digital.</p>
+
+    <div class="code-block"><span class="c-comment">/* Grain global — sempre em position: fixed para cobrir a viewport */</span>
+<span class="c-token">body::before</span> {
+  <span class="c-prop">content</span>: <span class="c-value">''</span>;
+  <span class="c-prop">position</span>: <span class="c-value">fixed</span>;
+  <span class="c-prop">inset</span>: <span class="c-value">0</span>;
+  <span class="c-prop">background-image</span>: <span class="c-value">url("data:image/svg+xml, ...feTurbulence...")</span>;
+  <span class="c-prop">pointer-events</span>: <span class="c-value">none</span>;
+  <span class="c-prop">z-index</span>: <span class="c-value">9999</span>; <span class="c-comment">/* acima de tudo */</span>
+  <span class="c-prop">opacity</span>: <span class="c-value">.45</span>; <span class="c-comment">/* sutil — deve ser quase imperceptível */</span>
+}</div>
+
+    <div class="rule rule--do">
+      <div class="rule__label">✓ Calibração do ruído</div>
+      <div class="rule__text"><code>baseFrequency</code> entre .8 e .9 para grão fino. <code>numOctaves: 4</code> para textura rica. Opacidade global entre .35 e .55 — deve ser sentido, não visto conscientemente.</div>
+    </div>
+  </section>
+
+  <section class="guide-section" id="orbs">
+    <div class="section-eyebrow">07 — Atmosfera</div>
+    <h2 class="section-title">Orbs de Luz <em>Ambiente</em></h2>
+    <p class="section-lead">Gradientes radiais difusos animados em <code>position: fixed</code> criam profundidade e calor sem poluir o conteúdo. Invisíveis conscientemente, presentes atmosfericamente.</p>
+
+    <div class="code-block"><span class="c-comment">/* Estrutura dos orbs */</span>
+<span class="c-token">.orb</span> {
+  <span class="c-prop">position</span>: <span class="c-value">fixed</span>;
+  <span class="c-prop">border-radius</span>: <span class="c-value">50%</span>;
+  <span class="c-prop">filter</span>: <span class="c-value">blur(clamp(60px, 10vw, 120px))</span>; <span class="c-comment">/* blur fluido! */</span>
+  <span class="c-prop">pointer-events</span>: <span class="c-value">none</span>;
+  <span class="c-prop">z-index</span>: <span class="c-value">0</span>;
+  <span class="c-prop">animation</span>: <span class="c-value">orb-drift 25s ease-in-out infinite</span>;
+}
+<span class="c-comment">/* Orb âmbar — sempre presente, top-left */</span>
+<span class="c-token">.orb-amber</span> {
+  <span class="c-prop">background</span>: <span class="c-value">radial-gradient(circle, rgba(232,184,109,.07) 0%, transparent 70%)</span>;
+}
+<span class="c-comment">/* Nunca mais de 3 orbs. Opacidade máxima: .08 */</span>
+
+<span class="c-token">@keyframes</span> orb-drift {
+  <span class="c-value">0%, 100%</span> { <span class="c-prop">transform</span>: <span class="c-value">translate(0,0) scale(1)</span>; }
+  <span class="c-value">33%</span>      { <span class="c-prop">transform</span>: <span class="c-value">translate(3%, 5%) scale(1.05)</span>; }
+  <span class="c-value">66%</span>      { <span class="c-prop">transform</span>: <span class="c-value">translate(-3%,-3%) scale(.96)</span>; }
+}</div>
+  </section>
+
+  <section class="guide-section" id="glass">
+    <div class="section-eyebrow">08 — Atmosfera</div>
+    <h2 class="section-title">Glass <em>Surface</em></h2>
+    <p class="section-lead">Cards e superfícies elevadas usam vidro fosco. Nunca branco puro — sempre translúcido sobre o void escuro.</p>
+
+    <div class="demo-frame">
+      <div class="demo-frame__label">exemplo ao vivo</div>
+      <div class="card">
+        <div class="card__header">
+          <div class="card__icon">✦</div>
+          <span class="card__title-text">Superfície Glass</span>
+        </div>
+        <div class="card__body" style="font-size:var(--text-sm);color:var(--ink-2);line-height:1.7">
+          Este card usa <code>--glass-bg</code> com <code>backdrop-filter: blur</code>. A linha de shimmer no topo é um <code>::before</code> com gradiente linear horizontal. Passe o mouse para ver a borda âmbar aparecer.
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block"><span class="c-comment">/* Receita do glass card */</span>
+<span class="c-token">.card</span> {
+  <span class="c-prop">background</span>:       <span class="c-token">var(--glass-bg)</span>;     <span class="c-comment">/* rgba(22,18,25,.7) */</span>
+  <span class="c-prop">backdrop-filter</span>:  <span class="c-token">var(--glass-blur)</span>;   <span class="c-comment">/* blur(clamp(8px,1.5vw,16px)) */</span>
+  <span class="c-prop">border</span>: <span class="c-value">1px solid</span> <span class="c-token">var(--glass-border)</span>; <span class="c-comment">/* rgba(255,240,210,.08) */</span>
+  <span class="c-prop">border-radius</span>:    <span class="c-token">var(--r-xl)</span>;
+}
+<span class="c-comment">/* Linha de shimmer no topo */</span>
+<span class="c-token">.card::before</span> {
+  <span class="c-prop">content</span>: <span class="c-value">''</span>;
+  <span class="c-prop">position</span>: <span class="c-value">absolute</span>; <span class="c-prop">top</span>: <span class="c-value">0</span>; <span class="c-prop">left</span>: <span class="c-value">10%</span>; <span class="c-prop">right</span>: <span class="c-value">10%</span>;
+  <span class="c-prop">height</span>: <span class="c-value">1px</span>;
+  <span class="c-prop">background</span>: <span class="c-value">linear-gradient(90deg, transparent, rgba(232,184,109,.12), transparent)</span>;
+}</div>
+  </section>
+
+  <section class="guide-section" id="bordas">
+    <div class="section-eyebrow">09 — Atmosfera</div>
+    <h2 class="section-title">Bordas <em>Semânticas</em></h2>
+    <p class="section-lead">Cada nível de borda tem um papel. Do hairline quase invisível até o active âmbar brilhante — a opacidade comunica estado, não apenas estética.</p>
+
+    <div class="grid-demo" style="margin-bottom:var(--space-md)">
+      <div class="grid-cell"><span>--border-0</span><span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--ink-3)">rgba(255,240,210,.04) · Separadores internos de grid</span></div>
+      <div class="grid-cell"><span>--border-1</span><span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--ink-3)">rgba(255,240,210,.08) · Borda padrão de card/elemento</span></div>
+      <div class="grid-cell"><span>--border-2</span><span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--ink-3)">rgba(255,240,210,.13) · Hover neutro</span></div>
+      <div class="grid-cell"><span>--border-amber</span><span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--amber-dim)">rgba(232,184,109,.22) · Hover com intenção</span></div>
+      <div class="grid-cell"><span>--border-active</span><span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--amber)">rgba(232,184,109,.45) · Foco, ativo, selecionado</span></div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  COMPONENTES                             ║
+       ╚══════════════════════════════════════════╝ -->
+  <section class="guide-section" id="botoes">
+    <div class="section-eyebrow">10 — Componentes</div>
+    <h2 class="section-title"><em>Botões</em></h2>
+
+    <div class="demo-frame">
+      <div class="demo-frame__label">variantes</div>
+      <div class="btn-row">
+        <button class="btn btn--cta">▶ Começar a Ler</button>
+        <button class="btn btn--outline">⤵ Continuar</button>
+        <button class="btn btn--ghost">Compartilhar</button>
+        <button class="btn btn--icon">⬇</button>
+        <button class="btn btn--icon">⤴</button>
+      </div>
+    </div>
+
+    <div class="grid-demo">
+      <div class="grid-cell"><span class="grid-cell__key">btn--cta</span><span>Âmbar sólido. Apenas 1 por view. Ação principal irreversível.</span></div>
+      <div class="grid-cell"><span class="grid-cell__key">btn--outline</span><span>Borda âmbar translúcida. Ação secundária importante.</span></div>
+      <div class="grid-cell"><span class="grid-cell__key">btn--ghost</span><span>Borda --border-1. Ações terciárias, utilitárias.</span></div>
+      <div class="grid-cell"><span class="grid-cell__key">btn--icon</span><span>Quadrado, raio --r-md. Ações sem label. Nunca mais de 3 seguidos.</span></div>
+    </div>
+
+    <div class="rule rule--do">
+      <div class="rule__label">✓ Hover padrão de botão</div>
+      <div class="rule__text"><code>translateY(-1px)</code> + <code>box-shadow</code> aumentado. Nunca mude a cor de fundo drasticamente — ajuste brilho e sombra. Botões icon usam <code>scale(1.06)</code> ao invés de translateY.</div>
+    </div>
+  </section>
+
+  <section class="guide-section" id="badges">
+    <div class="section-eyebrow">11 — Componentes</div>
+    <h2 class="section-title">Badges <em>& Tags</em></h2>
+
+    <div class="demo-frame">
+      <div class="demo-frame__label">todos os tipos</div>
+      <div class="badge-row">
+        <span class="badge badge--genre">Dark Fantasy</span>
+        <span class="badge badge--genre">Ficção Científica</span>
+        <span class="badge badge--fandom">Original</span>
+        <span class="badge badge--character">Kael Drevath</span>
+        <span class="badge badge--tag">magia</span>
+        <span class="badge badge--tag">guerra</span>
+        <span class="badge badge--warning">⚠ Violência</span>
+      </div>
+      <div class="badge-row">
+        <span class="badge badge--ongoing">◎ Em andamento</span>
+        <span class="badge badge--done">✓ Concluído</span>
+        <span class="badge badge--hiatus">⏸ Hiato</span>
+        <span class="badge badge--rating-e">E</span>
+        <span class="badge badge--rating-t">T</span>
+        <span class="badge badge--rating-m">M</span>
+      </div>
+      <div style="margin-top:var(--space-sm)">
+        <div class="mask-demo">
+          <span class="badge badge--genre">Dark Fantasy</span>
+          <span class="badge badge--genre">Aventura</span>
+          <span class="badge badge--fandom">Original</span>
+          <span class="badge badge--character">Kael Drevath</span>
+          <span class="badge badge--character">Seris Vael</span>
+          <span class="badge badge--tag">magia</span>
+          <span class="badge badge--tag">guerra</span>
+          <span class="badge badge--tag">destino</span>
+          <span class="badge badge--warning">⚠ Violência</span>
+        </div>
+        <p style="font-family:'Fira Code',monospace;font-size:.6rem;color:var(--ink-3);margin-top:.4rem;letter-spacing:.06em;text-transform:uppercase;">↑ Em listas: flex-wrap: nowrap + mask-image fade</p>
+      </div>
+    </div>
+
+    <div class="rule rule--do">
+      <div class="rule__label">✓ Regra obrigatória de badges</div>
+      <div class="rule__text">Sempre <code>white-space: nowrap</code> + <code>flex-shrink: 0</code> nos badges. Em containers de tags (uma linha só): <code>flex-wrap: nowrap</code> + <code>mask-image: linear-gradient(to right, black 72%, transparent)</code> para o fade.</div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  CARDS                                   ║
+       ╚══════════════════════════════════════════╝ -->
+  <section class="guide-section" id="cards">
+    <div class="section-eyebrow">12 — Componentes</div>
+    <h2 class="section-title"><em>Cards</em></h2>
+    <p class="section-lead">
+      O card é o container fundamental do sistema. Existem dois tipos: o <strong>glass card</strong> (conteúdo elevado, sidebar) e o <strong>illusia-card</strong> (listagem de obras com grid cover + conteúdo). Ambos compartilham a mesma anatomia base.
+    </p>
+
+    <div class="subsection">
+      <div class="subsection-title">Anatomia do glass card</div>
+
+      <div class="demo-frame">
+        <div class="demo-frame__label">ao vivo — passe o mouse</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-sm)">
+          <div class="card">
+            <div class="card__header">
+              <div class="card__icon">✦</div>
+              <span class="card__title-text">Card Padrão</span>
+            </div>
+            <div class="card__body" style="font-size:var(--text-sm);color:var(--ink-2);line-height:1.7">
+              Glass bg + backdrop-filter + shimmer line no topo via <code>::before</code>.
+            </div>
+          </div>
+          <div class="card" style="border-color:var(--border-amber)">
+            <div class="card__header">
+              <div class="card__icon">⚔</div>
+              <span class="card__title-text">Card com Label</span>
+            </div>
+            <div class="card__body" style="font-size:var(--text-sm);color:var(--ink-2);line-height:1.7">
+              Borda âmbar indica relevância ou destaque contextual no sidebar.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block"><span class="c-comment">/* Receita completa do card */</span>
+<span class="c-token">.card</span> {
+  <span class="c-prop">background</span>:      <span class="c-token">var(--glass-bg)</span>;       <span class="c-comment">/* rgba(22,18,25,.7) */</span>
+  <span class="c-prop">backdrop-filter</span>: <span class="c-token">var(--glass-blur)</span>;     <span class="c-comment">/* blur(clamp(8px,1.5vw,16px)) */</span>
+  <span class="c-prop">border</span>: <span class="c-value">1px solid</span>  <span class="c-token">var(--glass-border)</span>;   <span class="c-comment">/* rgba(255,240,210,.08) */</span>
+  <span class="c-prop">border-radius</span>:   <span class="c-token">var(--r-xl)</span>;
+  <span class="c-prop">overflow</span>:        <span class="c-value">hidden</span>;
+  <span class="c-prop">position</span>:        <span class="c-value">relative</span>;             <span class="c-comment">/* âncora o ::before */</span>
+  <span class="c-prop">transition</span>:      <span class="c-value">border-color</span> <span class="c-token">var(--t-mid)</span>, <span class="c-value">transform</span> <span class="c-token">var(--t-mid)</span> <span class="c-token">var(--ease-expo)</span>;
+}
+<span class="c-token">.card:hover</span> {
+  <span class="c-prop">border-color</span>: <span class="c-token">var(--border-amber)</span>;
+  <span class="c-prop">transform</span>:    <span class="c-value">translateY(-1px)</span>;
+}
+<span class="c-comment">/* Shimmer line — obrigatório */</span>
+<span class="c-token">.card::before</span> {
+  <span class="c-prop">content</span>: <span class="c-value">''</span>;
+  <span class="c-prop">position</span>: <span class="c-value">absolute</span>; <span class="c-prop">top</span>: <span class="c-value">0</span>; <span class="c-prop">left</span>: <span class="c-value">10%</span>; <span class="c-prop">right</span>: <span class="c-value">10%</span>;
+  <span class="c-prop">height</span>: <span class="c-value">1px</span>;
+  <span class="c-prop">background</span>: <span class="c-value">linear-gradient(90deg, transparent, rgba(232,184,109,.12), transparent)</span>;
+  <span class="c-prop">pointer-events</span>: <span class="c-value">none</span>;
+}</div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Illusia-card — grid de listagem</div>
+      <div class="subsection-desc">O card de obra usa CSS Grid de 2 colunas: cover fixo (col 1, spana todas as rows) + conteúdo (col 2). É o componente mais complexo do sistema.</div>
+
+      <div class="code-block"><span class="c-comment">/* Grid do card de obra */</span>
+<span class="c-token">.illusia-card__body</span> {
+  <span class="c-prop">display</span>: <span class="c-value">grid</span>;
+  <span class="c-prop">grid-template-columns</span>: <span class="c-token">var(--cover-w)</span> <span class="c-value">1fr</span>;
+  <span class="c-prop">grid-template-rows</span>: <span class="c-value">auto 1fr auto auto</span>;
+  <span class="c-comment">/*                   header middle tax  footer */</span>
+}
+<span class="c-comment">/* Cover spana TODAS as rows */</span>
+<span class="c-token">.illusia-card__cover</span> {
+  <span class="c-prop">grid-column</span>: <span class="c-value">1</span>;
+  <span class="c-prop">grid-row</span>: <span class="c-value">1 / -1</span>;
+}
+<span class="c-comment">/* Proporção da capa: sempre 2:3 */</span>
+<span class="c-token">.illusia-card__cover-link</span> {
+  <span class="c-prop">min-height</span>: <span class="c-value">calc(var(--cover-w) * 1.5)</span>;
+}
+<span class="c-comment">/* Mobile: cover spana header + excerpt (rows 1–2).
+   Chapters/tax/footer → grid-column: 1 / -1 */</span></div>
+
+      <div class="rule-grid">
+        <div class="rule rule--do">
+          <div class="rule__label">✓ Variante: sem cover</div>
+          <div class="rule__text">Adicionar <code>.illusia-card--no-cover</code>: <code>grid-template-columns: 1fr</code> e uma barra lateral âmbar de 3px via <code>::after</code> no body substitui visualmente a ausência da imagem.</div>
+        </div>
+        <div class="rule rule--do">
+          <div class="rule__label">✓ Variante: sticky</div>
+          <div class="rule__text">Adicionar <code>.illusia-card--sticky</code>: fundo levemente mais âmbar, borda inicial <code>--border-amber</code> em vez de <code>--border-1</code>, e <code>radial-gradient</code> sutil no canto superior esquerdo.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Header do card — estrutura interna</div>
+      <div class="grid-demo">
+        <div class="grid-cell"><span class="grid-cell__key">.card__header</span><span>Padding <code>--space-sm</code> × <code>--space-md</code>. Flex row. Border-bottom <code>--border-0</code>.</span></div>
+        <div class="grid-cell"><span class="grid-cell__key">.card__icon</span><span>Quadrado <code>clamp(20px,3vw,26px)</code>. Bg âmbar-glow. Border âmbar. Raio <code>--r-sm</code>.</span></div>
+        <div class="grid-cell"><span class="grid-cell__key">.card__title-text</span><span>Playfair Display, <code>--text-md</code>, peso 600, cor <code>--ink-0</code>.</span></div>
+        <div class="grid-cell"><span class="grid-cell__key">.card__label</span><span>Fira Code, <code>--text-2xs</code>, uppercase, letter-spacing .12em, cor <code>--amber-dim</code>.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  INPUTS                                  ║
+       ╚══════════════════════════════════════════╝ -->
+  <section class="guide-section" id="inputs">
+    <div class="section-eyebrow">13 — Componentes</div>
+    <h2 class="section-title"><em>Inputs</em></h2>
+    <p class="section-lead">
+      Campos de formulário seguem a mesma lógica das bordas semânticas: padrão quase invisível, foco âmbar com halo difuso. Nunca backgrounds brancos ou claros — o input pertence ao void.
+    </p>
+
+    <div class="demo-frame">
+      <div class="demo-frame__label">clique para ver o foco</div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-sm)">
+        <div>
+          <div style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:.4em">Título da obra</div>
+          <input class="input" type="text" placeholder="Ex.: A Chama da Última Torre">
+        </div>
+        <div>
+          <div style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:.4em">Título alternativo</div>
+          <input class="input" type="text" placeholder="Ex.: The Flame of the Last Tower">
+        </div>
+        <div>
+          <div style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:.4em">Sinopse</div>
+          <textarea class="input" rows="3" placeholder="Descrição da obra..." style="resize:vertical;line-height:1.65"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block"><span class="c-comment">/* Receita do input */</span>
+<span class="c-token">.input</span> {
+  <span class="c-prop">background</span>:    <span class="c-value">rgba(10,9,13,.6)</span>;       <span class="c-comment">/* quase void — não chega a ser opaco */</span>
+  <span class="c-prop">border</span>: <span class="c-value">1px solid</span> <span class="c-token">var(--border-1)</span>;    <span class="c-comment">/* hairline sutil no repouso */</span>
+  <span class="c-prop">border-radius</span>: <span class="c-token">var(--r-md)</span>;
+  <span class="c-prop">color</span>:         <span class="c-token">var(--ink-0)</span>;
+  <span class="c-prop">font-family</span>:   <span class="c-token">var(--ff-ui)</span>;
+  <span class="c-prop">font-size</span>:     <span class="c-token">var(--text-sm)</span>;
+  <span class="c-prop">padding</span>:       <span class="c-value">.65em</span> <span class="c-token">var(--space-md)</span>;
+  <span class="c-prop">outline</span>:       <span class="c-value">none</span>;
+  <span class="c-prop">transition</span>:    <span class="c-value">border-color</span> <span class="c-token">var(--t-mid)</span>, <span class="c-value">box-shadow</span> <span class="c-token">var(--t-mid)</span>;
+  <span class="c-prop">appearance</span>:   <span class="c-value">none</span>;
+  <span class="c-prop">width</span>:         <span class="c-value">100%</span>;
+}
+<span class="c-token">.input:focus</span> {
+  <span class="c-prop">border-color</span>: <span class="c-token">var(--border-amber)</span>;             <span class="c-comment">/* borda âmbar no foco */</span>
+  <span class="c-prop">box-shadow</span>:   <span class="c-value">0 0 0 3px rgba(232,184,109,.08)</span>; <span class="c-comment">/* halo difuso — não ring duro */</span>
+}
+<span class="c-token">.input::placeholder</span> { <span class="c-prop">color</span>: <span class="c-token">var(--ink-3)</span>; }  <span class="c-comment">/* muito sutil */</span></div>
+
+    <div class="subsection">
+      <div class="subsection-title">Labels de campo</div>
+      <div class="subsection-desc">Labels nunca usam a tag <code>&lt;label&gt;</code> estilizada com fonte de corpo. Sempre Fira Code uppercase com letter-spacing, cor <code>--ink-3</code>, tamanho <code>--text-2xs</code>.</div>
+      <div class="rule-grid">
+        <div class="rule rule--do">
+          <div class="rule__label">✓ Label correto</div>
+          <div class="rule__text">
+            <code style="display:block;margin-bottom:.4em">font-family: var(--ff-mono)</code>
+            <code style="display:block;margin-bottom:.4em">font-size: var(--text-2xs)</code>
+            <code style="display:block;margin-bottom:.4em">text-transform: uppercase</code>
+            <code style="display:block">letter-spacing: .1em · color: var(--ink-3)</code>
+          </div>
+        </div>
+        <div class="rule rule--dont">
+          <div class="rule__label">✗ Nunca</div>
+          <div class="rule__text">Labels com fonte de corpo (Syne/Playfair). Labels em bold chamativo. Labels da mesma cor do campo. Placeholder substituindo label — placeholder é auxiliar, não label.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="guide-section" id="listas">
+    <div class="section-eyebrow">12 — Componentes</div>
+    <h2 class="section-title">Listas de <em>Item</em></h2>
+    <p class="section-lead">Rows de capítulos, resultados de busca, itens de sidebar. O padrão é sempre o mesmo: barra vertical âmbar que nasce do scaleY(0) no hover.</p>
+
+    <div class="demo-frame">
+      <div class="demo-frame__label">hover para ver a barra</div>
+      <div style="border:1px solid var(--border-1);border-radius:var(--r-lg);overflow:hidden">
+        <div class="chapter-row-demo">
+          <span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--ink-3);text-align:right">01</span>
+          <div><div style="font-size:var(--text-sm);color:var(--ink-1)">Prólogo: O Calor Errado</div><div style="font-family:'Fira Code',monospace;font-size:.6rem;color:var(--ink-3)">Prelúdio</div></div>
+          <span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--ink-3)">2.4k</span>
+          <span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--ink-3)">12 Mar 23</span>
+        </div>
+        <div class="chapter-row-demo">
+          <span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--ink-3);text-align:right">02</span>
+          <div><div style="font-size:var(--text-sm);color:var(--amber)">A Última Chama Não Apaga <span style="font-family:'Fira Code',monospace;font-size:.55rem;background:rgba(232,184,109,.1);border:1px solid rgba(232,184,109,.2);border-radius:2px;padding:0 .4em;color:var(--amber)">Novo</span></div><div style="font-family:'Fira Code',monospace;font-size:.6rem;color:var(--ink-3)">Abismo</div></div>
+          <span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--ink-3)">5.1k</span>
+          <span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--ink-3)">há 3 dias</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block"><span class="c-comment">/* Padrão universal de item de lista */</span>
+<span class="c-token">.list-item</span> {
+  <span class="c-prop">position</span>: <span class="c-value">relative</span>;
+  <span class="c-prop">overflow</span>: <span class="c-value">hidden</span>;
+  <span class="c-prop">transition</span>: <span class="c-value">background</span> <span class="c-token">var(--t-fast)</span>;
+}
+<span class="c-token">.list-item::before</span> { <span class="c-comment">/* barra lateral âmbar */</span>
+  <span class="c-prop">content</span>: <span class="c-value">''</span>;
+  <span class="c-prop">position</span>: <span class="c-value">absolute</span>; <span class="c-prop">left</span>: <span class="c-value">0</span>; <span class="c-prop">top</span>: <span class="c-value">0</span>; <span class="c-prop">bottom</span>: <span class="c-value">0</span>;
+  <span class="c-prop">width</span>: <span class="c-value">2px</span>;
+  <span class="c-prop">background</span>: <span class="c-token">var(--amber)</span>;
+  <span class="c-prop">transform</span>: <span class="c-value">scaleY(0)</span>;
+  <span class="c-prop">transition</span>: <span class="c-value">transform</span> <span class="c-token">var(--t-mid)</span> <span class="c-token">var(--ease-expo)</span>;
+}
+<span class="c-token">.list-item:hover</span> {
+  <span class="c-prop">background</span>: <span class="c-value">rgba(232,184,109,.03)</span>;
+}
+<span class="c-token">.list-item:hover::before</span> { <span class="c-prop">transform</span>: <span class="c-value">scaleY(1)</span>; }</div>
+  </section>
+
+  <section class="guide-section" id="tabs">
+    <div class="section-eyebrow">13 — Componentes</div>
+    <h2 class="section-title">Tabs & <em>Pills</em></h2>
+
+    <div class="demo-frame">
+      <div class="demo-frame__label">tabs</div>
+      <div class="tabs-demo">
+        <button class="tab-demo-btn active">Capítulos</button>
+        <button class="tab-demo-btn">Blog (3)</button>
+        <button class="tab-demo-btn">Notas</button>
+        <button class="tab-demo-btn">Extras</button>
+      </div>
+    </div>
+
+    <div class="demo-frame" style="margin-top:var(--space-md)">
+      <div class="demo-frame__label">filter pills</div>
+      <div style="display:flex;gap:var(--space-xs);flex-wrap:wrap">
+        <button class="pill active">Todos</button>
+        <button class="pill">Prelúdio</button>
+        <button class="pill">Cinzas</button>
+        <button class="pill">Abismo</button>
+      </div>
+    </div>
+
+    <div class="rule rule--do">
+      <div class="rule__label">✓ Distinção tabs vs pills</div>
+      <div class="rule__text">Tabs: navegação estrutural de conteúdo, ficam na borda de cards, usam <code>border-bottom</code>. Pills: filtros de lista, ficam dentro de toolbars, usam <code>border-radius: 2px</code> (quase retangular, não circular).</div>
+    </div>
+  </section>
+
+  <section class="guide-section" id="progresso">
+    <div class="section-eyebrow">14 — Componentes</div>
+    <h2 class="section-title">Barra de <em>Progresso</em></h2>
+
+    <div class="demo-frame">
+      <div class="demo-frame__label">exemplo ao vivo</div>
+      <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);margin-bottom:.4rem;">
+        <span style="color:var(--ink-1)">Cap. 16 — O Mapa Proibido</span>
+        <span style="font-family:'Fira Code',monospace;color:var(--amber)">34%</span>
+      </div>
+      <div class="progress-bg">
+        <div class="progress-fill" style="width:34%"></div>
+      </div>
+      <div style="font-family:'Fira Code',monospace;font-size:var(--text-2xs);color:var(--ink-3);margin-top:.4rem">16 de 47 capítulos lidos</div>
+    </div>
+
+    <div class="rule rule--do">
+      <div class="rule__label">✓ Detalhe obrigatório</div>
+      <div class="rule__text">O ponto brilhante no final do fill (<code>::after</code> com <code>border-radius: 50%</code> e <code>box-shadow</code> âmbar) é parte do componente. Nunca omita — ele âncora visualmente onde o progresso parou.</div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  MOTION                                  ║
+       ╚══════════════════════════════════════════╝ -->
+  <section class="guide-section" id="easing">
+    <div class="section-eyebrow">15 — Motion</div>
+    <h2 class="section-title">Curvas de <em>Easing</em></h2>
+    <p class="section-lead">Passe o mouse sobre as barras para sentir cada curva. A diferença entre uma UI elegante e uma mecânica está no easing.</p>
+
+    <div class="ease-row">
+      <span class="ease-label">--ease-expo<br><span style="color:var(--ink-3);font-size:.85em">(.16,1,.3,1)</span></span>
+      <div class="ease-track ease-track--expo"><div class="ease-dot"></div></div>
+    </div>
+    <div class="ease-row">
+      <span class="ease-label">--ease-std<br><span style="color:var(--ink-3);font-size:.85em">(.4,0,.2,1)</span></span>
+      <div class="ease-track ease-track--std"><div class="ease-dot"></div></div>
+    </div>
+    <div class="ease-row">
+      <span class="ease-label">ease-in-out<br><span style="color:var(--ink-3);font-size:.85em">padrão CSS</span></span>
+      <div class="ease-track ease-track--linear"><div class="ease-dot" style="transition-timing-function:ease-in-out"></div></div>
+    </div>
+    <div class="ease-row">
+      <span class="ease-label">spring (overshoot)<br><span style="color:var(--ink-3);font-size:.85em">(.34,1.56,.64,1)</span></span>
+      <div class="ease-track ease-track--bounce"><div class="ease-dot"></div></div>
+    </div>
+
+    <div style="margin-top:var(--space-md)">
+      <div class="rule rule--do">
+        <div class="rule__label">✓ Quando usar cada um</div>
+        <div class="rule__text"><code>--ease-expo</code>: entradas de elementos, card hover, barras laterais (saída rápida, chegada suave). <code>--ease-std</code>: transições de estado, fades. Spring: botões de ação principal, confirmações de sucesso.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="guide-section" id="animacoes">
+    <div class="section-eyebrow">16 — Motion</div>
+    <h2 class="section-title">Tempos & <em>Durações</em></h2>
+
+    <div class="grid-demo" style="margin-bottom:var(--space-md)">
+      <div class="grid-cell"><span>--t-fast: 110ms</span><span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--ink-3)">Hover de cor, border, opacity. Coisas que o olho nota imediatamente.</span></div>
+      <div class="grid-cell"><span>--t-mid:  240ms</span><span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--ink-3)">Hover de transform, expansões, aparecimento de elementos.</span></div>
+      <div class="grid-cell"><span>--t-slow: 420ms</span><span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--ink-3)">Entradas de página (com animation-delay escalonado), zoom de capa.</span></div>
+    </div>
+  </section>
+
+  <section class="guide-section" id="micro">
+    <div class="section-eyebrow">17 — Motion</div>
+    <h2 class="section-title"><em>Microinterações</em></h2>
+    <p class="section-lead">Passe o mouse em cada caixa para ver o padrão de interação aplicado.</p>
+
+    <div class="anim-demo">
+      <div class="anim-box anim-box--lift">
+        <div style="font-size:1.5rem">↑</div>
+        <div class="anim-box__label">lift · cards</div>
+      </div>
+      <div class="anim-box anim-box--slide">
+        <div style="font-size:1.5rem">→</div>
+        <div class="anim-box__label">slide · sb-btn</div>
+      </div>
+      <div class="anim-box anim-box--scale">
+        <div style="font-size:1.5rem">⊕</div>
+        <div class="anim-box__label">scale · btn-icon</div>
+      </div>
+      <div class="anim-box anim-box--glow">
+        <div style="font-size:1.5rem">✦</div>
+        <div class="anim-box__label">glow · cta</div>
+      </div>
+    </div>
+
+    <div class="rule rule--do" style="margin-top:var(--space-md)">
+      <div class="rule__label">✓ Padrão por tipo de elemento</div>
+      <div class="rule__text">
+        Cards → <code>translateY(-2px)</code> + sombra.<br>
+        Sidebar buttons → <code>translateX(2px)</code> + barra lateral <code>scaleY(1)</code>.<br>
+        Botões icon → <code>scale(1.06)</code>.<br>
+        Botões CTA → <code>translateY(-1px)</code> + <code>box-shadow</code> expandido.<br>
+        Badges → <code>filter: brightness(1.2)</code> + <code>translateY(-1px)</code>.
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  LAYOUT & REGRAS                         ║
+       ╚══════════════════════════════════════════╝ -->
+  <section class="guide-section" id="grid">
+    <div class="section-eyebrow">18 — Layout</div>
+    <h2 class="section-title">Grid & <em>Responsivo</em></h2>
+
+    <div class="subsection">
+      <div class="subsection-title">Breakpoints semânticos</div>
+      <div class="grid-demo">
+        <div class="grid-cell"><span>≤ 400px</span><span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--ink-3)">Controles extras somem. Layout máximo comprimido.</span></div>
+        <div class="grid-cell"><span>≤ 640px</span><span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--ink-3)">Cards: capa + header+excerpt side-by-side. Resto full-width.</span></div>
+        <div class="grid-cell"><span>≤ 700px</span><span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--ink-3)">Guide nav vira horizontal. Story page: coluna única.</span></div>
+        <div class="grid-cell"><span>≤ 900px</span><span style="font-family:'Fira Code',monospace;font-size:.65rem;color:var(--ink-3)">Story page: sidebar sobe, vira grid horizontal.</span></div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Variável de largura máxima</div>
+      <div class="code-block">--max-w: <span class="c-token">min</span>(<span class="c-value">1100px</span>, <span class="c-value">94vw</span>);
+<span class="c-comment">/* Nunca use max-width: 1100px diretamente */</span>
+<span class="c-comment">/* O min() garante padding lateral automático em telas menores */</span></div>
+    </div>
+  </section>
+
+  <section class="guide-section" id="regras">
+    <div class="section-eyebrow">19 — Regras de Ouro</div>
+    <h2 class="section-title">As <em>10 Regras</em> Invioláveis</h2>
+
+    <div class="rule rule--do"><div class="rule__label">1 — Nunca valores literais no CSS</div><div class="rule__text">Todo espaço, fonte, cor e raio vem de um token <code>var(--...)</code>. Valores literais só em tokens novos no <code>:root</code>.</div></div>
+    <div class="rule rule--do"><div class="rule__label">2 — Toda medida de layout usa clamp()</div><div class="rule__text">Sem pixels fixos para espaçamento, tipografia ou raio de borda. O design vive entre 375px e 1440px sem breakpoints artificiais.</div></div>
+    <div class="rule rule--do"><div class="rule__label">3 — Âmbar é o único acento livre</div><div class="rule__text">Teal, crimson e violet têm papéis semânticos rígidos (status, aviso, fandom). Nunca use para decoração.</div></div>
+    <div class="rule rule--do"><div class="rule__label">4 — Playfair só para títulos e stats</div><div class="rule__text">Nunca para metadados ou labels. Fira Code só para metadados e labels. Nunca para corpo de texto.</div></div>
+    <div class="rule rule--do"><div class="rule__label">5 — Grain sempre presente</div><div class="rule__text"><code>body::before</code> com noise SVG em <code>position: fixed</code> e <code>z-index: 9999</code>. Opacidade entre .35 e .55.</div></div>
+    <div class="rule rule--do"><div class="rule__label">6 — Borda semântica no hover</div><div class="rule__text">Estado padrão: <code>--border-1</code>. Hover com intenção: <code>--border-amber</code>. Ativo/focado: <code>--border-active</code>. Nunca pule níveis.</div></div>
+    <div class="rule rule--do"><div class="rule__label">7 — Tags sempre em uma linha com fade</div><div class="rule__text"><code>flex-wrap: nowrap</code> + <code>overflow: hidden</code> + <code>mask-image</code> gradiente. Nunca quebre tags em múltiplas linhas num card.</div></div>
+    <div class="rule rule--do"><div class="rule__label">8 — Barra lateral nos items de lista</div><div class="rule__text">Todo row clicável tem <code>::before</code> com <code>scaleY(0) → scaleY(1)</code> no hover usando <code>--ease-expo</code>. É a assinatura do sistema.</div></div>
+    <div class="rule rule--do"><div class="rule__label">9 — Entradas escalonadas em listas</div><div class="rule__text">Cada item de uma lista renderizada tem <code>animation-delay: N * 30ms</code>. Faz o conteúdo aparecer de forma orgânica, não simultânea.</div></div>
+    <div class="rule rule--do"><div class="rule__label">10 — Shimmer line no topo de cards</div><div class="rule__text">Todo card tem <code>::before</code> com gradiente horizontal <code>transparent → rgba(amber,.12) → transparent</code> de 1px no topo. Define a superfície.</div></div>
+  </section>
+
+</main>
+</div><!-- /guide-wrap -->
+
+<script>
+/* Nav active state on scroll */
+const sections = document.querySelectorAll('.guide-section');
+const navLinks  = document.querySelectorAll('.nav-link');
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const link = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => io.observe(s));
+
+/* Smooth scroll */
+navLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+/* Tab demo interaction */
+document.querySelectorAll('.tab-demo-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.closest('.tabs-demo').querySelectorAll('.tab-demo-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>

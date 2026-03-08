@@ -1,0 +1,1959 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Illusia — Stories Page Redesign Ideas</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=Syne:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  /* ── Reset ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --void-0: hsl(270 60% 4%);
+    --void-1: hsl(270 25% 8%);
+    --void-2: hsl(270 15% 17%);
+    --void-3: hsl(270 16% 20%);
+    --void-4: hsl(270 14% 23.5%);
+
+    --ink-0: hsl(35 8% 93%);
+    --ink-1: hsl(35 7% 89%);
+    --ink-2: hsl(35 6% 85%);
+    --ink-3: hsl(35 5% 80.5%);
+    --ink-5: hsl(35 5% 71%);
+    --ink-6: hsl(35 4% 65%);
+    --ink-7: hsl(35 3% 61%);
+    --ink-8: hsl(35 3% 54%);
+    --ink-9: hsl(35 2% 49%);
+
+    --amber: hsl(37 73% 67%);
+    --amber-dim: hsl(37 43% 44%);
+    --amber-free: 37 73% 67%;
+    --amber-dim-free: 37 43% 44%;
+    --teal: hsl(170 50% 62%);
+    --teal-free: 170 50% 62%;
+    --crimson: hsl(0 58% 60%);
+    --sage: hsl(134 35% 61%);
+
+    --border-0: hsl(35 100% 91% / .04);
+    --border-1: hsl(35 100% 91% / .08);
+    --border-2: hsl(35 100% 91% / .13);
+    --border-amber: hsl(var(--amber-free) / .22);
+
+    --glass-bg: hsl(270 25% 8% / .7);
+
+    --ff-display: 'Playfair Display', Georgia, serif;
+    --ff-ui: 'Syne', sans-serif;
+    --ff-mono: 'Fira Code', monospace;
+
+    --r-xs: clamp(2px, .3vw, 3px);
+    --r-sm: clamp(3px, .5vw, 5px);
+    --r-md: clamp(6px, .9vw, 9px);
+    --r-lg: clamp(9px, 1.4vw, 14px);
+    --r-xl: clamp(12px, 1.8vw, 20px);
+
+    --space-2xs: clamp(.25rem, .5vw, .375rem);
+    --space-xs: clamp(.375rem, .75vw, .625rem);
+    --space-sm: clamp(.5rem, 1.2vw, .875rem);
+    --space-md: clamp(.875rem, 2vw, 1.25rem);
+    --space-lg: clamp(1.25rem, 3vw, 2rem);
+    --space-xl: clamp(2rem, 5vw, 3.5rem);
+
+    --text-3xs: clamp(.48rem, .85vw, .56rem);
+    --text-2xs: clamp(.58rem, 1.1vw, .68rem);
+    --text-xs: clamp(.68rem, 1.3vw, .78rem);
+    --text-sm: clamp(.78rem, 1.5vw, .88rem);
+    --text-base: clamp(.88rem, 1.7vw, 1rem);
+    --text-lg: clamp(1.15rem, 2.4vw, 1.45rem);
+    --text-xl: clamp(1.45rem, 3vw, 1.8rem);
+    --text-2xl: clamp(1.8rem, 4vw, 2.4rem);
+    --text-3xl: clamp(2.2rem, 5vw, 3rem);
+
+    --ease-expo: cubic-bezier(.16,1,.3,1);
+    --ease-std: cubic-bezier(.4,0,.2,1);
+    --t-fast: 110ms;
+    --t-mid: 240ms;
+    --t-slow: 420ms;
+  }
+
+  body {
+    font-family: var(--ff-ui);
+    background: var(--void-0);
+    color: var(--ink-2);
+    padding: clamp(1rem, 4vw, 2rem);
+    line-height: 1.5;
+  }
+
+  h1 {
+    font-family: var(--ff-display);
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--amber);
+    text-align: center;
+    margin-bottom: .5rem;
+  }
+
+  .page-subtitle {
+    text-align: center;
+    color: var(--ink-7);
+    font-size: var(--text-sm);
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-inline: auto;
+    line-height: 1.7;
+  }
+
+  .ideas-grid {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+  }
+
+  /* ── Section labels ── */
+  .idea-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .idea-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .idea-number {
+    font-family: var(--ff-display);
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 900;
+    color: hsl(var(--amber-free) / .15);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .idea-title {
+    font-family: var(--ff-display);
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-weight: 700;
+    color: var(--ink-0);
+  }
+
+  .idea-desc {
+    font-size: var(--text-sm);
+    color: var(--ink-6);
+    max-width: 60ch;
+    line-height: 1.7;
+    padding-left: calc(clamp(1.8rem, 4vw, 2.5rem) + var(--space-sm));
+  }
+
+  .idea-mockup {
+    border: 1px solid var(--border-1);
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    background: var(--void-0);
+  }
+
+  /* ══════════════════════════════════════════════════════
+   * Shared card component (mini version for page mockups)
+   * ══════════════════════════════════════════════════════ */
+
+  .mini-card {
+    border-radius: var(--r-xl);
+    border: 1px solid var(--border-1);
+    background: var(--glass-bg);
+    overflow: hidden;
+    position: relative;
+    transition: border-color var(--t-mid) var(--ease-std),
+                transform var(--t-mid) var(--ease-expo);
+  }
+
+  .mini-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--amber-free) / .12), transparent);
+    z-index: 1;
+  }
+
+  .mini-card:hover {
+    border-color: var(--border-amber);
+    transform: translateY(-2px);
+  }
+
+  .mini-card .card-body {
+    display: grid;
+    grid-template-columns: clamp(80px, 18vw, 140px) 1fr;
+  }
+
+  .mini-card .card-cover {
+    grid-row: 1 / -1;
+    position: relative;
+    overflow: hidden;
+    border-right: 1px solid var(--border-0);
+  }
+
+  .mini-card .card-cover a {
+    display: block;
+    aspect-ratio: 3 / 4;
+  }
+
+  .mini-card .card-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--t-slow) var(--ease-expo);
+  }
+
+  .mini-card:hover .card-cover img {
+    transform: scale(1.04);
+  }
+
+  .mini-card .card-cover .cover-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(to right, transparent 60%, hsl(270 15% 7% / .3) 100%);
+  }
+
+  .mini-card .card-content {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-sm);
+    gap: var(--space-xs);
+  }
+
+  .mini-card .card-label {
+    font-family: var(--ff-mono);
+    font-size: var(--text-3xs);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--amber-dim);
+  }
+
+  .mini-card .card-title {
+    font-family: var(--ff-display);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ink-0);
+  }
+
+  .mini-card .card-author {
+    font-family: var(--ff-ui);
+    font-size: var(--text-xs);
+    color: var(--ink-7);
+    font-style: italic;
+  }
+
+  .mini-card .card-author a { color: var(--amber-dim); text-decoration: none; }
+
+  .mini-card .card-excerpt {
+    font-size: var(--text-sm);
+    line-height: 1.7;
+    color: var(--ink-5);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .mini-card .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xs);
+    border-top: 1px solid var(--border-0);
+    padding-top: var(--space-xs);
+    margin-top: auto;
+    font-family: var(--ff-mono);
+    font-size: var(--text-2xs);
+    color: var(--ink-8);
+  }
+
+  .mini-card .card-badges {
+    display: flex;
+    gap: var(--space-2xs);
+  }
+
+  .badge {
+    font-family: var(--ff-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: .05em;
+    padding: .2em .55em;
+    border-radius: var(--r-xs);
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+
+  .badge-ongoing {
+    color: var(--teal);
+    border-color: hsl(var(--teal-free) / .3);
+    background: hsl(var(--teal-free) / .08);
+  }
+
+  .badge-completed {
+    color: var(--sage);
+    border-color: hsl(134 35% 61% / .3);
+    background: hsl(134 35% 61% / .08);
+  }
+
+  .badge-rating {
+    font-weight: 700;
+    min-width: 1.6em;
+    text-align: center;
+    color: var(--amber);
+    background: hsl(var(--amber-free) / .1);
+    border-color: hsl(var(--amber-free) / .3);
+  }
+
+  /* Sort bar shared */
+  .sort-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+  }
+
+  .sort-label {
+    font-family: var(--ff-mono);
+    font-size: var(--text-3xs);
+    font-weight: 400;
+    color: var(--ink-8);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin-right: auto;
+  }
+
+  .sort-btn {
+    font-family: var(--ff-mono);
+    font-size: var(--text-2xs);
+    font-weight: 500;
+    color: var(--ink-6);
+    letter-spacing: .04em;
+    border: 1px solid var(--border-1);
+    border-radius: var(--r-sm);
+    padding: var(--space-3xs, .2rem) var(--space-xs);
+    background: hsl(270 15% 10% / .5);
+    cursor: pointer;
+    transition: border-color var(--t-mid), color var(--t-mid), background var(--t-mid);
+  }
+
+  .sort-btn:hover {
+    border-color: hsl(var(--amber-free) / .4);
+    color: var(--amber);
+    background: hsl(var(--amber-free) / .06);
+  }
+
+  .sort-btn.active {
+    border-color: hsl(var(--amber-free) / .3);
+    color: var(--amber);
+  }
+
+  /* Pagination shared */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-2xs);
+    padding: var(--space-md) 0;
+  }
+
+  .page-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2em;
+    height: 2em;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--border-1);
+    background: hsl(270 15% 10% / .5);
+    color: var(--ink-5);
+    font-family: var(--ff-mono);
+    font-size: var(--text-xs);
+    text-decoration: none;
+    transition: all var(--t-mid);
+  }
+
+  .page-num:hover {
+    border-color: hsl(var(--amber-free) / .4);
+    color: var(--amber);
+  }
+
+  .page-num.current {
+    background: hsl(var(--amber-free) / .15);
+    border-color: hsl(var(--amber-free) / .3);
+    color: var(--amber);
+    font-weight: 700;
+  }
+
+
+  /* ══════════════════════════════════════════════════════
+   *  IDEA 1 — "Catalog Room"
+   *
+   *  A página é uma sala de catálogo. Stats como fichas de
+   *  uma gaveta de arquivo. Header com tipografia editorial
+   *  forte. Sort como abas de indexação na borda. Cards em
+   *  lista vertical como entradas de um catálogo.
+   *  A identidade vem da moldura: o conteúdo "vive dentro"
+   *  de um painel com bordas e cantos decorativos.
+   * ══════════════════════════════════════════════════════ */
+
+  .catalog-room {
+    padding: var(--space-xl) var(--space-lg);
+    position: relative;
+  }
+
+  /* Decorative frame */
+  .catalog-room::before {
+    content: '';
+    position: absolute;
+    inset: var(--space-sm);
+    border: 1px solid var(--border-0);
+    border-radius: var(--r-lg);
+    pointer-events: none;
+  }
+
+  /* Corner ornaments */
+  .catalog-room::after {
+    content: '';
+    position: absolute;
+    top: calc(var(--space-sm) - 1px);
+    left: calc(var(--space-sm) - 1px);
+    width: 3rem;
+    height: 3rem;
+    border-top: 1px solid hsl(var(--amber-free) / .2);
+    border-left: 1px solid hsl(var(--amber-free) / .2);
+    border-radius: var(--r-lg) 0 0 0;
+    pointer-events: none;
+  }
+
+  .catalog-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    position: relative;
+  }
+
+  .catalog-header__overline {
+    font-family: var(--ff-mono);
+    font-size: var(--text-3xs);
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--amber-dim);
+    margin-bottom: var(--space-xs);
+    display: block;
+  }
+
+  .catalog-header__title {
+    font-family: var(--ff-display);
+    font-size: var(--text-3xl);
+    font-weight: 900;
+    color: var(--ink-0);
+    letter-spacing: .02em;
+    line-height: 1.1;
+    margin-bottom: var(--space-xs);
+  }
+
+  .catalog-header__sub {
+    font-family: var(--ff-ui);
+    font-size: var(--text-sm);
+    color: var(--ink-7);
+    max-width: 32em;
+    margin: 0 auto;
+  }
+
+  /* Divider with diamond */
+  .catalog-divider {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin: var(--space-lg) 0;
+  }
+
+  .catalog-divider::before,
+  .catalog-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--amber-free) / .15), transparent);
+  }
+
+  .catalog-divider__diamond {
+    width: 6px;
+    height: 6px;
+    background: var(--amber-dim);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+    opacity: .5;
+  }
+
+  /* Stats as catalog index cards */
+  .catalog-stats {
+    display: flex;
+    justify-content: center;
+    gap: 1px;
+    margin-bottom: var(--space-lg);
+  }
+
+  .catalog-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: var(--space-sm) var(--space-md);
+    background: hsl(270 15% 7% / .5);
+    position: relative;
+  }
+
+  .catalog-stat:first-child { border-radius: var(--r-lg) 0 0 var(--r-lg); }
+  .catalog-stat:last-child { border-radius: 0 var(--r-lg) var(--r-lg) 0; }
+
+  .catalog-stat__value {
+    font-family: var(--ff-display);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--amber);
+    line-height: 1;
+  }
+
+  .catalog-stat__label {
+    font-family: var(--ff-mono);
+    font-size: var(--text-3xs);
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--ink-8);
+  }
+
+  /* Sort as catalog tabs */
+  .catalog-sort {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--border-0);
+    margin-bottom: var(--space-lg);
+  }
+
+  .catalog-sort .sort-label { margin-right: auto; }
+
+  /* Card list */
+  .catalog-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    list-style: none;
+    margin-bottom: var(--space-lg);
+  }
+
+
+  /* ══════════════════════════════════════════════════════
+   *  IDEA 2 — "Observatory Broadcast"
+   *
+   *  A página é um feed de transmissão do observatório.
+   *  Stats como indicadores de painel com glow sutil.
+   *  O header tem um efeito de "sinal" — título com
+   *  interferência sutil. Sort como controles de frequência.
+   *  Um card é "destacado" (o mais recente) com tratamento
+   *  hero. Os demais seguem em lista normal.
+   * ══════════════════════════════════════════════════════ */
+
+  .broadcast {
+    padding: var(--space-lg);
+  }
+
+  .broadcast-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    position: relative;
+  }
+
+  .broadcast-header__signal {
+    font-family: var(--ff-mono);
+    font-size: var(--text-3xs);
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: var(--space-xs);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5em;
+  }
+
+  .broadcast-header__signal::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--sage);
+    box-shadow: 0 0 8px hsl(134 35% 61% / .5);
+    animation: signal-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes signal-pulse {
+    0%, 100% { opacity: .5; }
+    50% { opacity: 1; }
+  }
+
+  .broadcast-header__title {
+    font-family: var(--ff-display);
+    font-size: var(--text-3xl);
+    font-weight: 900;
+    color: var(--ink-0);
+    letter-spacing: .02em;
+    line-height: 1.1;
+    margin-bottom: var(--space-2xs);
+  }
+
+  .broadcast-header__sub {
+    font-family: var(--ff-ui);
+    font-size: var(--text-sm);
+    color: var(--ink-7);
+    max-width: 32em;
+    margin: 0 auto;
+  }
+
+  /* Stats as broadcast indicators */
+  .broadcast-indicators {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    border-radius: var(--r-xl);
+    border: 1px solid var(--border-1);
+    overflow: hidden;
+    margin-bottom: var(--space-lg);
+    position: relative;
+  }
+
+  /* Shimmer top edge */
+  .broadcast-indicators::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--amber-free) / .12), transparent);
+    z-index: 1;
+  }
+
+  .broadcast-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: var(--space-sm) var(--space-xs);
+    background: hsl(270 15% 7% / .5);
+    position: relative;
+  }
+
+  .broadcast-indicator__value {
+    font-family: var(--ff-display);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--amber);
+    line-height: 1;
+  }
+
+  .broadcast-indicator__label {
+    font-family: var(--ff-mono);
+    font-size: var(--text-3xs);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--ink-8);
+  }
+
+  /* Hero card — featured/latest story */
+  .broadcast-hero {
+    margin-bottom: var(--space-lg);
+    border-radius: var(--r-xl);
+    border: 1px solid var(--border-1);
+    overflow: hidden;
+    position: relative;
+    background: var(--glass-bg);
+  }
+
+  .broadcast-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--amber-free) / .15), transparent);
+    z-index: 2;
+  }
+
+  .broadcast-hero .hero-body {
+    display: grid;
+    grid-template-columns: clamp(140px, 25vw, 240px) 1fr;
+  }
+
+  .broadcast-hero .hero-cover {
+    position: relative;
+    overflow: hidden;
+    border-right: 1px solid var(--border-0);
+  }
+
+  .broadcast-hero .hero-cover a {
+    display: block;
+    aspect-ratio: 3 / 4;
+  }
+
+  .broadcast-hero .hero-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .broadcast-hero .hero-cover .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, transparent 50%, hsl(270 15% 7% / .4) 100%);
+    pointer-events: none;
+  }
+
+  .broadcast-hero .hero-content {
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .broadcast-hero .hero-badge {
+    font-family: var(--ff-mono);
+    font-size: var(--text-3xs);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--amber);
+    background: hsl(var(--amber-free) / .1);
+    border: 1px solid hsl(var(--amber-free) / .2);
+    border-radius: var(--r-xs);
+    padding: .15em .6em;
+    width: fit-content;
+  }
+
+  .broadcast-hero .hero-title {
+    font-family: var(--ff-display);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--ink-0);
+    line-height: 1.15;
+  }
+
+  .broadcast-hero .hero-author {
+    font-family: var(--ff-ui);
+    font-size: var(--text-sm);
+    color: var(--ink-7);
+    font-style: italic;
+  }
+
+  .broadcast-hero .hero-author a { color: var(--amber-dim); text-decoration: none; }
+
+  .broadcast-hero .hero-excerpt {
+    font-size: var(--text-base);
+    line-height: 1.7;
+    color: var(--ink-5);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+
+  .broadcast-hero .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--ff-mono);
+    font-size: var(--text-2xs);
+    color: var(--ink-8);
+    margin-top: auto;
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--border-0);
+    flex-wrap: wrap;
+  }
+
+  .broadcast-hero .hero-meta .badge { margin-left: auto; }
+
+  /* Rest of cards label */
+  .broadcast-section-label {
+    font-family: var(--ff-mono);
+    font-size: var(--text-2xs);
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--ink-8);
+    display: flex;
+    align-items: center;
+    gap: .5em;
+    margin-bottom: var(--space-md);
+  }
+
+  .broadcast-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-0);
+  }
+
+  .broadcast-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    list-style: none;
+    margin-bottom: var(--space-lg);
+  }
+
+
+  /* ══════════════════════════════════════════════════════
+   *  IDEA 3 — "Manuscript Archive"
+   *
+   *  A página parece um arquivo de manuscritos. Header
+   *  com tipografia display grande e uma citação/epígrafe.
+   *  Stats integrados ao header como anotações marginais.
+   *  Sort como carimbo/selo de classificação. Cards com
+   *  numeração editorial (01, 02, 03...) visível.
+   * ══════════════════════════════════════════════════════ */
+
+  .manuscript {
+    padding: var(--space-lg);
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  .manuscript-header {
+    margin-bottom: var(--space-xl);
+    position: relative;
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--border-0);
+  }
+
+  .manuscript-header__title {
+    font-family: var(--ff-display);
+    font-size: clamp(2.5rem, 7vw, 4rem);
+    font-weight: 900;
+    color: var(--ink-0);
+    line-height: .95;
+    letter-spacing: -.01em;
+    margin-bottom: var(--space-sm);
+  }
+
+  .manuscript-header__title em {
+    font-style: italic;
+    color: var(--amber);
+  }
+
+  .manuscript-header__epigraph {
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: var(--text-sm);
+    color: var(--ink-7);
+    max-width: 28em;
+    line-height: 1.7;
+    padding-left: var(--space-md);
+    border-left: 2px solid hsl(var(--amber-free) / .15);
+  }
+
+  /* Stats as marginal annotations */
+  .manuscript-marginalia {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-2xs);
+  }
+
+  .manuscript-marginal {
+    font-family: var(--ff-mono);
+    font-size: var(--text-2xs);
+    color: var(--ink-8);
+    display: flex;
+    align-items: center;
+    gap: .4em;
+  }
+
+  .manuscript-marginal strong {
+    color: var(--amber);
+    font-weight: 500;
+  }
+
+  /* Sort as classification stamps */
+  .manuscript-classification {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+  }
+
+  .manuscript-stamp {
+    font-family: var(--ff-mono);
+    font-size: var(--text-3xs);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--ink-8);
+    border: 1px dashed var(--border-2);
+    border-radius: var(--r-sm);
+    padding: .3em .7em;
+    cursor: pointer;
+    transition: all var(--t-mid);
+  }
+
+  .manuscript-stamp:hover {
+    border-color: hsl(var(--amber-free) / .3);
+    border-style: solid;
+    color: var(--amber);
+  }
+
+  .manuscript-stamp.active {
+    border-style: solid;
+    border-color: hsl(var(--amber-free) / .3);
+    color: var(--amber);
+    background: hsl(var(--amber-free) / .06);
+  }
+
+  /* Cards with editorial numbering */
+  .manuscript-entries {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    list-style: none;
+    counter-reset: entry;
+    margin-bottom: var(--space-lg);
+  }
+
+  .manuscript-entry {
+    counter-increment: entry;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-md);
+    align-items: start;
+  }
+
+  .manuscript-entry__number {
+    font-family: var(--ff-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 900;
+    color: hsl(var(--amber-free) / .12);
+    line-height: 1;
+    padding-top: var(--space-xs);
+    min-width: 2.5rem;
+    text-align: right;
+  }
+
+  .manuscript-entry__number::after {
+    content: counter(entry, decimal-leading-zero);
+  }
+
+
+  /* ══════════════════════════════════════════════════════
+   *  IDEA 4 — "Gallery Wall"
+   *
+   *  A página é uma galeria de exposição. Covers são
+   *  o foco — grandes, com títulos como placas de museu
+   *  abaixo. Grid responsivo. Stats num "info desk"
+   *  lateral. Sort como filtros de seção da galeria.
+   *  O header é minimalista — apenas o nome da coleção.
+   * ══════════════════════════════════════════════════════ */
+
+  .gallery {
+    padding: var(--space-lg);
+  }
+
+  .gallery-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-md);
+    margin-bottom: var(--space-sm);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--border-0);
+    flex-wrap: wrap;
+  }
+
+  .gallery-header__title {
+    font-family: var(--ff-display);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--ink-0);
+    line-height: 1.1;
+  }
+
+  .gallery-header__count {
+    font-family: var(--ff-mono);
+    font-size: var(--text-2xs);
+    color: var(--ink-8);
+    letter-spacing: .08em;
+  }
+
+  /* Stats as info desk — horizontal bar */
+  .gallery-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-xs) 0;
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+  }
+
+  .gallery-info__item {
+    font-family: var(--ff-mono);
+    font-size: var(--text-2xs);
+    color: var(--ink-8);
+    display: flex;
+    align-items: center;
+    gap: .35em;
+  }
+
+  .gallery-info__item strong {
+    color: var(--amber);
+    font-weight: 500;
+    font-size: var(--text-sm);
+    font-family: var(--ff-display);
+  }
+
+  .gallery-info__sep {
+    color: var(--ink-9);
+    font-size: .5em;
+  }
+
+  /* Gallery grid — cover-focused cards */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-md);
+    list-style: none;
+    margin-bottom: var(--space-lg);
+  }
+
+  .gallery-card {
+    border-radius: var(--r-lg);
+    border: 1px solid var(--border-1);
+    background: var(--glass-bg);
+    overflow: hidden;
+    position: relative;
+    transition: border-color var(--t-mid), transform var(--t-mid) var(--ease-expo);
+  }
+
+  .gallery-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--amber-free) / .1), transparent);
+    z-index: 1;
+  }
+
+  .gallery-card:hover {
+    border-color: var(--border-amber);
+    transform: translateY(-3px);
+  }
+
+  .gallery-card__cover {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-0);
+  }
+
+  .gallery-card__cover a {
+    display: block;
+    aspect-ratio: 3 / 4;
+  }
+
+  .gallery-card__cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--t-slow) var(--ease-expo);
+  }
+
+  .gallery-card:hover .gallery-card__cover img {
+    transform: scale(1.05);
+  }
+
+  .gallery-card__cover .cover-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, hsl(270 25% 6% / .7) 100%);
+    pointer-events: none;
+  }
+
+  /* Cover badges — floating on image */
+  .gallery-card__cover-badges {
+    position: absolute;
+    top: var(--space-xs);
+    right: var(--space-xs);
+    display: flex;
+    gap: var(--space-2xs);
+    z-index: 1;
+  }
+
+  .gallery-card__cover-badges .badge {
+    backdrop-filter: blur(8px);
+    background: hsl(270 25% 8% / .7);
+  }
+
+  /* Museum label — below cover */
+  .gallery-card__label-plate {
+    padding: var(--space-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .gallery-card__title {
+    font-family: var(--ff-display);
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--ink-0);
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .gallery-card__author {
+    font-family: var(--ff-ui);
+    font-size: var(--text-xs);
+    color: var(--ink-7);
+    font-style: italic;
+  }
+
+  .gallery-card__meta {
+    font-family: var(--ff-mono);
+    font-size: var(--text-3xs);
+    color: var(--ink-9);
+    display: flex;
+    gap: .5em;
+    margin-top: var(--space-2xs);
+  }
+
+
+  /* ══════════════════════════════════════════════════════
+   *  IDEA 5 — "Chronicle Ledger"
+   *
+   *  A página é um livro-registro, um ledger de crônicas.
+   *  Header editorial com ornamento. Stats embutidos no
+   *  subtítulo como dados descritivos. Sem painel separado.
+   *  Sort como índice com letras/categorias.
+   *  Cards separados por "capítulos" do ledger com linhas
+   *  decorativas e numeração romana no canto.
+   * ══════════════════════════════════════════════════════ */
+
+  .ledger {
+    padding: var(--space-lg);
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .ledger-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    position: relative;
+  }
+
+  /* Ornament above title */
+  .ledger-header__ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+    color: hsl(var(--amber-free) / .3);
+    font-size: var(--text-xs);
+  }
+
+  .ledger-header__ornament::before,
+  .ledger-header__ornament::after {
+    content: '';
+    width: 3em;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--amber-free) / .2));
+  }
+
+  .ledger-header__ornament::after {
+    background: linear-gradient(270deg, transparent, hsl(var(--amber-free) / .2));
+  }
+
+  .ledger-header__title {
+    font-family: var(--ff-display);
+    font-size: var(--text-3xl);
+    font-weight: 900;
+    color: var(--ink-0);
+    line-height: 1.1;
+    margin-bottom: var(--space-sm);
+  }
+
+  /* Stats woven into prose */
+  .ledger-header__prose {
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: var(--text-sm);
+    color: var(--ink-6);
+    max-width: 38em;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  .ledger-header__prose strong {
+    color: var(--amber);
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  /* Sort as ledger tabs */
+  .ledger-tabs {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding-bottom: var(--space-sm);
+    margin-bottom: var(--space-lg);
+    position: relative;
+    flex-wrap: wrap;
+  }
+
+  .ledger-tabs::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--amber-free) / .1), var(--border-0), transparent);
+  }
+
+  .ledger-tab {
+    font-family: var(--ff-mono);
+    font-size: var(--text-2xs);
+    color: var(--ink-7);
+    padding: .3em .8em;
+    border: none;
+    background: none;
+    cursor: pointer;
+    position: relative;
+    transition: color var(--t-mid);
+    letter-spacing: .05em;
+  }
+
+  .ledger-tab:hover { color: var(--amber); }
+
+  .ledger-tab.active {
+    color: var(--amber);
+  }
+
+  .ledger-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: calc(var(--space-sm) * -1);
+    left: 20%; right: 20%;
+    height: 2px;
+    background: var(--amber);
+    border-radius: 1px;
+  }
+
+  /* Card entries */
+  .ledger-entries {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    list-style: none;
+    margin-bottom: var(--space-lg);
+  }
+
+  /* Entry separator — ornamental line between cards */
+  .ledger-entries > li + li::before {
+    content: '';
+    display: block;
+    width: 4em;
+    height: 1px;
+    background: hsl(var(--amber-free) / .1);
+    margin: 0 auto var(--space-md);
+  }
+
+
+  /* ── Grain overlay ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: .3;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  }
+
+</style>
+</head>
+<body>
+
+<h1>Illusia /stories/ — Page Redesign Ideas</h1>
+<p class="page-subtitle">
+  5 abordagens para a pagina de listagem de stories.
+  Cada uma explora uma forma diferente de apresentar o header,
+  stats, sort e card list com a identidade visual do Illusia.
+</p>
+
+<div class="ideas-grid">
+
+  <!-- ═══════════════════════════════════════════
+       IDEA 1: Catalog Room
+       ═══════════════════════════════════════════ -->
+  <section class="idea-section">
+    <div class="idea-header">
+      <span class="idea-number">01</span>
+      <div>
+        <h2 class="idea-title">Catalog Room</h2>
+      </div>
+    </div>
+    <p class="idea-desc">
+      A pagina e uma sala de catalogo de um observatorio antigo. Uma moldura decorativa
+      sutil envolve todo o conteudo. Stats como fichas de arquivo. Sort como abas de
+      indexacao. Overline monospace acima do titulo reforça o contexto editorial.
+      Divider com diamante separa header de conteudo.
+    </p>
+
+    <div class="idea-mockup">
+      <div class="catalog-room">
+
+        <header class="catalog-header">
+          <span class="catalog-header__overline">Arquivo do Observatorio</span>
+          <h2 class="catalog-header__title">Historias</h2>
+          <p class="catalog-header__sub">
+            Todas as narrativas catalogadas no acervo do observatorio, organizadas por data de ultima atividade.
+          </p>
+        </header>
+
+        <div class="catalog-divider">
+          <span class="catalog-divider__diamond"></span>
+        </div>
+
+        <div class="catalog-stats">
+          <div class="catalog-stat">
+            <span class="catalog-stat__value">42</span>
+            <span class="catalog-stat__label">Historias</span>
+          </div>
+          <div class="catalog-stat">
+            <span class="catalog-stat__value">1,2M</span>
+            <span class="catalog-stat__label">Palavras</span>
+          </div>
+          <div class="catalog-stat">
+            <span class="catalog-stat__value">3.847</span>
+            <span class="catalog-stat__label">Comentarios</span>
+          </div>
+          <div class="catalog-stat">
+            <span class="catalog-stat__value">~102h</span>
+            <span class="catalog-stat__label">Leitura</span>
+          </div>
+        </div>
+
+        <div class="catalog-sort">
+          <span class="sort-label">Ordenar</span>
+          <button class="sort-btn active">Atualizado</button>
+          <button class="sort-btn">Publicado</button>
+          <button class="sort-btn">A&ndash;Z</button>
+          <button class="sort-btn"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
+        </div>
+
+        <ul class="catalog-cards">
+          <li>
+            <div class="mini-card">
+              <div class="card-body">
+                <div class="card-cover">
+                  <a href="#"><img src="https://picsum.photos/seed/story-a/300/400" alt="Cover"></a>
+                  <div class="cover-overlay"></div>
+                </div>
+                <div class="card-content">
+                  <div><span class="card-label">Story</span></div>
+                  <h3 class="card-title">Guardiao</h3>
+                  <p class="card-author">por <a href="#">Israel Ribeiro</a></p>
+                  <p class="card-excerpt">O norte de Kaer-Thal congela sob o silencio da Barreira. A muralha invisivel que separa o mundo dos homens das feras.</p>
+                  <footer class="card-footer">
+                    <span><i class="fa-solid fa-list"></i> 127 &middot; <i class="fa-solid fa-font"></i> 185K &middot; <i class="fa-regular fa-clock"></i> ha 15 min</span>
+                    <div class="card-badges">
+                      <span class="badge badge-ongoing"><i class="fa-solid fa-pen-nib"></i> Ativa</span>
+                      <span class="badge badge-rating">16</span>
+                    </div>
+                  </footer>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="mini-card">
+              <div class="card-body">
+                <div class="card-cover">
+                  <a href="#"><img src="https://picsum.photos/seed/story-b/300/400" alt="Cover"></a>
+                  <div class="cover-overlay"></div>
+                </div>
+                <div class="card-content">
+                  <div><span class="card-label">Story</span></div>
+                  <h3 class="card-title">Cronicas do Ermo</h3>
+                  <p class="card-author">por <a href="#">Camila Sertanejo</a></p>
+                  <p class="card-excerpt">No sertao entre mundos, onde a areia canta e as estrelas mentem, uma viajante busca o rio que corre ao contrario.</p>
+                  <footer class="card-footer">
+                    <span><i class="fa-solid fa-list"></i> 84 &middot; <i class="fa-solid fa-font"></i> 112K &middot; <i class="fa-regular fa-clock"></i> ha 2 dias</span>
+                    <div class="card-badges">
+                      <span class="badge badge-ongoing"><i class="fa-solid fa-pen-nib"></i> Ativa</span>
+                    </div>
+                  </footer>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="pagination">
+          <a class="page-num current" href="#">1</a>
+          <a class="page-num" href="#">2</a>
+          <a class="page-num" href="#">3</a>
+          <a class="page-num" href="#">&rsaquo;</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       IDEA 2: Observatory Broadcast
+       ═══════════════════════════════════════════ -->
+  <section class="idea-section">
+    <div class="idea-header">
+      <span class="idea-number">02</span>
+      <div>
+        <h2 class="idea-title">Observatory Broadcast</h2>
+      </div>
+    </div>
+    <p class="idea-desc">
+      A pagina e um feed de transmissao do observatorio. Um indicador "SINAL ATIVO"
+      pisca no header. A story mais recente ganha tratamento hero — cover grande,
+      tipografia display, badge "ULTIMA TRANSMISSAO". As demais seguem em lista
+      abaixo, separadas por label "ARQUIVO". Stats como indicadores de painel.
+    </p>
+
+    <div class="idea-mockup">
+      <div class="broadcast">
+
+        <header class="broadcast-header">
+          <div class="broadcast-header__signal">
+            Sinal Ativo
+          </div>
+          <h2 class="broadcast-header__title">Historias</h2>
+          <p class="broadcast-header__sub">
+            Transmissoes captadas pelo observatorio. Frequencias organizadas por atividade recente.
+          </p>
+        </header>
+
+        <div class="broadcast-indicators">
+          <div class="broadcast-indicator">
+            <span class="broadcast-indicator__value">42</span>
+            <span class="broadcast-indicator__label">Sinais</span>
+          </div>
+          <div class="broadcast-indicator">
+            <span class="broadcast-indicator__value">1,2M</span>
+            <span class="broadcast-indicator__label">Palavras</span>
+          </div>
+          <div class="broadcast-indicator">
+            <span class="broadcast-indicator__value">3.847</span>
+            <span class="broadcast-indicator__label">Ecos</span>
+          </div>
+          <div class="broadcast-indicator">
+            <span class="broadcast-indicator__value">~102h</span>
+            <span class="broadcast-indicator__label">Leitura</span>
+          </div>
+        </div>
+
+        <div class="sort-bar" style="margin-bottom: var(--space-lg);">
+          <span class="sort-label">Frequencia</span>
+          <button class="sort-btn active">Recente</button>
+          <button class="sort-btn">Publicado</button>
+          <button class="sort-btn">A&ndash;Z</button>
+          <button class="sort-btn"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
+        </div>
+
+        <!-- Hero card — latest story -->
+        <div class="broadcast-hero">
+          <div class="hero-body">
+            <div class="hero-cover">
+              <a href="#"><img src="https://picsum.photos/seed/story-a/400/533" alt="Cover"></a>
+              <div class="hero-overlay"></div>
+            </div>
+            <div class="hero-content">
+              <span class="broadcast-hero__badge hero-badge">Ultima Transmissao</span>
+              <h3 class="hero-title">Guardiao</h3>
+              <p class="hero-author">por <a href="#">Israel Ribeiro</a></p>
+              <p class="hero-excerpt">O norte de Kaer-Thal congela sob o silencio da Barreira. A muralha invisivel que separa o mundo dos homens das feras que devoram tudo o que tocam. Quando a Barreira enfraquece, um guardiao desperta.</p>
+              <div class="hero-meta">
+                <span><i class="fa-solid fa-list"></i> 127 caps</span>
+                <span><i class="fa-solid fa-font"></i> 185K palavras</span>
+                <span><i class="fa-solid fa-message"></i> 1.423</span>
+                <span><i class="fa-regular fa-clock"></i> ha 15 min</span>
+                <span class="badge badge-ongoing"><i class="fa-solid fa-pen-nib"></i> Ativa</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="broadcast-section-label">Arquivo</div>
+
+        <ul class="broadcast-cards">
+          <li>
+            <div class="mini-card">
+              <div class="card-body">
+                <div class="card-cover">
+                  <a href="#"><img src="https://picsum.photos/seed/story-b/300/400" alt="Cover"></a>
+                  <div class="cover-overlay"></div>
+                </div>
+                <div class="card-content">
+                  <div><span class="card-label">Story</span></div>
+                  <h3 class="card-title">Cronicas do Ermo</h3>
+                  <p class="card-author">por <a href="#">Camila Sertanejo</a></p>
+                  <p class="card-excerpt">No sertao entre mundos, onde a areia canta e as estrelas mentem, uma viajante busca o rio que corre ao contrario.</p>
+                  <footer class="card-footer">
+                    <span><i class="fa-solid fa-list"></i> 84 &middot; <i class="fa-solid fa-font"></i> 112K &middot; <i class="fa-regular fa-clock"></i> ha 2 dias</span>
+                    <div class="card-badges">
+                      <span class="badge badge-ongoing"><i class="fa-solid fa-pen-nib"></i> Ativa</span>
+                    </div>
+                  </footer>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="mini-card">
+              <div class="card-body">
+                <div class="card-cover">
+                  <a href="#"><img src="https://picsum.photos/seed/story-c/300/400" alt="Cover"></a>
+                  <div class="cover-overlay"></div>
+                </div>
+                <div class="card-content">
+                  <div><span class="card-label">Story</span></div>
+                  <h3 class="card-title">Olhos de Vidro</h3>
+                  <p class="card-author">por <a href="#">Marcus Ventura</a></p>
+                  <p class="card-excerpt">Uma relojoeira cega descobre que seus automates podem ver o futuro — mas cada visao cobra um preco em memoria.</p>
+                  <footer class="card-footer">
+                    <span><i class="fa-solid fa-list"></i> 31 &middot; <i class="fa-solid fa-font"></i> 48K &middot; <i class="fa-regular fa-clock"></i> ha 1 semana</span>
+                    <div class="card-badges">
+                      <span class="badge badge-completed"><i class="fa-solid fa-trophy"></i> Completa</span>
+                    </div>
+                  </footer>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="pagination">
+          <a class="page-num current" href="#">1</a>
+          <a class="page-num" href="#">2</a>
+          <a class="page-num" href="#">3</a>
+          <a class="page-num" href="#">&rsaquo;</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       IDEA 3: Manuscript Archive
+       ═══════════════════════════════════════════ -->
+  <section class="idea-section">
+    <div class="idea-header">
+      <span class="idea-number">03</span>
+      <div>
+        <h2 class="idea-title">Manuscript Archive</h2>
+      </div>
+    </div>
+    <p class="idea-desc">
+      A pagina parece um arquivo de manuscritos. Titulo display gigante com
+      italico ambar. Epigrafe como citacao. Stats como anotacoes marginais
+      no canto superior direito (posicao absoluta). Sort como carimbos de
+      classificacao com borda tracejada. Cards com numeracao editorial
+      (01, 02, 03) — como entradas de um diario de campo.
+    </p>
+
+    <div class="idea-mockup">
+      <div class="manuscript">
+
+        <header class="manuscript-header">
+          <h2 class="manuscript-header__title">Todas as<br><em>Historias</em></h2>
+          <p class="manuscript-header__epigraph">
+            "Cada narrativa e uma estrela catalogada — distante, mas nao perdida.
+            O observatorio guarda todas."
+          </p>
+
+          <div class="manuscript-marginalia">
+            <span class="manuscript-marginal"><strong>42</strong> historias</span>
+            <span class="manuscript-marginal"><strong>1,2M</strong> palavras</span>
+            <span class="manuscript-marginal"><strong>3.847</strong> comentarios</span>
+            <span class="manuscript-marginal"><strong>~102h</strong> leitura</span>
+          </div>
+        </header>
+
+        <div class="manuscript-classification">
+          <span class="manuscript-stamp active">Recente</span>
+          <span class="manuscript-stamp">Publicado</span>
+          <span class="manuscript-stamp">A&ndash;Z</span>
+          <span class="manuscript-stamp">Palavras</span>
+          <span class="manuscript-stamp"><i class="fa-solid fa-arrow-down-short-wide"></i></span>
+        </div>
+
+        <ol class="manuscript-entries">
+          <li class="manuscript-entry">
+            <span class="manuscript-entry__number"></span>
+            <div class="mini-card">
+              <div class="card-body">
+                <div class="card-cover">
+                  <a href="#"><img src="https://picsum.photos/seed/story-a/300/400" alt="Cover"></a>
+                  <div class="cover-overlay"></div>
+                </div>
+                <div class="card-content">
+                  <h3 class="card-title">Guardiao</h3>
+                  <p class="card-author">por <a href="#">Israel Ribeiro</a></p>
+                  <p class="card-excerpt">O norte de Kaer-Thal congela sob o silencio da Barreira. A muralha invisivel que separa o mundo dos homens das feras.</p>
+                  <footer class="card-footer">
+                    <span><i class="fa-solid fa-list"></i> 127 &middot; <i class="fa-solid fa-font"></i> 185K &middot; <i class="fa-regular fa-clock"></i> ha 15 min</span>
+                    <div class="card-badges">
+                      <span class="badge badge-ongoing"><i class="fa-solid fa-pen-nib"></i> Ativa</span>
+                      <span class="badge badge-rating">16</span>
+                    </div>
+                  </footer>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="manuscript-entry">
+            <span class="manuscript-entry__number"></span>
+            <div class="mini-card">
+              <div class="card-body">
+                <div class="card-cover">
+                  <a href="#"><img src="https://picsum.photos/seed/story-b/300/400" alt="Cover"></a>
+                  <div class="cover-overlay"></div>
+                </div>
+                <div class="card-content">
+                  <h3 class="card-title">Cronicas do Ermo</h3>
+                  <p class="card-author">por <a href="#">Camila Sertanejo</a></p>
+                  <p class="card-excerpt">No sertao entre mundos, onde a areia canta e as estrelas mentem, uma viajante busca o rio.</p>
+                  <footer class="card-footer">
+                    <span><i class="fa-solid fa-list"></i> 84 &middot; <i class="fa-solid fa-font"></i> 112K &middot; <i class="fa-regular fa-clock"></i> ha 2 dias</span>
+                    <div class="card-badges">
+                      <span class="badge badge-ongoing"><i class="fa-solid fa-pen-nib"></i> Ativa</span>
+                    </div>
+                  </footer>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="manuscript-entry">
+            <span class="manuscript-entry__number"></span>
+            <div class="mini-card">
+              <div class="card-body">
+                <div class="card-cover">
+                  <a href="#"><img src="https://picsum.photos/seed/story-c/300/400" alt="Cover"></a>
+                  <div class="cover-overlay"></div>
+                </div>
+                <div class="card-content">
+                  <h3 class="card-title">Olhos de Vidro</h3>
+                  <p class="card-author">por <a href="#">Marcus Ventura</a></p>
+                  <p class="card-excerpt">Uma relojoeira cega descobre que seus automates podem ver o futuro.</p>
+                  <footer class="card-footer">
+                    <span><i class="fa-solid fa-list"></i> 31 &middot; <i class="fa-solid fa-font"></i> 48K &middot; <i class="fa-regular fa-clock"></i> ha 1 semana</span>
+                    <div class="card-badges">
+                      <span class="badge badge-completed"><i class="fa-solid fa-trophy"></i> Completa</span>
+                    </div>
+                  </footer>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ol>
+
+        <div class="pagination">
+          <a class="page-num current" href="#">1</a>
+          <a class="page-num" href="#">2</a>
+          <a class="page-num" href="#">3</a>
+          <a class="page-num" href="#">&rsaquo;</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       IDEA 4: Gallery Wall
+       ═══════════════════════════════════════════ -->
+  <section class="idea-section">
+    <div class="idea-header">
+      <span class="idea-number">04</span>
+      <div>
+        <h2 class="idea-title">Gallery Wall</h2>
+      </div>
+    </div>
+    <p class="idea-desc">
+      A pagina e uma galeria de exposicao. Covers sao o protagonista — grandes,
+      em grid responsivo. Titulo e autor abaixo como placas de museu. Stats como
+      uma barra de informacao horizontal discreta. Header minimalista com contagem.
+      Badges flutuam sobre a capa. Ideal para acervos visuais.
+    </p>
+
+    <div class="idea-mockup">
+      <div class="gallery">
+
+        <header class="gallery-header">
+          <h2 class="gallery-header__title">Historias</h2>
+          <span class="gallery-header__count">42 obras catalogadas</span>
+        </header>
+
+        <div class="gallery-info">
+          <span class="gallery-info__item"><strong>1,2M</strong> palavras</span>
+          <span class="gallery-info__sep">&bull;</span>
+          <span class="gallery-info__item"><strong>3.847</strong> comentarios</span>
+          <span class="gallery-info__sep">&bull;</span>
+          <span class="gallery-info__item"><strong>~102h</strong> de leitura</span>
+        </div>
+
+        <div class="sort-bar" style="margin-bottom: var(--space-lg);">
+          <span class="sort-label">Galeria</span>
+          <button class="sort-btn active">Recente</button>
+          <button class="sort-btn">Publicado</button>
+          <button class="sort-btn">A&ndash;Z</button>
+          <button class="sort-btn"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
+        </div>
+
+        <ul class="gallery-grid">
+          <li>
+            <div class="gallery-card">
+              <div class="gallery-card__cover">
+                <a href="#"><img src="https://picsum.photos/seed/story-a/400/533" alt="Cover"></a>
+                <div class="cover-gradient"></div>
+                <div class="gallery-card__cover-badges">
+                  <span class="badge badge-ongoing"><i class="fa-solid fa-pen-nib"></i></span>
+                  <span class="badge badge-rating">16</span>
+                </div>
+              </div>
+              <div class="gallery-card__label-plate">
+                <h3 class="gallery-card__title">Guardiao</h3>
+                <p class="gallery-card__author">Israel Ribeiro</p>
+                <div class="gallery-card__meta">
+                  <span>127 caps</span>
+                  <span>&middot;</span>
+                  <span>185K</span>
+                  <span>&middot;</span>
+                  <span>ha 15 min</span>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="gallery-card">
+              <div class="gallery-card__cover">
+                <a href="#"><img src="https://picsum.photos/seed/story-b/400/533" alt="Cover"></a>
+                <div class="cover-gradient"></div>
+                <div class="gallery-card__cover-badges">
+                  <span class="badge badge-ongoing"><i class="fa-solid fa-pen-nib"></i></span>
+                </div>
+              </div>
+              <div class="gallery-card__label-plate">
+                <h3 class="gallery-card__title">Cronicas do Ermo</h3>
+                <p class="gallery-card__author">Camila Sertanejo</p>
+                <div class="gallery-card__meta">
+                  <span>84 caps</span>
+                  <span>&middot;</span>
+                  <span>112K</span>
+                  <span>&middot;</span>
+                  <span>ha 2 dias</span>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="gallery-card">
+              <div class="gallery-card__cover">
+                <a href="#"><img src="https://picsum.photos/seed/story-c/400/533" alt="Cover"></a>
+                <div class="cover-gradient"></div>
+                <div class="gallery-card__cover-badges">
+                  <span class="badge badge-completed"><i class="fa-solid fa-trophy"></i></span>
+                </div>
+              </div>
+              <div class="gallery-card__label-plate">
+                <h3 class="gallery-card__title">Olhos de Vidro</h3>
+                <p class="gallery-card__author">Marcus Ventura</p>
+                <div class="gallery-card__meta">
+                  <span>31 caps</span>
+                  <span>&middot;</span>
+                  <span>48K</span>
+                  <span>&middot;</span>
+                  <span>ha 1 sem</span>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="gallery-card">
+              <div class="gallery-card__cover">
+                <a href="#"><img src="https://picsum.photos/seed/story-d/400/533" alt="Cover"></a>
+                <div class="cover-gradient"></div>
+                <div class="gallery-card__cover-badges">
+                  <span class="badge badge-ongoing"><i class="fa-solid fa-pen-nib"></i></span>
+                  <span class="badge badge-rating">18</span>
+                </div>
+              </div>
+              <div class="gallery-card__label-plate">
+                <h3 class="gallery-card__title">Sangue de Estrela</h3>
+                <p class="gallery-card__author">Ana Luisa Torres</p>
+                <div class="gallery-card__meta">
+                  <span>203 caps</span>
+                  <span>&middot;</span>
+                  <span>301K</span>
+                  <span>&middot;</span>
+                  <span>ha 3 dias</span>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="pagination">
+          <a class="page-num current" href="#">1</a>
+          <a class="page-num" href="#">2</a>
+          <a class="page-num" href="#">3</a>
+          <a class="page-num" href="#">&rsaquo;</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       IDEA 5: Chronicle Ledger
+       ═══════════════════════════════════════════ -->
+  <section class="idea-section">
+    <div class="idea-header">
+      <span class="idea-number">05</span>
+      <div>
+        <h2 class="idea-title">Chronicle Ledger</h2>
+      </div>
+    </div>
+    <p class="idea-desc">
+      A pagina e um livro-registro de cronicas. Header com ornamento decorativo
+      (linhas convergentes + simbolo). Stats sao tecidos numa frase descritiva
+      em italico ("42 historias registradas, somando 1,2M palavras..."). Sort
+      como abas com indicador ambar ativo. Cards separados por linhas ornamentais
+      sutis entre si. Zero grid — tudo e vertical e editorial.
+    </p>
+
+    <div class="idea-mockup">
+      <div class="ledger">
+
+        <header class="ledger-header">
+          <div class="ledger-header__ornament">
+            <i class="fa-solid fa-diamond" style="font-size: .5em;"></i>
+          </div>
+          <h2 class="ledger-header__title">Historias</h2>
+          <p class="ledger-header__prose">
+            <strong>42</strong> narrativas registradas no acervo,
+            somando <strong>1,2M</strong> palavras escritas,
+            <strong>3.847</strong> ecos de leitores
+            e aproximadamente <strong>102 horas</strong> de leitura.
+          </p>
+        </header>
+
+        <div class="ledger-tabs">
+          <button class="ledger-tab active">Recente</button>
+          <button class="ledger-tab">Publicado</button>
+          <button class="ledger-tab">A&ndash;Z</button>
+          <button class="ledger-tab">Palavras</button>
+          <button class="ledger-tab"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
+        </div>
+
+        <ul class="ledger-entries">
+          <li>
+            <div class="mini-card">
+              <div class="card-body">
+                <div class="card-cover">
+                  <a href="#"><img src="https://picsum.photos/seed/story-a/300/400" alt="Cover"></a>
+                  <div class="cover-overlay"></div>
+                </div>
+                <div class="card-content">
+                  <div><span class="card-label">Story</span></div>
+                  <h3 class="card-title">Guardiao</h3>
+                  <p class="card-author">por <a href="#">Israel Ribeiro</a></p>
+                  <p class="card-excerpt">O norte de Kaer-Thal congela sob o silencio da Barreira. A muralha invisivel que separa o mundo dos homens das feras.</p>
+                  <footer class="card-footer">
+                    <span><i class="fa-solid fa-list"></i> 127 &middot; <i class="fa-solid fa-font"></i> 185K &middot; <i class="fa-regular fa-clock"></i> ha 15 min</span>
+                    <div class="card-badges">
+                      <span class="badge badge-ongoing"><i class="fa-solid fa-pen-nib"></i> Ativa</span>
+                      <span class="badge badge-rating">16</span>
+                    </div>
+                  </footer>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="mini-card">
+              <div class="card-body">
+                <div class="card-cover">
+                  <a href="#"><img src="https://picsum.photos/seed/story-b/300/400" alt="Cover"></a>
+                  <div class="cover-overlay"></div>
+                </div>
+                <div class="card-content">
+                  <div><span class="card-label">Story</span></div>
+                  <h3 class="card-title">Cronicas do Ermo</h3>
+                  <p class="card-author">por <a href="#">Camila Sertanejo</a></p>
+                  <p class="card-excerpt">No sertao entre mundos, onde a areia canta e as estrelas mentem, uma viajante busca o rio que corre ao contrario.</p>
+                  <footer class="card-footer">
+                    <span><i class="fa-solid fa-list"></i> 84 &middot; <i class="fa-solid fa-font"></i> 112K &middot; <i class="fa-regular fa-clock"></i> ha 2 dias</span>
+                    <div class="card-badges">
+                      <span class="badge badge-ongoing"><i class="fa-solid fa-pen-nib"></i> Ativa</span>
+                    </div>
+                  </footer>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="mini-card">
+              <div class="card-body">
+                <div class="card-cover">
+                  <a href="#"><img src="https://picsum.photos/seed/story-c/300/400" alt="Cover"></a>
+                  <div class="cover-overlay"></div>
+                </div>
+                <div class="card-content">
+                  <div><span class="card-label">Story</span></div>
+                  <h3 class="card-title">Olhos de Vidro</h3>
+                  <p class="card-author">por <a href="#">Marcus Ventura</a></p>
+                  <p class="card-excerpt">Uma relojoeira cega descobre que seus automates podem ver o futuro — mas cada visao cobra um preco.</p>
+                  <footer class="card-footer">
+                    <span><i class="fa-solid fa-list"></i> 31 &middot; <i class="fa-solid fa-font"></i> 48K &middot; <i class="fa-regular fa-clock"></i> ha 1 semana</span>
+                    <div class="card-badges">
+                      <span class="badge badge-completed"><i class="fa-solid fa-trophy"></i> Completa</span>
+                    </div>
+                  </footer>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="pagination">
+          <a class="page-num current" href="#">1</a>
+          <a class="page-num" href="#">2</a>
+          <a class="page-num" href="#">3</a>
+          <a class="page-num" href="#">&rsaquo;</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

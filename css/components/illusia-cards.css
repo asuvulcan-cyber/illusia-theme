@@ -1,16 +1,18 @@
 /* ══════════════════════════════════════════════════════════════
- * Illusia Cards — Story Card Redesign
+ * Illusia Cards — Card System Redesign
  *
- * Redesenho completo do card de história com markup original Illusia.
- * Template override em partials/_card-story.php com HTML semântico
- * e classes BEM .illusia-card*.
+ * Redesenho completo dos cards com markup original Illusia.
+ * Template overrides em partials/_card-{type}.php com HTML semântico
+ * e classes BEM .illusia-card*. Tipos: story, chapter, collection,
+ * recommendation.
  *
  * Usa tokens bridge (--bg-* / --fg-*) em vez de --void-* / --ink-*
  * para compatibilidade com dark mode E light mode.
  * Cores via triplets -free (zero rgba literal) — reagem ao modal
  * hue-rotate do Fictioneer automaticamente.
  *
- * @since 1.5.0
+ * @since 1.5.0 — Story card
+ * @since 1.8.0 — Chapter, Collection, Recommendation cards
  * ══════════════════════════════════════════════════════════════ */
 
 /* ── 1. Custom Properties ── */
@@ -87,6 +89,9 @@
 .illusia-card__cover-link:focus-visible,
 .illusia-card__author a:focus-visible,
 .illusia-chapter-list__link:focus-visible,
+.illusia-featured-list__link:focus-visible,
+.illusia-links-list__link:focus-visible,
+.illusia-card__parent-story-link:focus-visible,
 .illusia-meta-item a:focus-visible {
   outline: 2px solid var(--amber);
   outline-offset: 2px;
@@ -990,6 +995,56 @@
     font-size: var(--text-2xs);
   }
 
+  /* ── New card types — mobile ── */
+
+  /* Parent story row (chapter card) */
+  .illusia-card__parent-story-right {
+    display: none;
+  }
+
+  .illusia-card__parent-story-row {
+    padding: .35em var(--space-xs);
+  }
+
+  .illusia-card__parent-story-link {
+    font-size: var(--text-2xs);
+  }
+
+  /* Featured list (collection card) */
+  .illusia-featured-list__item {
+    padding: .35em var(--space-xs);
+  }
+
+  .illusia-featured-list__link {
+    font-size: var(--text-2xs);
+  }
+
+  .illusia-featured-list__type {
+    font-size: var(--text-3xs);
+  }
+
+  .illusia-featured-list__date,
+  .illusia-featured-list__separator {
+    display: none;
+  }
+
+  /* External links (recommendation card) */
+  .illusia-links-list__item {
+    padding: .35em var(--space-xs);
+  }
+
+  .illusia-links-list__link {
+    font-size: var(--text-2xs);
+  }
+
+  /* Collection card — footer always visible, restore on mobile */
+  .illusia-card--collection .illusia-card__footer {
+    grid-column: 1 / -1;
+    grid-row: 5;
+  }
+
+  /* Recommendation card — no footer to restore */
+
   /* No-cover variant on mobile: single column */
   .illusia-card--no-cover .illusia-card__body {
     grid-template-columns: 1fr;
@@ -1178,7 +1233,362 @@
   border-color: hsl(0 0% 100% / .2);
 }
 
-/* ── 18. Reduced Motion ── */
+/* Light mode — Chapter card */
+:root[data-mode=light] .illusia-card__parent-story-row {
+  background: hsl(var(--bg-100-free) / .3);
+}
+
+:root[data-mode=light] .illusia-card__parent-story-row::before {
+  background: var(--amber-dim);
+}
+
+:root[data-mode=light] .illusia-card__parent-story-row:hover {
+  background: hsl(var(--amber-free) / .04);
+}
+
+/* Light mode — Featured list (collection) */
+:root[data-mode=light] .illusia-featured-list__item::before {
+  background: var(--amber-dim);
+}
+
+:root[data-mode=light] .illusia-featured-list__item:hover {
+  background: hsl(var(--amber-free) / .04);
+}
+
+/* Light mode — External links (recommendation) */
+:root[data-mode=light] .illusia-links-list__item::before {
+  background: var(--amber-dim);
+}
+
+:root[data-mode=light] .illusia-links-list__item:hover {
+  background: hsl(var(--amber-free) / .04);
+}
+
+:root[data-mode=light] .illusia-links-list__link {
+  color: var(--amber-dim);
+}
+
+:root[data-mode=light] .illusia-links-list__item:hover .illusia-links-list__link {
+  color: var(--amber);
+}
+
+/* ── 18. Chapter Card Variant ── */
+
+/* Compact stats grid (2 cells instead of 4) */
+.illusia-card__cover-stats--compact {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Text icon cover (emoji/character as cover) */
+.illusia-card__cover-link--text-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: hsl(var(--bg-900-free) / .7);
+}
+
+.illusia-card__text-icon {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1;
+  filter: grayscale(.2);
+}
+
+/* Story unpublished — visual dimming */
+.illusia-card--story-unpublished {
+  opacity: .6;
+}
+
+.illusia-card--story-unpublished:hover {
+  opacity: .85;
+}
+
+/* Parent story link row */
+.illusia-card__parent-story-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: .42em var(--space-sm);
+  background: hsl(var(--bg-900-free) / .5);
+  border: 1px solid var(--border-0);
+  border-radius: var(--r-md);
+  transition: background var(--t-fast);
+  position: relative;
+}
+
+/* Amber sidebar bar on hover */
+.illusia-card__parent-story-row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--amber);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform var(--t-mid) var(--ease-expo);
+  border-radius: 2px 0 0 2px;
+}
+
+.illusia-card__parent-story-row:hover {
+  background: hsl(var(--amber-free) / .03);
+}
+
+.illusia-card__parent-story-row:hover::before {
+  transform: scaleY(1);
+}
+
+.illusia-card__parent-story-row--password .illusia-card__parent-story-link {
+  color: var(--fg-700);
+}
+
+.illusia-card__parent-story-left {
+  display: flex;
+  align-items: center;
+  gap: .4em;
+  min-width: 0;
+  flex: 1;
+}
+
+.illusia-card__parent-story-icon {
+  color: var(--amber-dim);
+  font-size: .65em;
+  flex-shrink: 0;
+}
+
+.illusia-card__parent-story-link {
+  font-size: var(--text-xs);
+  color: var(--fg-400);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color var(--t-fast);
+}
+
+.illusia-card__parent-story-row:hover .illusia-card__parent-story-link {
+  color: var(--fg-100);
+}
+
+.illusia-card__parent-story-right {
+  display: flex;
+  align-items: center;
+  gap: .3em;
+  flex-shrink: 0;
+}
+
+.illusia-card__parent-story-words,
+.illusia-card__parent-story-status {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  color: var(--fg-700);
+  white-space: nowrap;
+}
+
+.illusia-card__parent-story-separator {
+  color: var(--fg-900);
+  font-size: .7em;
+}
+
+/* ── 19. Collection Card Variant ── */
+
+/* Collection footer always visible (no stats on cover duplicate it all) */
+.illusia-card--collection .illusia-card__footer {
+  display: flex;
+}
+
+/* Featured items list — shares base pattern with chapter list */
+.illusia-featured-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-0);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.illusia-featured-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: .42em var(--space-sm);
+  border-bottom: 1px solid var(--border-0);
+  transition: background var(--t-fast);
+  position: relative;
+}
+
+.illusia-featured-list__item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--amber);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform var(--t-mid) var(--ease-expo);
+}
+
+.illusia-featured-list__item:last-child {
+  border-bottom: none;
+}
+
+.illusia-featured-list__item:hover {
+  background: hsl(var(--amber-free) / .03);
+}
+
+.illusia-featured-list__item:hover::before {
+  transform: scaleY(1);
+}
+
+.illusia-featured-list__item--password .illusia-featured-list__link {
+  color: var(--fg-700);
+}
+
+.illusia-featured-list__left {
+  display: flex;
+  align-items: center;
+  gap: .4em;
+  min-width: 0;
+  flex: 1;
+}
+
+.illusia-featured-list__icon {
+  color: var(--amber-dim);
+  font-size: .65em;
+  flex-shrink: 0;
+}
+
+.illusia-featured-list__link {
+  font-size: var(--text-xs);
+  color: var(--fg-400);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color var(--t-fast);
+}
+
+.illusia-featured-list__item:hover .illusia-featured-list__link {
+  color: var(--fg-100);
+}
+
+.illusia-featured-list__right {
+  display: flex;
+  align-items: center;
+  gap: .3em;
+  flex-shrink: 0;
+}
+
+.illusia-featured-list__type {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  color: var(--fg-700);
+  white-space: nowrap;
+}
+
+.illusia-featured-list__separator {
+  color: var(--fg-900);
+  font-size: .7em;
+}
+
+.illusia-featured-list__date {
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  color: var(--fg-700);
+  white-space: nowrap;
+}
+
+/* ── 20. Recommendation Card Variant ── */
+
+/* No footer — !important overrides collection's display:flex and mobile restoration */
+.illusia-card--no-footer .illusia-card__footer {
+  display: none !important;
+}
+
+/* No cover stats on recommendations */
+.illusia-card--recommendation .illusia-card__cover-stats {
+  display: none;
+}
+
+/* External links list */
+.illusia-links-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-0);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.illusia-links-list__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: .42em var(--space-sm);
+  border-bottom: 1px solid var(--border-0);
+  transition: background var(--t-fast);
+  position: relative;
+}
+
+.illusia-links-list__item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--amber);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform var(--t-mid) var(--ease-expo);
+}
+
+.illusia-links-list__item:last-child {
+  border-bottom: none;
+}
+
+.illusia-links-list__item:hover {
+  background: hsl(var(--amber-free) / .03);
+}
+
+.illusia-links-list__item:hover::before {
+  transform: scaleY(1);
+}
+
+.illusia-links-list__left {
+  display: flex;
+  align-items: center;
+  gap: .4em;
+  min-width: 0;
+  flex: 1;
+}
+
+.illusia-links-list__icon {
+  color: var(--amber-dim);
+  font-size: .6em;
+  flex-shrink: 0;
+}
+
+.illusia-links-list__link {
+  font-size: var(--text-xs);
+  color: var(--amber-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color var(--t-fast);
+}
+
+.illusia-links-list__item:hover .illusia-links-list__link {
+  color: var(--amber);
+}
+
+/* ── 21. Reduced Motion ── */
 
 @media (prefers-reduced-motion: reduce) {
   .illusia-card {
@@ -1190,6 +1600,15 @@
   .illusia-chapter-list__item,
   .illusia-chapter-list__item::before,
   .illusia-chapter-list__link,
+  .illusia-featured-list__item,
+  .illusia-featured-list__item::before,
+  .illusia-featured-list__link,
+  .illusia-links-list__item,
+  .illusia-links-list__item::before,
+  .illusia-links-list__link,
+  .illusia-card__parent-story-row,
+  .illusia-card__parent-story-row::before,
+  .illusia-card__parent-story-link,
   .illusia-card__title-link,
   .illusia-card .card__popup-menu-toggle {
     transition-duration: 0.01ms !important;

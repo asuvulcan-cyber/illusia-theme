@@ -197,6 +197,9 @@ get_header();
 
         <?php if ( ! empty( $title ) ) : ?>
           <header class="illusia-stories__header">
+            <span class="illusia-stories__overline"><?php
+              esc_html_e( 'Arquivo Illusia', 'fictioneer' );
+            ?></span>
             <h1 class="illusia-stories__title"><?php echo esc_html( $title ); ?></h1>
           </header>
         <?php endif; ?>
@@ -206,6 +209,10 @@ get_header();
             <?php the_content(); ?>
           </section>
         <?php endif; ?>
+
+        <div class="illusia-stories__divider" aria-hidden="true">
+          <span class="illusia-stories__diamond"></span>
+        </div>
 
         <?php // ── Stats Panel ── ?>
 

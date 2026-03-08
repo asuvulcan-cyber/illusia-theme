@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Illusia Card — Redesign Ideas</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=Syne:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ── Reset ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    /* ── Illusia tokens (standalone) ── */
+    --void-0: hsl(270 60% 4%);
+    --void-1: hsl(270 25% 8%);
+    --void-2: hsl(270 15% 17%);
+    --void-3: hsl(270 16% 20%);
+    --void-4: hsl(270 14% 23.5%);
+
+    --ink-0: hsl(35 8% 93%);
+    --ink-1: hsl(35 7% 89%);
+    --ink-2: hsl(35 6% 85%);
+    --ink-3: hsl(35 5% 80.5%);
+    --ink-5: hsl(35 5% 71%);
+    --ink-6: hsl(35 4% 65%);
+    --ink-7: hsl(35 3% 61%);
+    --ink-8: hsl(35 3% 54%);
+    --ink-9: hsl(35 2% 49%);
+
+    --amber: hsl(37 73% 67%);
+    --amber-dim: hsl(37 43% 44%);
+    --amber-free: 37 73% 67%;
+    --amber-dim-free: 37 43% 44%;
+    --teal: hsl(170 50% 62%);
+    --teal-free: 170 50% 62%;
+    --crimson: hsl(0 58% 60%);
+    --sage: hsl(134 35% 61%);
+
+    --border-0: hsl(35 100% 91% / .04);
+    --border-1: hsl(35 100% 91% / .08);
+    --border-2: hsl(35 100% 91% / .13);
+    --border-amber: hsl(var(--amber-free) / .22);
+
+    --glass-bg: hsl(270 25% 8% / .7);
+
+    --ff-display: 'Playfair Display', Georgia, serif;
+    --ff-ui: 'Syne', sans-serif;
+    --ff-mono: 'Fira Code', monospace;
+
+    --r-xs: clamp(2px, .3vw, 3px);
+    --r-sm: clamp(3px, .5vw, 5px);
+    --r-md: clamp(6px, .9vw, 9px);
+    --r-lg: clamp(9px, 1.4vw, 14px);
+    --r-xl: clamp(12px, 1.8vw, 20px);
+
+    --space-2xs: clamp(.25rem, .5vw, .375rem);
+    --space-xs: clamp(.375rem, .75vw, .625rem);
+    --space-sm: clamp(.5rem, 1.2vw, .875rem);
+    --space-md: clamp(.875rem, 2vw, 1.25rem);
+
+    --text-2xs: clamp(.58rem, 1.1vw, .68rem);
+    --text-xs: clamp(.68rem, 1.3vw, .78rem);
+    --text-sm: clamp(.78rem, 1.5vw, .88rem);
+    --text-base: clamp(.88rem, 1.7vw, 1rem);
+    --text-lg: clamp(1.15rem, 2.4vw, 1.45rem);
+
+    --ease-expo: cubic-bezier(.16,1,.3,1);
+    --ease-std: cubic-bezier(.4,0,.2,1);
+    --t-fast: 110ms;
+    --t-mid: 240ms;
+    --t-slow: 420ms;
+  }
+
+  body {
+    font-family: var(--ff-ui);
+    background: var(--void-0);
+    color: var(--ink-2);
+    padding: clamp(1rem, 4vw, 2rem);
+    line-height: 1.5;
+  }
+
+  h1 {
+    font-family: var(--ff-display);
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--amber);
+    text-align: center;
+    margin-bottom: .5rem;
+  }
+
+  .page-subtitle {
+    text-align: center;
+    color: var(--ink-7);
+    font-size: var(--text-sm);
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-inline: auto;
+    line-height: 1.7;
+  }
+
+  .ideas-grid {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  /* ── Section labels ── */
+  .idea-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .idea-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .idea-number {
+    font-family: var(--ff-display);
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 900;
+    color: hsl(var(--amber-free) / .15);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .idea-title {
+    font-family: var(--ff-display);
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-weight: 700;
+    color: var(--ink-0);
+  }
+
+  .idea-desc {
+    font-size: var(--text-sm);
+    color: var(--ink-6);
+    max-width: 60ch;
+    line-height: 1.7;
+    padding-left: calc(clamp(1.8rem, 4vw, 2.5rem) + var(--space-sm));
+  }
+
+  /* ══════════════════════════════════════════════════════
+   * Shared card pieces
+   * ══════════════════════════════════════════════════════ */
+  .cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .cover-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .label {
+    font-family: var(--ff-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--amber-dim);
+  }
+
+  .title {
+    font-family: var(--ff-display);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ink-0);
+  }
+
+  .author {
+    font-family: var(--ff-ui);
+    font-size: var(--text-xs);
+    color: var(--ink-7);
+    font-style: italic;
+  }
+
+  .author a { color: var(--amber-dim); text-decoration: none; }
+
+  .excerpt {
+    font-size: var(--text-sm);
+    line-height: 1.7;
+    color: var(--ink-5);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .controls-btn {
+    width: clamp(26px, 3vw, 32px);
+    height: clamp(26px, 3vw, 32px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--border-1);
+    background: hsl(270 15% 13% / .5);
+    color: var(--ink-8);
+    font-size: var(--text-xs);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Chapter list shared */
+  .ch-list {
+    list-style: none;
+    border: 1px solid var(--border-1);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+
+  .ch-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xs);
+    padding: .45em var(--space-sm);
+    border-bottom: 1px solid var(--border-0);
+    font-size: var(--text-xs);
+    position: relative;
+    transition: background var(--t-fast) var(--ease-std);
+    cursor: pointer;
+  }
+
+  .ch-item:last-child { border-bottom: none; }
+
+  .ch-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--amber);
+    transform: scaleY(0);
+    transform-origin: center;
+    transition: transform var(--t-mid) var(--ease-expo);
+  }
+
+  .ch-item:hover { background: hsl(var(--amber-free) / .03); }
+  .ch-item:hover::before { transform: scaleY(1); }
+
+  .ch-left {
+    display: flex;
+    align-items: center;
+    gap: .4em;
+    color: var(--ink-5);
+    min-width: 0;
+    flex: 1;
+  }
+
+  .ch-icon { color: var(--amber-dim); font-size: .7em; flex-shrink: 0; }
+
+  .ch-link {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--ink-5);
+    text-decoration: none;
+    transition: color var(--t-fast);
+  }
+
+  .ch-item:hover .ch-link { color: var(--ink-0); }
+
+  .ch-right {
+    font-family: var(--ff-mono);
+    font-size: var(--text-2xs);
+    color: var(--ink-8);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .ch-new {
+    background: hsl(var(--amber-free) / .1);
+    color: var(--amber);
+    border: 1px solid hsl(var(--amber-free) / .2);
+    border-radius: var(--r-xs);
+    padding: 0 .4em;
+    font-size: var(--text-2xs);
+    font-weight: 500;
+  }
+
+  /* Taxonomies shared */
+  .tax-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--space-2xs);
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, black 0%, black 75%, transparent 100%);
+    mask-image: linear-gradient(to right, black 0%, black 75%, transparent 100%);
+  }
+
+  .tag {
+    font-family: var(--ff-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: .03em;
+    padding: .2em .55em;
+    border-radius: var(--r-xs);
+    border: 1px solid var(--border-1);
+    white-space: nowrap;
+    flex-shrink: 0;
+    color: var(--ink-5);
+  }
+
+  /* Footer shared */
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-family: var(--ff-mono);
+    font-size: var(--text-2xs);
+    color: var(--ink-8);
+    letter-spacing: .04em;
+  }
+
+  .card-badges {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+
+  .badge {
+    font-family: var(--ff-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: .05em;
+    padding: .25em .65em;
+    border-radius: var(--r-xs);
+    border: 1px solid transparent;
+    white-space: nowrap;
+    line-height: 1.5;
+  }
+
+  .badge-ongoing {
+    color: var(--teal);
+    border-color: hsl(var(--teal-free) / .3);
+    background: hsl(var(--teal-free) / .08);
+  }
+
+  .badge-rating {
+    font-weight: 700;
+    min-width: 1.8em;
+    text-align: center;
+    color: var(--amber);
+    background: hsl(var(--amber-free) / .1);
+    border-color: hsl(var(--amber-free) / .3);
+  }
+
+
+  /* ══════════════════════════════════════════════════════
+   *  IDEA 1 — "Book Display" (Cover-Driven Height)
+   *
+   *  A capa DITA a altura do card. Cover à esquerda
+   *  com aspect-ratio 3/4, conteúdo à direita se adapta.
+   *  height: fit-content no grid, cover-w maior (~30%).
+   *  Se o conteúdo for maior que a capa, ele é truncado.
+   * ══════════════════════════════════════════════════════ */
+  .card-1 {
+    border-radius: var(--r-xl);
+    border: 1px solid var(--border-1);
+    background: var(--glass-bg);
+    overflow: hidden;
+    position: relative;
+    transition: border-color var(--t-mid) var(--ease-std),
+                transform var(--t-mid) var(--ease-expo);
+  }
+
+  .card-1::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--amber-free) / .12), transparent);
+    z-index: 1;
+  }
+
+  .card-1:hover {
+    border-color: var(--border-amber);
+    transform: translateY(-2px);
+  }
+
+  .card-1 .body {
+    display: grid;
+    grid-template-columns: clamp(120px, 28%, 200px) 1fr;
+    /* Nenhuma row definida — a capa dita */
+  }
+
+  .card-1 .cover {
+    grid-row: 1 / -1;
+    position: relative;
+    overflow: hidden;
+    border-right: 1px solid var(--border-0);
+  }
+
+  .card-1 .cover-link {
+    display: block;
+    aspect-ratio: 3 / 4;
+  }
+
+  .card-1 .cover-img {
+    transition: transform var(--t-slow) var(--ease-expo);
+  }
+
+  .card-1:hover .cover-img {
+    transform: scale(1.04);
+  }
+
+  .card-1 .cover-overlay {
+    background: linear-gradient(to right, transparent 60%, hsl(270 15% 7% / .3) 100%);
+  }
+
+  .card-1 .content {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-sm);
+    gap: var(--space-xs);
+    /* Permite conteúdo fluir mas overflow hidden no card */
+    min-height: 0;
+  }
+
+  .card-1 .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-xs);
+  }
+
+  .card-1 .title-group { min-width: 0; }
+
+  .card-1 .excerpt { -webkit-line-clamp: 2; }
+
+  .card-1 .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xs);
+    border-top: 1px solid var(--border-0);
+    padding-top: var(--space-xs);
+    margin-top: auto;
+    flex-wrap: wrap;
+    row-gap: var(--space-2xs);
+  }
+
+
+  /* ══════════════════════════════════════════════════════
+   *  IDEA 2 — "Poster Stack" (Cover on top, content below)
+   *
+   *  A capa é o "poster" — full-width no topo com 3/4.
+   *  Conteúdo vive abaixo, como um sumário de livro.
+   *  Zero conflito de espaço — capa e conteúdo nunca
+   *  disputam a mesma row. Muito clean.
+   * ══════════════════════════════════════════════════════ */
+  .card-2 {
+    border-radius: var(--r-xl);
+    border: 1px solid var(--border-1);
+    background: var(--glass-bg);
+    overflow: hidden;
+    position: relative;
+    max-width: 380px;
+    transition: border-color var(--t-mid) var(--ease-std),
+                transform var(--t-mid) var(--ease-expo);
+  }
+
+  .card-2::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--amber-free) / .12), transparent);
+    z-index: 2;
+  }
+
+  .card-2:hover {
+    border-color: var(--border-amber);
+    transform: translateY(-2px);
+  }
+
+  .card-2 .cover {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-0);
+  }
+
+  .card-2 .cover-link {
+    display: block;
+    aspect-ratio: 3 / 4;
+    max-height: clamp(180px, 35vw, 280px);
+    overflow: hidden;
+  }
+
+  .card-2 .cover-img {
+    transition: transform var(--t-slow) var(--ease-expo);
+  }
+
+  .card-2:hover .cover-img {
+    transform: scale(1.04);
+  }
+
+  .card-2 .cover-overlay {
+    background: linear-gradient(
+      to bottom,
+      transparent 50%,
+      hsl(270 25% 8% / .6) 100%
+    );
+  }
+
+  /* Title overlapping the cover bottom */
+  .card-2 .cover-title {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    padding: var(--space-lg) var(--space-sm) var(--space-xs);
+    z-index: 1;
+  }
+
+  .card-2 .content {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-sm);
+    gap: var(--space-xs);
+  }
+
+  .card-2 .excerpt { -webkit-line-clamp: 2; }
+
+  .card-2 .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xs);
+    border-top: 1px solid var(--border-0);
+    padding-top: var(--space-xs);
+    flex-wrap: wrap;
+    row-gap: var(--space-2xs);
+  }
+
+  /* Poster cards grid (2-column layout for demo) */
+  .poster-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-md);
+  }
+
+
+  /* ══════════════════════════════════════════════════════
+   *  IDEA 3 — "Floating Cover" (Cover offset com depth)
+   *
+   *  A capa "flutua" sobre o card com shadow e offset,
+   *  como uma capa física de livro. O card tem padding
+   *  para acomodar. A capa é menor, com sombra dramática.
+   * ══════════════════════════════════════════════════════ */
+  .card-3 {
+    border-radius: var(--r-xl);
+    border: 1px solid var(--border-1);
+    background: var(--glass-bg);
+    overflow: visible; /* cover flutua fora */
+    position: relative;
+    transition: border-color var(--t-mid) var(--ease-std),
+                transform var(--t-mid) var(--ease-expo);
+  }
+
+  .card-3::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--amber-free) / .12), transparent);
+    z-index: 1;
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+  }
+
+  .card-3:hover {
+    border-color: var(--border-amber);
+    transform: translateY(-2px);
+  }
+
+  .card-3 .body {
+    display: grid;
+    grid-template-columns: clamp(100px, 22%, 160px) 1fr;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    /* O card tem padding, e a capa "escapa" com margin negativo */
+  }
+
+  .card-3 .cover {
+    grid-row: 1 / 4; /* spans header, middle, tax */
+    position: relative;
+    z-index: 2;
+    align-self: start;
+  }
+
+  .card-3 .cover-link {
+    display: block;
+    aspect-ratio: 3 / 4;
+    border-radius: var(--r-md);
+    overflow: hidden;
+    box-shadow:
+      0 4px 16px hsl(270 60% 4% / .5),
+      0 1px 3px hsl(270 60% 4% / .3);
+    border: 1px solid var(--border-2);
+    transition: box-shadow var(--t-mid) var(--ease-std),
+                transform var(--t-mid) var(--ease-expo);
+    /* Float effect: negative margin to "escape" card */
+    margin-top: calc(var(--space-sm) * -1.5);
+    margin-left: calc(var(--space-2xs) * -1);
+  }
+
+  .card-3:hover .cover-link {
+    box-shadow:
+      0 8px 32px hsl(270 60% 4% / .6),
+      0 2px 6px hsl(270 60% 4% / .3),
+      0 0 0 1px hsl(var(--amber-free) / .1);
+    transform: translateY(-2px);
+  }
+
+  .card-3 .cover-img {
+    transition: transform var(--t-slow) var(--ease-expo);
+  }
+
+  .card-3:hover .cover-img {
+    transform: scale(1.04);
+  }
+
+  .card-3 .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-xs);
+  }
+
+  .card-3 .title-group { min-width: 0; }
+
+  .card-3 .middle {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .card-3 .excerpt { -webkit-line-clamp: 2; }
+
+  .card-3 .footer {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xs);
+    border-top: 1px solid var(--border-0);
+    padding-top: var(--space-xs);
+    flex-wrap: wrap;
+    row-gap: var(--space-2xs);
+  }
+
+
+  /* ══════════════════════════════════════════════════════
+   *  IDEA 4 — "Cinematic" (Cover background + glass content)
+   *
+   *  A capa é o fundo inteiro do card (blur + overlay),
+   *  com a imagem 3/4 nítida no lado esquerdo e conteúdo
+   *  em painel glass sobre o fundo. Dramático, cinemático.
+   * ══════════════════════════════════════════════════════ */
+  .card-4 {
+    border-radius: var(--r-xl);
+    border: 1px solid var(--border-1);
+    overflow: hidden;
+    position: relative;
+    transition: border-color var(--t-mid) var(--ease-std),
+                transform var(--t-mid) var(--ease-expo);
+  }
+
+  .card-4::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--amber-free) / .12), transparent);
+    z-index: 3;
+  }
+
+  .card-4:hover {
+    border-color: var(--border-amber);
+    transform: translateY(-2px);
+  }
+
+  /* Background blurred cover */
+  .card-4 .bg-cover {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .card-4 .bg-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(20px) brightness(.4) saturate(.7);
+    transform: scale(1.1); /* prevent blur edges */
+  }
+
+  .card-4 .bg-cover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      hsl(270 25% 8% / .3) 0%,
+      hsl(270 25% 8% / .7) 100%
+    );
+  }
+
+  .card-4 .body {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: clamp(110px, 25%, 180px) 1fr;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+  }
+
+  .card-4 .cover {
+    grid-row: 1 / 4;
+    position: relative;
+    align-self: start;
+  }
+
+  .card-4 .cover-link {
+    display: block;
+    aspect-ratio: 3 / 4;
+    border-radius: var(--r-md);
+    overflow: hidden;
+    box-shadow: 0 4px 24px hsl(270 60% 4% / .5);
+    border: 1px solid hsl(35 100% 91% / .1);
+  }
+
+  .card-4 .cover-img {
+    transition: transform var(--t-slow) var(--ease-expo);
+  }
+
+  .card-4:hover .cover-img {
+    transform: scale(1.04);
+  }
+
+  .card-4 .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-xs);
+  }
+
+  .card-4 .title-group { min-width: 0; }
+
+  /* Content panel with glass effect */
+  .card-4 .content-glass {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .card-4 .excerpt { -webkit-line-clamp: 2; }
+
+  .card-4 .footer {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xs);
+    border-top: 1px solid hsl(35 100% 91% / .06);
+    padding-top: var(--space-xs);
+    flex-wrap: wrap;
+    row-gap: var(--space-2xs);
+  }
+
+
+  /* ══════════════════════════════════════════════════════
+   *  IDEA 5 — "Compact Shelf" (Cover-dictated, chapters
+   *  como expand)
+   *
+   *  A altura do card é 100% ditada pela capa 3/4.
+   *  Conteúdo à direita é compacto: header + excerpt.
+   *  Chapters vivem num <details> expansível.
+   *  Zero blank space. O card é tão alto quanto a capa.
+   * ══════════════════════════════════════════════════════ */
+  .card-5 {
+    border-radius: var(--r-xl);
+    border: 1px solid var(--border-1);
+    background: var(--glass-bg);
+    overflow: hidden;
+    position: relative;
+    transition: border-color var(--t-mid) var(--ease-std),
+                transform var(--t-mid) var(--ease-expo);
+  }
+
+  .card-5::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--amber-free) / .12), transparent);
+    z-index: 1;
+  }
+
+  .card-5:hover {
+    border-color: var(--border-amber);
+    transform: translateY(-2px);
+  }
+
+  .card-5 .body {
+    display: grid;
+    grid-template-columns: clamp(100px, 24%, 170px) 1fr;
+    /* Cover dita, conteúdo se adapta */
+  }
+
+  .card-5 .cover {
+    grid-row: 1 / -1;
+    position: relative;
+    overflow: hidden;
+    border-right: 1px solid var(--border-0);
+  }
+
+  .card-5 .cover-link {
+    display: block;
+    aspect-ratio: 3 / 4;
+  }
+
+  .card-5 .cover-img {
+    transition: transform var(--t-slow) var(--ease-expo);
+  }
+
+  .card-5:hover .cover-img {
+    transform: scale(1.04);
+  }
+
+  .card-5 .cover-overlay {
+    background: linear-gradient(to right, transparent 60%, hsl(270 15% 7% / .2) 100%);
+  }
+
+  .card-5 .content {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-sm);
+    gap: var(--space-xs);
+    min-height: 0;
+  }
+
+  .card-5 .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-xs);
+  }
+
+  .card-5 .title-group { min-width: 0; }
+
+  .card-5 .excerpt { -webkit-line-clamp: 3; }
+
+  /* Expandable chapters */
+  .card-5 .chapters-expand {
+    border: none;
+    background: none;
+    padding: 0;
+  }
+
+  .card-5 .chapters-expand summary {
+    font-family: var(--ff-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--amber-dim);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: .4em;
+    padding: var(--space-2xs) 0;
+    list-style: none;
+    transition: color var(--t-fast);
+  }
+
+  .card-5 .chapters-expand summary::-webkit-details-marker { display: none; }
+
+  .card-5 .chapters-expand summary::before {
+    content: '›';
+    font-size: 1.1em;
+    transition: transform var(--t-mid) var(--ease-expo);
+    display: inline-block;
+  }
+
+  .card-5 .chapters-expand[open] summary::before {
+    transform: rotate(90deg);
+  }
+
+  .card-5 .chapters-expand summary:hover { color: var(--amber); }
+
+  .card-5 .chapters-expand .ch-list {
+    margin-top: var(--space-2xs);
+  }
+
+  .card-5 .footer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+    row-gap: var(--space-2xs);
+    margin-top: auto;
+    border-top: 1px solid var(--border-0);
+    padding-top: var(--space-xs);
+  }
+
+
+  /* ══════════════════════════════════════════════════════
+   *  IDEA 6 — "Observatory Panel" (Asymmetric split)
+   *
+   *  Inspirado em painéis de observatório. Cover à esquerda
+   *  com bordas internas e "moldura". Dados organizados
+   *  em grid de instrumentos à direita. Chapters como
+   *  "readings". Mais técnico/editorial.
+   * ══════════════════════════════════════════════════════ */
+  .card-6 {
+    border-radius: var(--r-xl);
+    border: 1px solid var(--border-1);
+    background: var(--glass-bg);
+    overflow: hidden;
+    position: relative;
+    transition: border-color var(--t-mid) var(--ease-std),
+                transform var(--t-mid) var(--ease-expo);
+  }
+
+  .card-6::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--amber-free) / .12), transparent);
+    z-index: 1;
+  }
+
+  .card-6:hover {
+    border-color: var(--border-amber);
+    transform: translateY(-2px);
+  }
+
+  .card-6 .body {
+    display: grid;
+    grid-template-columns: clamp(110px, 26%, 180px) 1fr;
+  }
+
+  .card-6 .cover-frame {
+    grid-row: 1 / -1;
+    padding: var(--space-xs);
+    border-right: 1px solid var(--border-0);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    background: hsl(270 25% 6% / .5);
+  }
+
+  .card-6 .cover-link {
+    display: block;
+    aspect-ratio: 3 / 4;
+    border-radius: var(--r-md);
+    overflow: hidden;
+    border: 1px solid var(--border-1);
+    position: relative;
+  }
+
+  .card-6 .cover-img {
+    transition: transform var(--t-slow) var(--ease-expo);
+  }
+
+  .card-6:hover .cover-img {
+    transform: scale(1.04);
+  }
+
+  /* Mini stats below cover, inside frame */
+  .card-6 .cover-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    border-radius: var(--r-sm);
+    overflow: hidden;
+    border: 1px solid var(--border-0);
+  }
+
+  .card-6 .stat-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--space-2xs);
+    background: hsl(270 15% 10% / .5);
+    gap: 1px;
+  }
+
+  .card-6 .stat-value {
+    font-family: var(--ff-display);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--ink-0);
+    line-height: 1;
+  }
+
+  .card-6 .stat-label {
+    font-family: var(--ff-mono);
+    font-size: clamp(.5rem, .9vw, .58rem);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--ink-8);
+  }
+
+  .card-6 .content {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-sm);
+    gap: var(--space-xs);
+  }
+
+  .card-6 .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-xs);
+  }
+
+  .card-6 .title-group { min-width: 0; }
+
+  .card-6 .excerpt { -webkit-line-clamp: 2; }
+
+  .card-6 .readings-label {
+    font-family: var(--ff-mono);
+    font-size: var(--text-2xs);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--amber-dim);
+    display: flex;
+    align-items: center;
+    gap: .5em;
+  }
+
+  .card-6 .readings-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-0);
+  }
+
+  .card-6 .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xs);
+    border-top: 1px solid var(--border-0);
+    padding-top: var(--space-xs);
+    margin-top: auto;
+    flex-wrap: wrap;
+    row-gap: var(--space-2xs);
+  }
+
+  /* ── Grain overlay (page-level) ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: .35;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  }
+
+</style>
+</head>
+<body>
+
+<h1>Illusia Story Card — Redesign Ideas</h1>
+<p class="page-subtitle">
+  6 abordagens criativas que preservam a capa 3/4 inteira.
+  Redimensione a janela para ver a responsividade.
+</p>
+
+<div class="ideas-grid">
+
+  <!-- ═══════════════════════════════════════════
+       IDEA 1: Book Display
+       ═══════════════════════════════════════════ -->
+  <section class="idea-section">
+    <div class="idea-header">
+      <span class="idea-number">01</span>
+      <div>
+        <h2 class="idea-title">Book Display</h2>
+      </div>
+    </div>
+    <p class="idea-desc">
+      A capa DITA a altura do card. Cover ocupa ~28% da largura com aspect-ratio 3/4.
+      Conteúdo se adapta ao espaço restante. Se o conteúdo for mais alto que a capa,
+      o card cresce naturalmente — mas o conteúdo é compacto o suficiente para quase
+      nunca ultrapassar. Zero blank space.
+    </p>
+
+    <div class="card-1">
+      <div class="body">
+        <div class="cover">
+          <a class="cover-link" href="#">
+            <img class="cover-img" src="https://picsum.photos/seed/guardiao/300/400" alt="Cover">
+            <div class="cover-overlay"></div>
+          </a>
+        </div>
+
+        <div class="content">
+          <header class="header">
+            <div class="title-group">
+              <div class="label">Story</div>
+              <h3 class="title">Guardiao</h3>
+              <p class="author">por <a href="#">Israel Ribeiro</a></p>
+            </div>
+            <span class="controls-btn">&#x22EE;</span>
+          </header>
+
+          <p class="excerpt">O norte de Kaer-Thal congela sob o silencio da Barreira. A muralha invisivel que separa o mundo dos homens das feras que devoram tudo o que tocam.</p>
+
+          <ol class="ch-list">
+            <li class="ch-item">
+              <span class="ch-left">
+                <span class="ch-icon">&#x203A;</span>
+                <a class="ch-link" href="#">Cap 125 — "Grilhoes IV"</a>
+              </span>
+              <span class="ch-right">2,1K &middot; ha 5 dias</span>
+            </li>
+            <li class="ch-item">
+              <span class="ch-left">
+                <span class="ch-icon">&#x203A;</span>
+                <a class="ch-link" href="#">Cap 126 — "Alto Lirio"</a>
+              </span>
+              <span class="ch-right">1,4K &middot; ha 2 dias</span>
+            </li>
+            <li class="ch-item">
+              <span class="ch-left">
+                <span class="ch-icon">&#x203A;</span>
+                <a class="ch-link" href="#">Cap 127 — "Culpados"</a>
+              </span>
+              <span class="ch-right"><span class="ch-new">Novo</span></span>
+            </li>
+          </ol>
+
+          <div class="tax-row">
+            <span class="tag">Brasileira</span>
+            <span class="tag">Acao</span>
+            <span class="tag">Aventura</span>
+            <span class="tag">Drama</span>
+            <span class="tag">Ficcao Cientifica</span>
+          </div>
+
+          <footer class="footer">
+            <div class="card-meta">
+              <span>&#x2261; 127</span>
+              <span>T 185,1K</span>
+              <span>&#x25F7; ha 15 min</span>
+            </div>
+            <div class="card-badges">
+              <span class="badge badge-ongoing">&#x25CF; Ativa</span>
+              <span class="badge badge-rating">16</span>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       IDEA 2: Poster Stack
+       ═══════════════════════════════════════════ -->
+  <section class="idea-section">
+    <div class="idea-header">
+      <span class="idea-number">02</span>
+      <div>
+        <h2 class="idea-title">Poster Stack</h2>
+      </div>
+    </div>
+    <p class="idea-desc">
+      Capa como poster no topo (3/4 com max-height), titulo sobreposto na base da capa
+      com gradient fade. Conteudo abaixo como sumario. Funciona num grid de 2 colunas.
+      A capa NUNCA e recortada — sempre 3/4 visivel.
+    </p>
+
+    <div class="poster-grid">
+      <div class="card-2">
+        <div class="cover">
+          <a class="cover-link" href="#">
+            <img class="cover-img" src="https://picsum.photos/seed/guardiao/300/400" alt="Cover">
+            <div class="cover-overlay"></div>
+          </a>
+          <div class="cover-title">
+            <div class="label" style="color: hsl(37 73% 67% / .8);">Story</div>
+            <h3 class="title">Guardiao</h3>
+            <p class="author">por <a href="#" style="color: hsl(37 73% 67% / .7);">Israel Ribeiro</a></p>
+          </div>
+        </div>
+
+        <div class="content">
+          <p class="excerpt">O norte de Kaer-Thal congela sob o silencio da Barreira. A muralha invisivel que separa o mundo dos homens das feras.</p>
+
+          <ol class="ch-list">
+            <li class="ch-item">
+              <span class="ch-left">
+                <span class="ch-icon">&#x203A;</span>
+                <a class="ch-link" href="#">Cap 127 — "Culpados"</a>
+              </span>
+              <span class="ch-right"><span class="ch-new">Novo</span></span>
+            </li>
+            <li class="ch-item">
+              <span class="ch-left">
+                <span class="ch-icon">&#x203A;</span>
+                <a class="ch-link" href="#">Cap 126 — "Alto Lirio"</a>
+              </span>
+              <span class="ch-right">1,4K &middot; ha 2 dias</span>
+            </li>
+          </ol>
+
+          <div class="tax-row">
+            <span class="tag">Brasileira</span>
+            <span class="tag">Acao</span>
+            <span class="tag">Aventura</span>
+            <span class="tag">Drama</span>
+          </div>
+
+          <footer class="footer">
+            <div class="card-meta">
+              <span>&#x2261; 127</span>
+              <span>T 185,1K</span>
+            </div>
+            <div class="card-badges">
+              <span class="badge badge-ongoing">&#x25CF; Ativa</span>
+              <span class="badge badge-rating">16</span>
+            </div>
+          </footer>
+        </div>
+      </div>
+
+      <div class="card-2">
+        <div class="cover">
+          <a class="cover-link" href="#">
+            <img class="cover-img" src="https://picsum.photos/seed/nexus/300/400" alt="Cover">
+            <div class="cover-overlay"></div>
+          </a>
+          <div class="cover-title">
+            <div class="label" style="color: hsl(37 73% 67% / .8);">Story</div>
+            <h3 class="title">Dark Nexus</h3>
+            <p class="author">por <a href="#" style="color: hsl(37 73% 67% / .7);">Clery</a></p>
+          </div>
+        </div>
+
+        <div class="content">
+          <p class="excerpt">Em um mundo onde parte da humanidade desperta poderes ligados a alma, Lance desperta um poder raro e perigoso.</p>
+
+          <ol class="ch-list">
+            <li class="ch-item">
+              <span class="ch-left">
+                <span class="ch-icon">&#x203A;</span>
+                <a class="ch-link" href="#">Cap 43 — "Fronteira"</a>
+              </span>
+              <span class="ch-right"><span class="ch-new">Novo</span></span>
+            </li>
+          </ol>
+
+          <div class="tax-row">
+            <span class="tag">Acao</span>
+            <span class="tag">Superpoderes</span>
+            <span class="tag">Drama</span>
+          </div>
+
+          <footer class="footer">
+            <div class="card-meta">
+              <span>&#x2261; 43</span>
+              <span>T 98,2K</span>
+            </div>
+            <div class="card-badges">
+              <span class="badge badge-ongoing">&#x25CF; Ativa</span>
+              <span class="badge badge-rating">16</span>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       IDEA 3: Floating Cover
+       ═══════════════════════════════════════════ -->
+  <section class="idea-section">
+    <div class="idea-header">
+      <span class="idea-number">03</span>
+      <div>
+        <h2 class="idea-title">Floating Cover</h2>
+      </div>
+    </div>
+    <p class="idea-desc">
+      A capa "flutua" sobre o card com sombra dramatica e margem negativa,
+      como uma capa fisica de livro apoiada no painel. Cria profundidade e
+      presenca fisica. A capa e menor e tem borda propria.
+    </p>
+
+    <div class="card-3">
+      <div class="body">
+        <div class="cover">
+          <a class="cover-link" href="#">
+            <img class="cover-img" src="https://picsum.photos/seed/guardiao/300/400" alt="Cover">
+          </a>
+        </div>
+
+        <header class="header">
+          <div class="title-group">
+            <div class="label">Story</div>
+            <h3 class="title">Guardiao</h3>
+            <p class="author">por <a href="#">Israel Ribeiro</a></p>
+          </div>
+          <span class="controls-btn">&#x22EE;</span>
+        </header>
+
+        <div class="middle">
+          <p class="excerpt">O norte de Kaer-Thal congela sob o silencio da Barreira. A muralha invisivel que separa o mundo dos homens das feras que devoram tudo o que tocam.</p>
+
+          <ol class="ch-list">
+            <li class="ch-item">
+              <span class="ch-left">
+                <span class="ch-icon">&#x203A;</span>
+                <a class="ch-link" href="#">Cap 126 — "Alto Lirio"</a>
+              </span>
+              <span class="ch-right">1,4K &middot; ha 2 dias</span>
+            </li>
+            <li class="ch-item">
+              <span class="ch-left">
+                <span class="ch-icon">&#x203A;</span>
+                <a class="ch-link" href="#">Cap 127 — "Culpados"</a>
+              </span>
+              <span class="ch-right"><span class="ch-new">Novo</span></span>
+            </li>
+          </ol>
+
+          <div class="tax-row">
+            <span class="tag">Brasileira</span>
+            <span class="tag">Acao</span>
+            <span class="tag">Aventura</span>
+            <span class="tag">Drama</span>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <div class="card-meta">
+            <span>&#x2261; 127</span>
+            <span>T 185,1K</span>
+            <span>&#x25F7; ha 15 min</span>
+            <span>&#x25CF; 107</span>
+          </div>
+          <div class="card-badges">
+            <span class="badge badge-ongoing">&#x25CF; Ativa</span>
+            <span class="badge badge-rating">16</span>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       IDEA 4: Cinematic
+       ═══════════════════════════════════════════ -->
+  <section class="idea-section">
+    <div class="idea-header">
+      <span class="idea-number">04</span>
+      <div>
+        <h2 class="idea-title">Cinematic</h2>
+      </div>
+    </div>
+    <p class="idea-desc">
+      A capa aparece duas vezes: blur no fundo inteiro do card (atmosfera) +
+      nitida 3/4 no lado esquerdo. Conteudo flui sobre o fundo cinematico.
+      Dramatico. Cada card tem sua propria "cena".
+    </p>
+
+    <div class="card-4">
+      <div class="bg-cover">
+        <img src="https://picsum.photos/seed/guardiao/300/400" alt="">
+      </div>
+
+      <div class="body">
+        <div class="cover">
+          <a class="cover-link" href="#">
+            <img class="cover-img" src="https://picsum.photos/seed/guardiao/300/400" alt="Cover">
+          </a>
+        </div>
+
+        <header class="header">
+          <div class="title-group">
+            <div class="label">Story</div>
+            <h3 class="title">Guardiao</h3>
+            <p class="author">por <a href="#">Israel Ribeiro</a></p>
+          </div>
+          <span class="controls-btn">&#x22EE;</span>
+        </header>
+
+        <div class="content-glass">
+          <p class="excerpt">O norte de Kaer-Thal congela sob o silencio da Barreira. A muralha invisivel que separa o mundo dos homens das feras que devoram tudo.</p>
+
+          <ol class="ch-list" style="background: hsl(270 15% 10% / .3); border-color: hsl(35 100% 91% / .06);">
+            <li class="ch-item">
+              <span class="ch-left">
+                <span class="ch-icon">&#x203A;</span>
+                <a class="ch-link" href="#">Cap 126 — "Alto Lirio"</a>
+              </span>
+              <span class="ch-right">1,4K &middot; ha 2 dias</span>
+            </li>
+            <li class="ch-item">
+              <span class="ch-left">
+                <span class="ch-icon">&#x203A;</span>
+                <a class="ch-link" href="#">Cap 127 — "Culpados"</a>
+              </span>
+              <span class="ch-right"><span class="ch-new">Novo</span></span>
+            </li>
+          </ol>
+
+          <div class="tax-row">
+            <span class="tag" style="border-color: hsl(35 100% 91% / .06);">Brasileira</span>
+            <span class="tag" style="border-color: hsl(35 100% 91% / .06);">Acao</span>
+            <span class="tag" style="border-color: hsl(35 100% 91% / .06);">Aventura</span>
+            <span class="tag" style="border-color: hsl(35 100% 91% / .06);">Drama</span>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <div class="card-meta">
+            <span>&#x2261; 127</span>
+            <span>T 185,1K</span>
+            <span>&#x25F7; ha 15 min</span>
+          </div>
+          <div class="card-badges">
+            <span class="badge badge-ongoing">&#x25CF; Ativa</span>
+            <span class="badge badge-rating">16</span>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       IDEA 5: Compact Shelf
+       ═══════════════════════════════════════════ -->
+  <section class="idea-section">
+    <div class="idea-header">
+      <span class="idea-number">05</span>
+      <div>
+        <h2 class="idea-title">Compact Shelf</h2>
+      </div>
+    </div>
+    <p class="idea-desc">
+      A capa dita a altura. Conteudo e compacto: header + excerpt + tags.
+      Os capitulos vivem num &lt;details&gt; expansivel — so aparecem
+      quando o usuario quer. Card fino e elegante. Perfeito para listas longas.
+    </p>
+
+    <div class="card-5">
+      <div class="body">
+        <div class="cover">
+          <a class="cover-link" href="#">
+            <img class="cover-img" src="https://picsum.photos/seed/guardiao/300/400" alt="Cover">
+            <div class="cover-overlay"></div>
+          </a>
+        </div>
+
+        <div class="content">
+          <header class="header">
+            <div class="title-group">
+              <div class="label">Story</div>
+              <h3 class="title">Guardiao</h3>
+              <p class="author">por <a href="#">Israel Ribeiro</a></p>
+            </div>
+            <span class="controls-btn">&#x22EE;</span>
+          </header>
+
+          <p class="excerpt">O norte de Kaer-Thal congela sob o silencio da Barreira. A muralha invisivel que separa o mundo dos homens das feras que devoram tudo o que tocam.</p>
+
+          <details class="chapters-expand">
+            <summary>3 capitulos recentes</summary>
+            <ol class="ch-list">
+              <li class="ch-item">
+                <span class="ch-left">
+                  <span class="ch-icon">&#x203A;</span>
+                  <a class="ch-link" href="#">Cap 125 — "Grilhoes IV"</a>
+                </span>
+                <span class="ch-right">2,1K &middot; ha 5 dias</span>
+              </li>
+              <li class="ch-item">
+                <span class="ch-left">
+                  <span class="ch-icon">&#x203A;</span>
+                  <a class="ch-link" href="#">Cap 126 — "Alto Lirio"</a>
+                </span>
+                <span class="ch-right">1,4K &middot; ha 2 dias</span>
+              </li>
+              <li class="ch-item">
+                <span class="ch-left">
+                  <span class="ch-icon">&#x203A;</span>
+                  <a class="ch-link" href="#">Cap 127 — "Culpados"</a>
+                </span>
+                <span class="ch-right"><span class="ch-new">Novo</span></span>
+              </li>
+            </ol>
+          </details>
+
+          <div class="tax-row">
+            <span class="tag">Brasileira</span>
+            <span class="tag">Acao</span>
+            <span class="tag">Aventura</span>
+            <span class="tag">Drama</span>
+            <span class="tag">Ficcao Cientifica</span>
+          </div>
+
+          <div class="footer-row">
+            <div class="card-meta">
+              <span>&#x2261; 127</span>
+              <span>T 185,1K</span>
+              <span>&#x25F7; ha 15 min</span>
+            </div>
+            <div class="card-badges">
+              <span class="badge badge-ongoing">&#x25CF; Ativa</span>
+              <span class="badge badge-rating">16</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       IDEA 6: Observatory Panel
+       ═══════════════════════════════════════════ -->
+  <section class="idea-section">
+    <div class="idea-header">
+      <span class="idea-number">06</span>
+      <div>
+        <h2 class="idea-title">Observatory Panel</h2>
+      </div>
+    </div>
+    <p class="idea-desc">
+      Inspirado no conceito "Dark Editorial Observatory" do design direction.
+      A capa vive em uma "moldura" propria com mini stats abaixo (como instrumentos).
+      Capitulos sao "readings". A capa + stats ditam a altura. Tecnico e editorial.
+    </p>
+
+    <div class="card-6">
+      <div class="body">
+        <div class="cover-frame">
+          <a class="cover-link" href="#">
+            <img class="cover-img" src="https://picsum.photos/seed/guardiao/300/400" alt="Cover">
+          </a>
+
+          <div class="cover-stats">
+            <div class="stat-cell">
+              <span class="stat-value">127</span>
+              <span class="stat-label">caps</span>
+            </div>
+            <div class="stat-cell">
+              <span class="stat-value">185K</span>
+              <span class="stat-label">palavras</span>
+            </div>
+            <div class="stat-cell">
+              <span class="stat-value">107</span>
+              <span class="stat-label">follows</span>
+            </div>
+            <div class="stat-cell">
+              <span class="stat-value" style="color: var(--teal);">&#x25CF;</span>
+              <span class="stat-label">ativa</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="content">
+          <header class="header">
+            <div class="title-group">
+              <div class="label">Story</div>
+              <h3 class="title">Guardiao</h3>
+              <p class="author">por <a href="#">Israel Ribeiro</a></p>
+            </div>
+            <span class="controls-btn">&#x22EE;</span>
+          </header>
+
+          <p class="excerpt">O norte de Kaer-Thal congela sob o silencio da Barreira. A muralha invisivel que separa o mundo dos homens das feras que devoram tudo o que tocam.</p>
+
+          <div>
+            <div class="readings-label">Capitulos Recentes</div>
+          </div>
+
+          <ol class="ch-list">
+            <li class="ch-item">
+              <span class="ch-left">
+                <span class="ch-icon">&#x203A;</span>
+                <a class="ch-link" href="#">Cap 125 — "Grilhoes IV"</a>
+              </span>
+              <span class="ch-right">2,1K &middot; ha 5 dias</span>
+            </li>
+            <li class="ch-item">
+              <span class="ch-left">
+                <span class="ch-icon">&#x203A;</span>
+                <a class="ch-link" href="#">Cap 126 — "Alto Lirio"</a>
+              </span>
+              <span class="ch-right">1,4K &middot; ha 2 dias</span>
+            </li>
+            <li class="ch-item">
+              <span class="ch-left">
+                <span class="ch-icon">&#x203A;</span>
+                <a class="ch-link" href="#">Cap 127 — "Culpados"</a>
+              </span>
+              <span class="ch-right"><span class="ch-new">Novo</span></span>
+            </li>
+          </ol>
+
+          <div class="tax-row">
+            <span class="tag">Brasileira</span>
+            <span class="tag">Acao</span>
+            <span class="tag">Aventura</span>
+            <span class="tag">Drama</span>
+            <span class="tag">Ficcao Cientifica</span>
+          </div>
+
+          <footer class="footer">
+            <div class="card-meta">
+              <span>&#x25F7; ha 15 min</span>
+              <span>&#x2606; 4.8</span>
+            </div>
+            <div class="card-badges">
+              <span class="badge badge-rating">16</span>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

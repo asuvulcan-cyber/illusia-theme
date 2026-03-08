@@ -4,7 +4,7 @@
 // CONSTANTS
 // =============================================================================
 
-define( 'CHILD_VERSION', '1.7.0' );
+define( 'CHILD_VERSION', '1.10.4' );
 define( 'CHILD_NAME', 'Illusia Theme' );
 
 // =============================================================================
@@ -57,6 +57,14 @@ function illusia_enqueue_styles_and_scripts(): void {
     CHILD_VERSION
   );
 
+  // Page style: Illusia Frame (moldura decorativa global)
+  wp_enqueue_style(
+    'illusia-page-style-frame',
+    get_stylesheet_directory_uri() . '/css/illusia-page-style-frame.css',
+    ['illusia-properties'],
+    CHILD_VERSION
+  );
+
   // Componentes: stories page (archive) — só na página /stories/
   if ( is_page_template( 'stories.php' ) ) {
     wp_enqueue_style(
@@ -66,8 +74,46 @@ function illusia_enqueue_styles_and_scripts(): void {
       CHILD_VERSION
     );
   }
+
+  // Componentes: collections page (archive) — só na página /collections/
+  if ( is_page_template( 'collections.php' ) ) {
+    wp_enqueue_style(
+      'illusia-collections',
+      get_stylesheet_directory_uri() . '/css/components/illusia-collections.css',
+      ['illusia-properties', 'illusia-cards'],
+      CHILD_VERSION
+    );
+  }
 }
 add_action( 'wp_enqueue_scripts', 'illusia_enqueue_styles_and_scripts', 99 );
+
+/**
+ * Add "Illusia Frame" to the Customizer Page Style dropdown.
+ *
+ * Adds a decorative border + amber corner ornament option that
+ * applies globally to `.main__wrapper` when selected.
+ *
+ * @since 1.10.1
+ *
+ * @param array $styles Existing page style choices.
+ * @return array Modified choices with Illusia Frame added.
+ */
+function illusia_add_page_styles( array $styles ): array {
+  // Insert before 'none' (last option) for logical ordering
+  $position = array_search( 'none', array_keys( $styles ) );
+
+  if ( $position !== false ) {
+    $before = array_slice( $styles, 0, $position, true );
+    $after  = array_slice( $styles, $position, null, true );
+
+    return $before + ['illusia-frame' => _x( 'Illusia Frame', 'Customizer page style option.', 'fictioneer' )] + $after;
+  }
+
+  $styles['illusia-frame'] = _x( 'Illusia Frame', 'Customizer page style option.', 'fictioneer' );
+
+  return $styles;
+}
+add_filter( 'fictioneer_filter_customizer_page_style', 'illusia_add_page_styles' );
 
 /**
  * Add or remove parent filters and actions on the frontend
