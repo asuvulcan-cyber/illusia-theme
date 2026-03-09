@@ -6,6 +6,54 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.11.2] - 2026-03-08
+
+### Fixed
+- `js/illusia-archive-cloud.js` — Detecção de overflow corrigida: agora aplica `._overflowing` primeiro para ativar o `max-height`, depois compara `scrollHeight > clientHeight`; antes verificava sem constraint (sempre iguais, toggle nunca aparecia)
+- `css/components/illusia-archives.css` — max-height reduzido de 10rem para 6rem (~2-3 linhas de pills); mask fade ajustado de 2.5rem para 1.5rem
+- 6 templates de taxonomia — `hide_empty => true` adicionado ao `wp_tag_cloud()` para excluir termos com 0 itens
+
+## [1.11.1] - 2026-03-08
+
+### Added
+- `js/illusia-archive-cloud.js` — Script de progressive enhancement para tax cloud colapsável: detecta overflow do container, adiciona classe `._overflowing` com max-height + mask-image fade, botão toggle "Ver todos" / "Recolher" com chevron CSS animado, scroll-into-view ao recolher
+
+### Changed
+- `css/components/illusia-archives.css` — Tax cloud refatorado: layout flex movido para `.illusia-archive__cloud-items` wrapper; estados `._overflowing` (max-height 10rem + mask gradient) e `._expanded`; botão toggle mono com chevron rotativo; light mode e reduced motion para toggle
+- 6 templates de taxonomia — Cloud envolvido em `<div class="illusia-archive__cloud-items">`, botão toggle adicionado com `hidden` (revelado pelo JS)
+- `functions.php` — Enqueue condicional de `illusia-archive-cloud.js` em taxonomy archives; versão bumped para 1.11.1
+
+## [1.11.0] - 2026-03-08
+
+### Added
+- `chapters.php` — Template override da página /chapters/ do Fictioneer; query logic espelhada do pai com markup Illusia; sort UI do pai preservada via chamada direta a `fictioneer_sort_order_filter_interface`; layout single column para cards; paginação estilizada
+- `recommendations.php` — Template override da página /recommendations/ do Fictioneer; mesma estrutura que chapters
+- `partials/_archive-loop.php` — Override do archive loop do Fictioneer; cards tipados via `fictioneer_echo_card()` com staggered entry animation; paginação Illusia; sort UI preservada via hook `fictioneer_archive_loop_before`
+- `taxonomy-fcn_genre.php` — Archive de gêneros com header semântico (overline teal), counter, descrição, divider diamante, tax cloud reimaginado como fichas de referência cruzada
+- `taxonomy-fcn_fandom.php` — Archive de fandoms (overline violet), mesma estrutura
+- `taxonomy-fcn_character.php` — Archive de personagens (overline amber), mesma estrutura
+- `taxonomy-fcn_content_warning.php` — Archive de avisos de conteúdo (overline crimson), mesma estrutura
+- `category.php` — Archive de categorias (overline neutra, com parent hierárquico)
+- `tag.php` — Archive de tags (overline neutra)
+- `css/components/illusia-list-pages.css` — CSS base unificado para todas as list pages e archives:
+  - Page header com overline mono e shimmer line âmbar
+  - Sort UI "Observatory Instrument Panel": micro-label, botões glass, popups blur
+  - Card list flex column com staggered fade-in (`calc(--i * 60ms)`, até 8)
+  - Empty state "Silent Observatory" com borda dashed e tipografia mono
+  - Paginação "Observatory Page Dial" com mono numbers e amber glow no current
+  - Light mode, responsive (900px, 640px, 400px), reduced motion
+- `css/components/illusia-archives.css` — CSS "The Catalog Index" para taxonomy archives:
+  - Header com overline semântica colorida por taxonomia (teal/violet/amber/crimson/neutral)
+  - Título em Playfair, parent term, counter badge com borda semântica
+  - Descrição editorial em Syne italic
+  - Divider diamante com linhas convergentes na cor da taxonomia
+  - Tax cloud reimaginado: pills mono uniformes com barra lateral `scaleY` no hover (regra #8), cores semânticas por taxonomia
+  - Light mode com variantes -dim, responsive, reduced motion
+
+### Changed
+- `functions.php` — Enqueue condicional de `illusia-list-pages.css` (chapters + recommendations + archives) e `illusia-archives.css` (apenas taxonomy archives); versão bumped para 1.11.0
+- `style.css` — Versão bumped para 1.11.0
+
 ## [1.10.4] - 2026-03-08
 
 ### Fixed

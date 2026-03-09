@@ -1,0 +1,602 @@
+/* ══════════════════════════════════════════════════════════════
+ * Illusia Archives — "The Catalog Index"
+ *
+ * Redesenho dos taxonomy archives do Fictioneer (genre, fandom,
+ * character, content-warning, category, tag). Cada gaveta do
+ * catálogo tem um header semântico colorido pela taxonomia,
+ * contador de resultados, descrição editorial e tax cloud
+ * reimaginado como fichas de referência cruzada.
+ *
+ * A cor semântica é aplicada via modifier no <main>:
+ *   .illusia-archive--teal    (genre)
+ *   .illusia-archive--violet  (fandom)
+ *   .illusia-archive--amber   (character)
+ *   .illusia-archive--crimson (content-warning)
+ *   .illusia-archive--neutral (category, tag)
+ *
+ * Usa illusia-list-pages.css para sort, cards e paginação.
+ *
+ * @since 1.11.0
+ * ══════════════════════════════════════════════════════════════ */
+
+
+/* ═══════════════════════════════════════════════════════════════
+ * 1. ARCHIVE HEADER — Catalog Drawer Label
+ *
+ * Centro visual da página. Overline mono com cor semântica da
+ * taxonomia, título em Playfair, parent (se hierárquico),
+ * contador mono e descrição editorial.
+ * ═══════════════════════════════════════════════════════════════ */
+
+.illusia-archive__header {
+  text-align: center;
+  padding: var(--space-xl) 0 var(--space-md);
+  position: relative;
+  animation: illusia-archive-header-in var(--t-slow) var(--ease-expo) both;
+}
+
+@keyframes illusia-archive-header-in {
+  from {
+    opacity: 0;
+    transform: translateY(clamp(6px, 1vw, 12px));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Overline — taxonomy type label */
+.illusia-archive__overline {
+  display: block;
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  font-weight: 400;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--fg-500);
+  margin-bottom: var(--space-xs);
+}
+
+/* Semantic overline colors */
+.illusia-archive__overline--teal    { color: var(--teal-dim); }
+.illusia-archive__overline--violet  { color: var(--violet-dim); }
+.illusia-archive__overline--amber   { color: var(--amber-dim); }
+.illusia-archive__overline--crimson { color: var(--crimson-dim); }
+
+/* Title — term name */
+.illusia-archive__title {
+  font-family: var(--ff-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--fg-100);
+  letter-spacing: .015em;
+  line-height: 1.15;
+  margin: 0;
+}
+
+/* Parent term — shown for hierarchical taxonomies */
+.illusia-archive__parent {
+  display: block;
+  font-family: var(--ff-ui);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--fg-500);
+  margin-top: var(--space-3xs);
+}
+
+/* Result counter — mono badge */
+.illusia-archive__count {
+  display: inline-block;
+  font-family: var(--ff-mono);
+  font-size: var(--text-2xs);
+  font-weight: 400;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--fg-500);
+  margin-top: var(--space-sm);
+  padding: var(--space-3xs) var(--space-sm);
+  border: 1px solid var(--border-1);
+  border-radius: var(--r-sm);
+  background: hsl(var(--bg-900-free) / .4);
+}
+
+/* Semantic counter border accents */
+.illusia-archive--teal .illusia-archive__count {
+  border-color: hsl(var(--teal-free) / .15);
+}
+
+.illusia-archive--violet .illusia-archive__count {
+  border-color: hsl(var(--violet-free) / .15);
+}
+
+.illusia-archive--amber .illusia-archive__count {
+  border-color: hsl(var(--amber-free) / .15);
+}
+
+.illusia-archive--crimson .illusia-archive__count {
+  border-color: hsl(var(--crimson-free) / .15);
+}
+
+/* Description — editorial note */
+.illusia-archive__description {
+  font-family: var(--ff-ui);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--fg-400);
+  max-width: 38em;
+  margin: var(--space-sm) auto 0;
+  line-height: 1.6;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+ * 2. DIVIDER — Diamond Separator
+ *
+ * Mesmo padrão do Stories "Catalog Room": linhas convergentes
+ * com diamante central âmbar. Separa o header do conteúdo.
+ * ═══════════════════════════════════════════════════════════════ */
+
+.illusia-archive__divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: var(--space-md) 0 var(--space-lg);
+}
+
+.illusia-archive__divider::before,
+.illusia-archive__divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+}
+
+/* Semantic divider line color */
+.illusia-archive__divider::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(var(--amber-free) / .15)
+  );
+}
+
+.illusia-archive__divider::after {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--amber-free) / .15),
+    transparent
+  );
+}
+
+/* Semantic divider color by taxonomy */
+.illusia-archive--teal .illusia-archive__divider::before {
+  background: linear-gradient(90deg, transparent, hsl(var(--teal-free) / .12));
+}
+.illusia-archive--teal .illusia-archive__divider::after {
+  background: linear-gradient(90deg, hsl(var(--teal-free) / .12), transparent);
+}
+
+.illusia-archive--violet .illusia-archive__divider::before {
+  background: linear-gradient(90deg, transparent, hsl(var(--violet-free) / .12));
+}
+.illusia-archive--violet .illusia-archive__divider::after {
+  background: linear-gradient(90deg, hsl(var(--violet-free) / .12), transparent);
+}
+
+.illusia-archive--crimson .illusia-archive__divider::before {
+  background: linear-gradient(90deg, transparent, hsl(var(--crimson-free) / .12));
+}
+.illusia-archive--crimson .illusia-archive__divider::after {
+  background: linear-gradient(90deg, hsl(var(--crimson-free) / .12), transparent);
+}
+
+.illusia-archive__diamond {
+  width: clamp(5px, .5vw, 7px);
+  height: clamp(5px, .5vw, 7px);
+  background: var(--amber-dim);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+  opacity: .5;
+}
+
+/* Semantic diamond color */
+.illusia-archive--teal .illusia-archive__diamond    { background: var(--teal-dim); }
+.illusia-archive--violet .illusia-archive__diamond  { background: var(--violet-dim); }
+.illusia-archive--crimson .illusia-archive__diamond { background: var(--crimson-dim); }
+
+
+/* ═══════════════════════════════════════════════════════════════
+ * 3. TAX CLOUD — Cross-Reference Index Cards
+ *
+ * Reimaginação completa do wp_tag_cloud(). Em vez de tags com
+ * font-sizes variáveis, um grid de fichas uniformes estilizadas
+ * como cross-reference cards de um catálogo de biblioteca.
+ *
+ * Cada ficha: mono uppercase, borda fina, hover com barra
+ * lateral semântica (regra inviolável #8). Count entre
+ * parênteses como anotação de cataloguista.
+ * ═══════════════════════════════════════════════════════════════ */
+
+.illusia-archive__cloud {
+  margin-bottom: var(--space-lg);
+  padding: var(--space-sm) 0;
+  position: relative;
+  text-align: center;
+}
+
+/* "Ver também" micro-label */
+.illusia-archive__cloud-label {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-family: var(--ff-mono);
+  font-size: var(--text-3xs);
+  font-weight: 400;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--fg-600);
+  margin-bottom: var(--space-xs);
+}
+
+/* Cloud items container — flex wrap layout */
+.illusia-archive__cloud-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2xs);
+}
+
+/* Overflow collapse — activated by JS when content exceeds threshold */
+.illusia-archive__cloud._overflowing .illusia-archive__cloud-items {
+  max-height: 6rem;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 1.5rem), transparent);
+  mask-image: linear-gradient(to bottom, black calc(100% - 1.5rem), transparent);
+}
+
+/* Expanded state — removes constraint */
+.illusia-archive__cloud._expanded .illusia-archive__cloud-items {
+  max-height: none;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+/* Toggle button — observatory mono control */
+.illusia-archive__cloud-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3xs);
+  margin-top: var(--space-sm);
+  padding: var(--space-3xs) var(--space-sm);
+  font-family: var(--ff-mono);
+  font-size: var(--text-3xs);
+  font-weight: 400;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--fg-500);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color var(--t-mid) var(--ease-std);
+}
+
+.illusia-archive__cloud-toggle:hover {
+  color: var(--amber);
+}
+
+.illusia-archive__cloud-toggle:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+/* Chevron indicator */
+.illusia-archive__cloud-toggle::after {
+  content: '';
+  width: clamp(4px, .4vw, 6px);
+  height: clamp(4px, .4vw, 6px);
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform var(--t-mid) var(--ease-std);
+}
+
+.illusia-archive__cloud._expanded .illusia-archive__cloud-toggle::after {
+  transform: rotate(-135deg);
+}
+
+/* Toggle text states */
+.illusia-archive__cloud-toggle-less {
+  display: none;
+}
+
+.illusia-archive__cloud._expanded .illusia-archive__cloud-toggle-more {
+  display: none;
+}
+
+.illusia-archive__cloud._expanded .illusia-archive__cloud-toggle-less {
+  display: inline;
+}
+
+/* Individual cloud links — override WordPress inline font-size */
+.illusia-archive__cloud .tag-cloud-link {
+  font-size: var(--text-2xs) !important; /* Override wp_tag_cloud() inline style */
+  font-family: var(--ff-mono);
+  font-weight: 400;
+  letter-spacing: .04em;
+  color: var(--fg-400);
+  text-decoration: none;
+  padding: var(--space-3xs) var(--space-xs);
+  border: 1px solid var(--border-1);
+  border-radius: var(--r-xs);
+  background: hsl(var(--bg-900-free) / .4);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  transition:
+    border-color var(--t-mid) var(--ease-std),
+    color        var(--t-mid) var(--ease-std),
+    background   var(--t-mid) var(--ease-std);
+}
+
+/* Amber bar lateral — regra inviolável #8 */
+.illusia-archive__cloud .tag-cloud-link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--amber);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform var(--t-mid) var(--ease-expo);
+}
+
+.illusia-archive__cloud .tag-cloud-link:hover {
+  border-color: hsl(var(--amber-free) / .3);
+  color: var(--amber);
+  background: hsl(var(--amber-free) / .04);
+}
+
+.illusia-archive__cloud .tag-cloud-link:hover::before {
+  transform: scaleY(1);
+}
+
+/* Focus visible */
+.illusia-archive__cloud .tag-cloud-link:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+/* ── Semantic cloud colors ── */
+
+/* Teal (genre) */
+.illusia-archive__cloud--teal .tag-cloud-link::before {
+  background: var(--teal);
+}
+
+.illusia-archive__cloud--teal .tag-cloud-link:hover {
+  border-color: hsl(var(--teal-free) / .3);
+  color: var(--teal);
+  background: hsl(var(--teal-free) / .04);
+}
+
+/* Violet (fandom) */
+.illusia-archive__cloud--violet .tag-cloud-link::before {
+  background: var(--violet);
+}
+
+.illusia-archive__cloud--violet .tag-cloud-link:hover {
+  border-color: hsl(var(--violet-free) / .3);
+  color: var(--violet);
+  background: hsl(var(--violet-free) / .04);
+}
+
+/* Amber (character) — uses default amber */
+
+/* Crimson (content-warning) */
+.illusia-archive__cloud--crimson .tag-cloud-link::before {
+  background: var(--crimson);
+}
+
+.illusia-archive__cloud--crimson .tag-cloud-link:hover {
+  border-color: hsl(var(--crimson-free) / .3);
+  color: var(--crimson);
+  background: hsl(var(--crimson-free) / .04);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+ * 4. RESPONSIVE — Tablet (<=900px)
+ * ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 900px) {
+  .illusia-archive__title {
+    font-size: var(--text-xl);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+ * 5. RESPONSIVE — Mobile (<=640px)
+ * ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .illusia-archive__header {
+    padding: var(--space-lg) 0 var(--space-sm);
+  }
+
+  .illusia-archive__title {
+    font-size: var(--text-lg);
+  }
+
+  .illusia-archive__overline {
+    font-size: clamp(.42rem, .8vw, .5rem);
+    letter-spacing: .2em;
+  }
+
+  .illusia-archive__cloud-items {
+    gap: var(--space-3xs);
+  }
+
+  .illusia-archive__cloud .tag-cloud-link {
+    font-size: clamp(.5rem, 1vw, .6rem) !important; /* Override — mobile size */
+    padding: var(--space-3xs) var(--space-2xs);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+ * 6. RESPONSIVE — Small (<=400px)
+ * ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 400px) {
+  .illusia-archive__count {
+    font-size: clamp(.5rem, 1vw, .6rem);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+ * 7. LIGHT MODE
+ *
+ * Acentos usam variantes -dim para WCAG em fundo claro.
+ * Glass backgrounds mais transparentes. Counter e cloud
+ * ajustados para contraste.
+ * ═══════════════════════════════════════════════════════════════ */
+
+/* Overline — semantic colors swap to -dim */
+:root[data-mode=light] .illusia-archive__overline--teal    { color: var(--teal-dim); }
+:root[data-mode=light] .illusia-archive__overline--violet  { color: var(--violet-dim); }
+:root[data-mode=light] .illusia-archive__overline--amber   { color: var(--amber-dim); }
+:root[data-mode=light] .illusia-archive__overline--crimson { color: var(--crimson-dim); }
+
+/* Counter */
+:root[data-mode=light] .illusia-archive__count {
+  background: hsl(var(--bg-900-free) / .2);
+  border-color: hsl(var(--illusia-border-base) / .1);
+}
+
+:root[data-mode=light] .illusia-archive--teal .illusia-archive__count {
+  border-color: hsl(var(--teal-free) / .12);
+}
+
+:root[data-mode=light] .illusia-archive--violet .illusia-archive__count {
+  border-color: hsl(var(--violet-free) / .12);
+}
+
+:root[data-mode=light] .illusia-archive--amber .illusia-archive__count {
+  border-color: hsl(var(--amber-free) / .12);
+}
+
+:root[data-mode=light] .illusia-archive--crimson .illusia-archive__count {
+  border-color: hsl(var(--crimson-free) / .12);
+}
+
+/* Divider */
+:root[data-mode=light] .illusia-archive__divider::before {
+  background: linear-gradient(90deg, transparent, hsl(var(--amber-dim-free) / .12));
+}
+
+:root[data-mode=light] .illusia-archive__divider::after {
+  background: linear-gradient(90deg, hsl(var(--amber-dim-free) / .12), transparent);
+}
+
+:root[data-mode=light] .illusia-archive__diamond {
+  opacity: .35;
+}
+
+:root[data-mode=light] .illusia-archive--teal .illusia-archive__divider::before {
+  background: linear-gradient(90deg, transparent, hsl(var(--teal-dim-free) / .1));
+}
+:root[data-mode=light] .illusia-archive--teal .illusia-archive__divider::after {
+  background: linear-gradient(90deg, hsl(var(--teal-dim-free) / .1), transparent);
+}
+
+:root[data-mode=light] .illusia-archive--violet .illusia-archive__divider::before {
+  background: linear-gradient(90deg, transparent, hsl(var(--violet-dim-free) / .1));
+}
+:root[data-mode=light] .illusia-archive--violet .illusia-archive__divider::after {
+  background: linear-gradient(90deg, hsl(var(--violet-dim-free) / .1), transparent);
+}
+
+:root[data-mode=light] .illusia-archive--crimson .illusia-archive__divider::before {
+  background: linear-gradient(90deg, transparent, hsl(var(--crimson-dim-free) / .1));
+}
+:root[data-mode=light] .illusia-archive--crimson .illusia-archive__divider::after {
+  background: linear-gradient(90deg, hsl(var(--crimson-dim-free) / .1), transparent);
+}
+
+/* Semantic diamond light mode */
+:root[data-mode=light] .illusia-archive--teal .illusia-archive__diamond    { background: var(--teal-dim); }
+:root[data-mode=light] .illusia-archive--violet .illusia-archive__diamond  { background: var(--violet-dim); }
+:root[data-mode=light] .illusia-archive--crimson .illusia-archive__diamond { background: var(--crimson-dim); }
+
+/* Cloud — light adjustments */
+:root[data-mode=light] .illusia-archive__cloud .tag-cloud-link {
+  background: hsl(var(--bg-900-free) / .2);
+  border-color: hsl(var(--illusia-border-base) / .1);
+}
+
+:root[data-mode=light] .illusia-archive__cloud .tag-cloud-link:hover {
+  border-color: hsl(var(--amber-free) / .25);
+  color: var(--amber-dim);
+  background: hsl(var(--amber-free) / .04);
+}
+
+:root[data-mode=light] .illusia-archive__cloud--teal .tag-cloud-link:hover {
+  border-color: hsl(var(--teal-free) / .25);
+  color: var(--teal-dim);
+  background: hsl(var(--teal-free) / .04);
+}
+
+:root[data-mode=light] .illusia-archive__cloud--violet .tag-cloud-link:hover {
+  border-color: hsl(var(--violet-free) / .25);
+  color: var(--violet-dim);
+  background: hsl(var(--violet-free) / .04);
+}
+
+:root[data-mode=light] .illusia-archive__cloud--crimson .tag-cloud-link:hover {
+  border-color: hsl(var(--crimson-free) / .25);
+  color: var(--crimson-dim);
+  background: hsl(var(--crimson-free) / .04);
+}
+
+/* Cloud sidebar bar — dim in light */
+:root[data-mode=light] .illusia-archive__cloud--teal .tag-cloud-link::before    { background: var(--teal-dim); }
+:root[data-mode=light] .illusia-archive__cloud--violet .tag-cloud-link::before  { background: var(--violet-dim); }
+:root[data-mode=light] .illusia-archive__cloud--crimson .tag-cloud-link::before { background: var(--crimson-dim); }
+:root[data-mode=light] .illusia-archive__cloud .tag-cloud-link::before          { background: var(--amber-dim); }
+
+/* Cloud toggle — light mode */
+:root[data-mode=light] .illusia-archive__cloud-toggle:hover {
+  color: var(--amber-dim);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+ * 8. REDUCED MOTION
+ * ═══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  .illusia-archive__header {
+    animation: none;
+  }
+
+  .illusia-archive__cloud .tag-cloud-link {
+    transition-duration: 0.01ms !important; /* Override — reduced motion safety net */
+  }
+
+  .illusia-archive__cloud .tag-cloud-link::before {
+    transition-duration: 0.01ms !important; /* Override — reduced motion safety net */
+  }
+
+  .illusia-archive__cloud-toggle {
+    transition-duration: 0.01ms !important; /* Override — reduced motion safety net */
+  }
+
+  .illusia-archive__cloud-toggle::after {
+    transition-duration: 0.01ms !important; /* Override — reduced motion safety net */
+  }
+}

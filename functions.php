@@ -4,7 +4,7 @@
 // CONSTANTS
 // =============================================================================
 
-define( 'CHILD_VERSION', '1.10.4' );
+define( 'CHILD_VERSION', '1.11.2' );
 define( 'CHILD_NAME', 'Illusia Theme' );
 
 // =============================================================================
@@ -82,6 +82,39 @@ function illusia_enqueue_styles_and_scripts(): void {
       get_stylesheet_directory_uri() . '/css/components/illusia-collections.css',
       ['illusia-properties', 'illusia-cards'],
       CHILD_VERSION
+    );
+  }
+
+  // Componentes: list pages base (chapters, recommendations, archives)
+  $needs_list_pages = is_page_template( 'chapters.php' )
+    || is_page_template( 'recommendations.php' )
+    || is_archive();
+
+  if ( $needs_list_pages ) {
+    wp_enqueue_style(
+      'illusia-list-pages',
+      get_stylesheet_directory_uri() . '/css/components/illusia-list-pages.css',
+      ['illusia-properties', 'illusia-cards'],
+      CHILD_VERSION
+    );
+  }
+
+  // Componentes: taxonomy archives (genre, fandom, character, warning, category, tag)
+  if ( is_archive() && ! is_author() && ! is_date() && ! is_post_type_archive() ) {
+    wp_enqueue_style(
+      'illusia-archives',
+      get_stylesheet_directory_uri() . '/css/components/illusia-archives.css',
+      ['illusia-properties', 'illusia-list-pages'],
+      CHILD_VERSION
+    );
+
+    // Collapsible tax cloud toggle
+    wp_enqueue_script(
+      'illusia-archive-cloud',
+      get_stylesheet_directory_uri() . '/js/illusia-archive-cloud.js',
+      [],
+      CHILD_VERSION,
+      true
     );
   }
 }
