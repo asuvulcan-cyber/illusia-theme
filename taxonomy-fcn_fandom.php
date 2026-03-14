@@ -20,23 +20,44 @@ get_header();
 $term = get_queried_object();
 $parent = get_term_by( 'id', $term->parent, get_query_var( 'taxonomy' ) );
 $taxonomy_slug = 'fcn_fandom';
-$taxonomy_label = __( 'Fandom', 'fictioneer' );
+$taxonomy_label = 'Nacionalidade';
 $taxonomy_color = 'violet';
 
-// Tax cloud
-$tax_cloud = wp_tag_cloud( array(
-  'fictioneer_query_name' => 'tag_cloud',
-  'smallest' => .75,
-  'largest' => .75,
-  'unit' => 'rem',
-  'number' => 0,
-  'taxonomy' => [ $taxonomy_slug ],
-  'exclude' => $term->term_id,
-  'show_count' => true,
-  'pad_counts' => true,
+// Tax cloud — related terms with at least 1 published item
+$cloud_terms = get_terms( array(
+  'taxonomy'   => $taxonomy_slug,
+  'exclude'    => $term->term_id,
   'hide_empty' => true,
-  'echo' => false,
+  'pad_counts' => true,
+  'orderby'    => 'count',
+  'order'      => 'DESC',
 ) );
+
+if ( is_wp_error( $cloud_terms ) ) {
+  $cloud_terms = array();
+}
+
+$cloud_terms = array_filter( $cloud_terms, function( $t ) {
+  return $t->count > 0;
+} );
+
+$tax_cloud = '';
+
+if ( ! empty( $cloud_terms ) ) {
+  // wp_generate_tag_cloud() needs ->link on each term (wp_tag_cloud sets it automatically)
+  foreach ( $cloud_terms as $ct ) {
+    $ct->link = get_term_link( $ct );
+  }
+
+  $tax_cloud = wp_generate_tag_cloud( $cloud_terms, array(
+    'smallest'   => .75,
+    'largest'    => .75,
+    'unit'       => 'rem',
+    'show_count' => true,
+    'orderby'    => 'count',
+    'order'      => 'DESC',
+  ) );
+}
 
 ?>
 
@@ -65,8 +86,8 @@ $tax_cloud = wp_tag_cloud( array(
 
         <span class="illusia-archive__count"><?php
           echo esc_html( sprintf(
-            _n( '%s resultado', '%s resultados', $term->count, 'fictioneer' ),
-            number_format_i18n( $term->count )
+            _n( '%s resultado', '%s resultados', $wp_query->found_posts, 'fictioneer' ),
+            number_format_i18n( $wp_query->found_posts )
           ) );
         ?></span>
 
@@ -81,7 +102,7 @@ $tax_cloud = wp_tag_cloud( array(
 
       <?php if ( ! empty( $tax_cloud ) ) : ?>
         <nav class="illusia-archive__cloud illusia-archive__cloud--<?php echo esc_attr( $taxonomy_color ); ?>"
-             aria-label="<?php esc_attr_e( 'Related fandoms', 'fictioneer' ); ?>">
+             aria-label="Nacionalidades relacionadas">
           <span class="illusia-archive__cloud-label"><?php
             esc_html_e( 'Ver também', 'fictioneer' );
           ?></span>
@@ -112,7 +133,7 @@ $tax_cloud = wp_tag_cloud( array(
     'template' => 'taxonomy-fcn_fandom.php',
     'breadcrumbs' => array(
       [ fcntr( 'frontpage' ), get_home_url() ],
-      [ sprintf( __( 'Fandom: %s', 'fictioneer' ), single_tag_title( '', false ) ), null ],
+      [ sprintf( 'Nacionalidade: %s', single_tag_title( '', false ) ), null ],
     ),
   );
 

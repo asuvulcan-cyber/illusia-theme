@@ -6,6 +6,105 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.12.3] - 2026-03-13
+
+### Changed
+- **Template: TCG** redesenhado com flip card front/back — frente minimalista (imagem + nome + bio), verso com detalhes (aparência, personalidade, relacionamentos, notas, hierarquia)
+- Animação 3D CSS com `perspective` + `rotateY` e botão "Virar Carta"
+- Corner ornaments duplicados em ambas as faces da carta
+- Wrappers `__card`, `__front`, `__back` transparentes (`display: contents`) para templates não-TCG
+
+### Technical
+- HTML structure: novo `__card > __front + __back` wrapper + `__flip-btn` na `_character-sheet.php`
+- CSS: `perspective: 1200px`, `transform-style: preserve-3d`, `backface-visibility: hidden`, grid stacking
+- JS: `initTcgFlip()` toggle de classe `--flipped` no `illusia-char-gallery.js`
+- Reduced motion: desabilita transição do card flip
+
+## [1.12.2] - 2026-03-13
+
+### Added
+- **Carousel**: Main image + gallery merged into auto-sliding carousel with random start, prev/next nav, dots
+- **Lightbox**: Full-screen image viewer with keyboard navigation (Escape, Arrow keys), backdrop blur
+- **Children tree**: Personagem pages now show hierarchical children tree (e.g., subordinates, members)
+- **Template selector**: Admin dropdown to choose display template (Padrão, Compacto, Wiki, TCG, RPG)
+- **Template: Compacto** — single column, retrato 80px, espaçamento reduzido, max-width 560px
+- **Template: Wiki** — infobox flutuante à direita estilo Wikipedia, headings serif, seções com border-bottom
+- **Template: TCG** — carta colecionável centralizada 400px, borda decorativa amber com glow, corner ornaments, painéis
+- **Template: RPG** — ficha de mesa com borda dupla, headings bold com underline, stat entries com dotted dividers
+- **Type-colored badges**: Distinct colors for Obra (amber), Local (teal), Organização (violet), Personagem (crimson) in breadcrumb and index
+- **Type indicator dots**: Colored dot before each tree node matching its type
+
+### Changed
+- Removed max-width limitation on character index and sheet (was 680px/720px)
+- Breadcrumb badges now use type-specific colors instead of monochrome
+- Index tree connectors thickened from 1px to 2px for better visibility
+- Gallery items now open in lightbox instead of new tab
+- Carousel replaces static portrait when multiple images exist
+
+### Technical
+- New file: `js/illusia-char-gallery.js` — vanilla JS carousel + lightbox
+- New meta: `illusia_char_template` with sanitize callback and helper
+- Updated `illusia_get_char_meta()` to include `template` key
+- Front-end JS conditionally enqueued on `fcn_character` taxonomy pages
+- CSS type color tokens scoped via custom properties (`--type-obra`, `--type-local`, etc.)
+- 4 template variant CSS sections (Compacto, Wiki, TCG, RPG) with light mode + responsive support
+
+## [1.12.1] - 2026-03-13
+
+### Added
+- Character Sheet System — sistema completo de fichas de personagem para taxonomia `fcn_character`
+- `illusia_char_type` term meta — campo select (obra/local/organização/personagem) define o tipo do termo na hierarquia
+- `illusia_char_image` — URL de imagem principal para qualquer tipo
+- `illusia_char_full_name`, `illusia_char_titles` — nome completo e títulos/epítetos (personagem only)
+- `illusia_char_appearance`, `illusia_char_personality`, `illusia_char_notes` — textareas descritivos (personagem only)
+- `illusia_char_relationships` — repeater de relacionamentos com AJAX autocomplete e drag-and-drop para reordenação
+- `illusia_char_gallery` — galeria de imagens adicionais armazenada como JSON de URLs (personagem only)
+- `illusia_char_former_orgs` — organizações anteriores com busca AJAX filtrada por tipo organização (personagem only)
+- `illusia_char_creator` — ownership tracking: auto-salva criador, autores editam/deletam apenas seus termos
+- `map_meta_cap` filter (priority 10000) — restringe edit_term/delete_term por ownership para autores
+- `pre_get_terms` filter — filtra lista admin para mostrar apenas termos do autor (scoped a edit-tags screen)
+- Admin UI: form fields no add/edit, colunas Tipo e Criador, campo de ownership (editors+)
+- Front-end routing por tipo: personagem → character sheet, obra/local/org → índice hierárquico em árvore
+- Tax cloud filtrado para exibir apenas termos tipo personagem
+- CSS component `illusia-character-sheet.css` — breadcrumb, ficha, galeria, índice em árvore, layout duas colunas
+- Layout responsivo: 640px (colunas empilham), 480px (identidade vertical, breadcrumb vertical, tree compacto)
+- Light mode e reduced motion suportados
+- `includes/illusia-character-meta.php` — constantes, registro de meta, sanitização, helpers, tree builder/renderer
+- `includes/illusia-character-admin.php` — admin UI, save handlers, AJAX search com filtro de tipo
+- `includes/illusia-character-caps.php` — capabilities, ownership, cap mapping, admin list filtering
+- `partials/_character-sheet.php` — ficha completa com breadcrumb, retrato, galeria, bio, aparência/personalidade (duas colunas), relacionamentos/orgs anteriores (duas colunas), notas, aparições
+- `partials/_character-index.php` — índice hierárquico com badges inline e linhas conectoras CSS
+- `js/illusia-char-admin.js` — type toggle, image preview, relationship repeater com drag-and-drop, galeria, former orgs
+- `css/admin/illusia-char-admin.css` — estilos admin com badges de tipo, drag handle, galeria grid, tags de orgs
+
+## [1.11.8] - 2026-03-09
+
+### Fixed
+- 6 templates de taxonomia — Contador de resultados no header corrigido: substituído `$term->count` (conta apenas posts diretos do termo) por `$wp_query->found_posts` (total real da query, incluindo posts de termos filhos)
+
+## [1.11.7] - 2026-03-09
+
+### Fixed
+- 6 templates de taxonomia — Links do tax cloud corrigidos: `wp_generate_tag_cloud()` usa `$tag->link` para o `href`, com fallback para `#` se ausente; `wp_tag_cloud()` seta via `get_term_link()` automaticamente, mas a chamada direta não; adicionado `foreach` com `get_term_link()` antes de `wp_generate_tag_cloud()`
+
+## [1.11.6] - 2026-03-09
+
+### Changed
+- 6 templates de taxonomia — Labels da overline traduzidos para PT-BR: Genre → Gênero, Fandom → Nacionalidade, Character → Personagem, Content Warning → Aviso de Conteúdo, Category → Categoria
+
+## [1.11.5] - 2026-03-09
+
+### Fixed
+- 6 templates de taxonomia — Ordenação do tax cloud corrigida: `wp_generate_tag_cloud()` re-ordena internamente por nome (ignora ordem do array); adicionado `orderby => count` + `order => DESC` explícito na chamada de `wp_generate_tag_cloud()`
+
+## [1.11.4] - 2026-03-09
+
+### Changed
+- 6 templates de taxonomia — Tax cloud ordenado por popularidade (`orderby => count`, `order => DESC`); termos mais populares aparecem primeiro, especialmente relevante com o collapse de 2-3 linhas
+
+### Fixed
+- 6 templates de taxonomia — Tax cloud reescrito: `wp_tag_cloud()` substituído por `get_terms()` + filtro explícito `count > 0` + `wp_generate_tag_cloud()`; abordagem anterior com `hide_empty` não filtrava termos vazios efetivamente
+
 ## [1.11.2] - 2026-03-08
 
 ### Fixed

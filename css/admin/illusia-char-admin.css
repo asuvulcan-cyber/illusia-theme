@@ -1,0 +1,294 @@
+/**
+ * Illusia Character Admin Styles
+ *
+ * Form field styles for the fcn_character taxonomy admin screens.
+ *
+ * @since 1.12.0
+ * @modified 1.12.1 — drag handle, gallery, former orgs
+ */
+
+/* =============================================================================
+ * 1. TYPE BADGE (term list column)
+ * ========================================================================== */
+
+.illusia-char-type-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 3px;
+  background: #f0f0f1;
+  color: #50575e;
+}
+
+.illusia-char-type-badge--obra         { background: #fef3c7; color: #92400e; }
+.illusia-char-type-badge--local        { background: #fce7f3; color: #9d174d; }
+.illusia-char-type-badge--organizacao  { background: #d1fae5; color: #065f46; }
+.illusia-char-type-badge--personagem   { background: #dbeafe; color: #1e40af; }
+.illusia-char-type-badge--none         { background: transparent; color: #a0a5aa; }
+
+/* =============================================================================
+ * 2. IMAGE PREVIEW
+ * ========================================================================== */
+
+.illusia-char-image-preview {
+  margin-top: 8px;
+  max-width: 200px;
+}
+
+.illusia-char-image-preview img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #dcdcde;
+  border-radius: 4px;
+}
+
+/* =============================================================================
+ * 3. RELATIONSHIP REPEATER
+ * ========================================================================== */
+
+.illusia-char-relationships {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.illusia-char-rel-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: #f6f7f7;
+  border: 1px solid #dcdcde;
+  border-radius: 4px;
+  position: relative;
+  transition: opacity 0.15s, box-shadow 0.15s;
+}
+
+/* Drag handle */
+.illusia-char-rel-handle {
+  cursor: grab;
+  font-size: 16px;
+  line-height: 1;
+  color: #999;
+  flex-shrink: 0;
+  user-select: none;
+  padding: 2px 4px;
+}
+
+.illusia-char-rel-handle:hover {
+  color: #555;
+}
+
+.illusia-char-rel-handle:active {
+  cursor: grabbing;
+}
+
+/* Drag states */
+.illusia-char-rel-row--dragging {
+  opacity: 0.4;
+}
+
+.illusia-char-rel-row--drag-over {
+  box-shadow: 0 -2px 0 0 #2271b1;
+}
+
+.illusia-char-rel-type {
+  flex: 0 0 180px;
+  min-width: 0;
+}
+
+.illusia-char-rel-search {
+  flex: 1;
+  min-width: 120px;
+  position: relative;
+}
+
+.illusia-char-rel-results {
+  position: absolute;
+  z-index: 100;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.illusia-char-rel-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.illusia-char-rel-result:hover {
+  background: #f0f0f1;
+}
+
+.illusia-char-rel-result-name {
+  font-weight: 500;
+}
+
+.illusia-char-rel-result-type {
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.illusia-char-rel-no-results {
+  padding: 8px 10px;
+  color: #888;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.illusia-char-rel-remove {
+  flex-shrink: 0;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.illusia-char-rel-add {
+  align-self: flex-start;
+}
+
+/* =============================================================================
+ * 4. RELATIONSHIP TYPES ADMIN (details/summary)
+ * ========================================================================== */
+
+.illusia-char-rel-types-admin {
+  margin-top: 12px;
+}
+
+.illusia-char-rel-types-admin summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: #2271b1;
+}
+
+.illusia-char-rel-types-admin summary:hover {
+  color: #135e96;
+}
+
+/* =============================================================================
+ * 5. GALLERY
+ * ========================================================================== */
+
+.illusia-char-gallery-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.illusia-char-gallery-item {
+  position: relative;
+  border: 1px solid #dcdcde;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.illusia-char-gallery-item img {
+  display: block;
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+
+.illusia-char-gallery-remove {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.illusia-char-gallery-remove:hover {
+  background: rgba(200, 0, 0, 0.8);
+}
+
+.illusia-char-gallery-add {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* =============================================================================
+ * 6. FORMER ORGANIZATIONS
+ * ========================================================================== */
+
+.illusia-char-former-orgs-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.illusia-char-former-org-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: #d1fae5;
+  color: #065f46;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.illusia-char-former-org-remove {
+  background: none;
+  border: none;
+  color: #065f46;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+  opacity: 0.6;
+}
+
+.illusia-char-former-org-remove:hover {
+  opacity: 1;
+  color: #b91c1c;
+}
+
+.illusia-char-former-orgs-search-wrap {
+  position: relative;
+}
+
+.illusia-char-former-orgs-results {
+  position: absolute;
+  z-index: 100;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+}

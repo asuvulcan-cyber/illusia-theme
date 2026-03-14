@@ -4,8 +4,19 @@
 // CONSTANTS
 // =============================================================================
 
-define( 'CHILD_VERSION', '1.11.2' );
+define( 'CHILD_VERSION', '1.12.6' );
 define( 'CHILD_NAME', 'Illusia Theme' );
+
+// =============================================================================
+// CHARACTER SHEET SYSTEM
+// =============================================================================
+
+require_once get_stylesheet_directory() . '/includes/illusia-character-meta.php';
+require_once get_stylesheet_directory() . '/includes/illusia-character-caps.php';
+
+if ( is_admin() ) {
+  require_once get_stylesheet_directory() . '/includes/illusia-character-admin.php';
+}
 
 // =============================================================================
 // CHILD THEME SETUP
@@ -117,6 +128,25 @@ function illusia_enqueue_styles_and_scripts(): void {
       true
     );
   }
+
+  // Character sheet / index (only on fcn_character taxonomy archives)
+  if ( is_tax( 'fcn_character' ) ) {
+    wp_enqueue_style(
+      'illusia-character-sheet',
+      get_stylesheet_directory_uri() . '/css/components/illusia-character-sheet.css',
+      ['illusia-properties', 'illusia-archives'],
+      CHILD_VERSION
+    );
+
+    // Carousel + lightbox JS for character pages
+    wp_enqueue_script(
+      'illusia-char-gallery',
+      get_stylesheet_directory_uri() . '/js/illusia-char-gallery.js',
+      [],
+      CHILD_VERSION,
+      true
+    );
+  }
 }
 add_action( 'wp_enqueue_scripts', 'illusia_enqueue_styles_and_scripts', 99 );
 
@@ -147,6 +177,86 @@ function illusia_add_page_styles( array $styles ): array {
   return $styles;
 }
 add_filter( 'fictioneer_filter_customizer_page_style', 'illusia_add_page_styles' );
+
+/**
+ * Remove taxonomies that don't belong on chapters.
+ *
+ * Chapters live inside stories — genre, fandom, category and tag
+ * apply to the story, not individual chapters. This removes the
+ * taxonomy UI from the chapter editor AND excludes chapters from
+ * those taxonomy archives automatically.
+ *
+ * Kept on chapters: fcn_character (aparições), fcn_content_warning.
+ *
+ * @since 1.12.6
+ */
+function illusia_unregister_chapter_taxonomies() {
+  unregister_taxonomy_for_object_type( 'fcn_genre', 'fcn_chapter' );
+  unregister_taxonomy_for_object_type( 'fcn_fandom', 'fcn_chapter' );
+  unregister_taxonomy_for_object_type( 'category', 'fcn_chapter' );
+  unregister_taxonomy_for_object_type( 'post_tag', 'fcn_chapter' );
+}
+add_action( 'init', 'illusia_unregister_chapter_taxonomies', 99 );
+
+/**
+ * Translate Fictioneer taxonomy URL slugs to Portuguese.
+ *
+ * After adding/changing this, flush rewrite rules:
+ * WP Admin > Configurações > Links Permanentes > Salvar.
+ *
+ * @since 1.12.6
+ *
+ * @param array  $args     Taxonomy registration arguments.
+ * @param string $taxonomy Taxonomy slug being registered.
+ * @return array Modified arguments.
+ */
+function illusia_translate_taxonomy_slugs( $args, $taxonomy ) {
+  $slugs = array(
+    'fcn_genre'           => 'genero',
+    'fcn_fandom'          => 'nacionalidade',
+    'fcn_character'       => 'personagem',
+    'fcn_content_warning' => 'aviso-de-conteudo',
+  );
+
+  if ( isset( $slugs[ $taxonomy ] ) ) {
+    $args['rewrite']['slug'] = $slugs[ $taxonomy ];
+  }
+
+  return $args;
+}
+add_filter( 'register_taxonomy_args', 'illusia_translate_taxonomy_slugs', 10, 2 );
+
+/**
+ * Exclude chapters from taxonomy archive queries.
+ *
+ * Complements illusia_unregister_chapter_taxonomies(): the unregister
+ * removes the editor UI, but existing term relationships in the DB
+ * still feed the main query. This filter removes fcn_chapter from
+ * genre, fandom, category and tag archive queries.
+ *
+ * @since 1.12.6
+ */
+function illusia_exclude_chapters_from_archives( $query ) {
+  if ( is_admin() || ! $query->is_main_query() ) {
+    return;
+  }
+
+  if (
+    $query->is_tax( 'fcn_genre' ) ||
+    $query->is_tax( 'fcn_fandom' ) ||
+    $query->is_category() ||
+    $query->is_tag()
+  ) {
+    $post_types = $query->get( 'post_type' );
+
+    if ( empty( $post_types ) || $post_types === 'any' ) {
+      $query->set( 'post_type', array( 'fcn_story', 'fcn_collection', 'fcn_recommendation', 'post' ) );
+    } elseif ( is_array( $post_types ) ) {
+      $query->set( 'post_type', array_values( array_diff( $post_types, array( 'fcn_chapter' ) ) ) );
+    }
+  }
+}
+add_action( 'pre_get_posts', 'illusia_exclude_chapters_from_archives', 20 );
 
 /**
  * Add or remove parent filters and actions on the frontend

@@ -130,6 +130,21 @@
   line-height: 1.6;
 }
 
+/* Header image — used by character index (obra/local/org) */
+.illusia-archive__header-image {
+  margin-top: var(--space-sm);
+}
+
+.illusia-archive__header-image img {
+  max-width: 200px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-1);
+}
+
+:root[data-mode=light] .illusia-archive__header-image img {
+  border-color: var(--border-2);
+}
+
 
 /* ═══════════════════════════════════════════════════════════════
  * 2. DIVIDER — Diamond Separator
